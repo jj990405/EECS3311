@@ -33,6 +33,8 @@ public final class CommandLineInterface {
                     case "deadline edit" -> editDeadline();
                     case "deadline delete" -> deleteDeadline();
                     case "timeline" -> timeline();
+                    case "calendar" -> calendar();
+                    case "reminders" -> reminders();
                     case "complete" -> complete();
                     case "progress" -> progress();
                     case "tree" -> showTree();
@@ -53,7 +55,7 @@ public final class CommandLineInterface {
 
     private void help() {
         System.out.println("semester add | course add | material add | deadline add | deadline edit");
-        System.out.println("deadline delete | timeline | complete | progress | tree | exit");
+        System.out.println("deadline delete | timeline | calendar | reminders | complete | progress | tree | exit");
         System.out.println("ai syllabus | ai week | proposals | approve | reject");
         System.out.println("Dates use YYYY-MM-DD. Leave a deadline date blank for TBD.");
     }
@@ -225,6 +227,20 @@ public final class CommandLineInterface {
                     d.title(), d.completed() ? " [done]" : "");
             previousDate = date;
         }
+    }
+
+    private void calendar() {
+        String month = ask("Month (YYYY-MM, blank for current month)");
+        System.out.println(controller.calendar(month.isBlank() ? java.time.YearMonth.now() : java.time.YearMonth.parse(month)));
+    }
+
+    private void reminders() {
+        String input = ask("Days ahead (blank for 7)");
+        int days = input.isBlank() ? 7 : Integer.parseInt(input);
+        List<Deadline> items = controller.reminders(LocalDate.now(), days);
+        if (items.isEmpty()) System.out.println("No upcoming deadlines.");
+        for (Deadline item : items) System.out.println(item.dueDate() + " " + controller.course(item.courseId()).name()
+                + " " + item.title());
     }
 
     private void showTree() {

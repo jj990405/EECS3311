@@ -54,6 +54,8 @@ public final class MainWindow extends JFrame {
         button(actions, "New course", this::addCourse);
         button(actions, "Upload file", this::uploadFile);
         button(actions, "New deadline", this::addDeadline);
+        button(actions, "Calendar", this::showCalendar);
+        button(actions, "Reminders", this::showReminders);
         button(actions, "Edit deadline", this::editDeadline);
         button(actions, "Toggle done", this::toggleDone);
         button(actions, "Delete deadline", this::deleteDeadline);
@@ -160,6 +162,22 @@ public final class MainWindow extends JFrame {
             controller.addDeadline(course.id(), ask("Deadline title", ""), ask("Type (e.g. Assignment)", ""),
                     date("Due date", "", true), ask("Covered topics / scope", ""));
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void showCalendar() {
+        String value = ask("Month (YYYY-MM)", java.time.YearMonth.now().toString());
+        javax.swing.JTextArea area = new javax.swing.JTextArea(controller.calendar(java.time.YearMonth.parse(value)));
+        area.setEditable(false);
+        area.setFont(new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 13));
+        JOptionPane.showMessageDialog(this, new JScrollPane(area), "Monthly calendar", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showReminders() {
+        var items = controller.reminders(LocalDate.now(), 7);
+        String message = items.isEmpty() ? "No deadlines due in the next seven days."
+                : items.stream().map(d -> d.dueDate() + " " + controller.course(d.courseId()).name()
+                        + " " + d.title()).collect(java.util.stream.Collectors.joining("\n"));
+        JOptionPane.showMessageDialog(this, message, "Upcoming deadlines", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private Deadline selectedDeadline() {

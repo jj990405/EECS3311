@@ -36,6 +36,8 @@ public final class AgentControllerTest {
             check(ordered.get(3).id().equals(undated.id()), "TBD should be listed last");
             check(agent.schedule(AgentController.Period.THIS_MONTH, harder.id(), "project",
                     LocalDate.of(2026, 11, 1)).size() == 1, "Month, course, and search filter");
+            check(agent.calendar(java.time.YearMonth.of(2026, 11)).contains("Project 2"), "Monthly calendar entry");
+            check(agent.reminders(LocalDate.of(2026, 11, 8), 2).size() == 2, "Due-soon reminders");
 
             expectInvalid(() -> agent.addDeadline(harder.id(), "Invalid", "Assignment",
                     LocalDate.of(2027, 1, 1), ""), "Out-of-semester deadline must fail");

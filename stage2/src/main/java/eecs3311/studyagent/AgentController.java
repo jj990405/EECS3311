@@ -142,4 +142,12 @@ public final class AgentController {
                 && d.dueDate().isBefore(today)).count();
         return new Progress(completed, items.size(), overdue);
     }
+
+    public String calendar(java.time.YearMonth month) {
+        return new CalendarView().render(month, schedule(Period.ALL, null, "", month.atDay(1)));
+    }
+
+    public List<Deadline> reminders(LocalDate today, int daysAhead) {
+        return new ReminderService().upcoming(schedule(Period.ALL, null, "", today), today, daysAhead);
+    }
 }

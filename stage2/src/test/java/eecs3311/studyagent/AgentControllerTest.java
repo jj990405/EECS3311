@@ -65,6 +65,25 @@ public final class AgentControllerTest {
                     "Duplicate material must fail");
             check(agent.workspace().get(0).children().size() == 2, "Composite workspace contains both courses");
 
+            AgentController aiAgent = new AgentController(temporary.resolve("data"), (system, user) ->
+                    system.contains("DEADLINE_EXTRACTION")
+                            ? "{\"deadlines\":[{\"title\":\"AI suggested exam\",\"type\":\"Exam\","
+                            + "\"dueDate\":\"2026-11-15\",\"scope\":\"Ch 1\",\"evidence\":\"Nov 15 exam\"}]}"
+                            : "{\"week\":4,\"reason\":\"lecture heading\"}");
+            Path syllabusPath = temporary.resolve("syllabus.txt");
+            Files.writeString(syllabusPath, "Exam on Nov 15, 2026");
+            MaterialFile syllabus = aiAgent.uploadMaterial(harder.id(), Category.SYLLABUS, syllabusPath);
+            var proposedDeadline = aiAgent.suggestSyllabusDeadlines(syllabus.id()).get(0);
+            check(aiAgent.schedule(AgentController.Period.ALL, null, "AI suggested", LocalDate.now()).isEmpty(),
+                    "Model output must not mutate schedule before approval");
+            aiAgent.approveProposal(proposedDeadline.id());
+            check(aiAgent.schedule(AgentController.Period.ALL, null, "AI suggested", LocalDate.now()).size() == 1,
+                    "Approved deadline is stored");
+            var proposedWeek = aiAgent.suggestLectureWeek(material.id());
+            aiAgent.rejectProposal(proposedWeek.id());
+            check(aiAgent.materials().stream().filter(m -> m.id().equals(material.id())).findFirst().orElseThrow()
+                    .lectureWeek() == null, "Rejected week has no effect");
+
             agent.setCompleted(sameDayHard.id(), true);
             AgentController.Progress progress = agent.progress(harder.id(), LocalDate.of(2026, 11, 11));
             check(progress.completed() == 1 && progress.total() == 2 && progress.overdue() == 0,
@@ -74,15 +93,15 @@ public final class AgentControllerTest {
             AgentController reloaded = new AgentController(temporary.resolve("data"));
             check(reloaded.semesters().size() == 1 && reloaded.courses().size() == 2,
                     "Semester and course survive restart");
-            check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 4,
+            check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 5,
                     "Deadlines survive restart");
             check(reloaded.deadline(sameDayHard.id()).completed(), "Completion survives restart");
-            check(reloaded.materials().size() == 1, "Material metadata survives restart");
+            check(reloaded.materials().size() == 2, "Material metadata survives restart");
 
             reloaded.editDeadline(late.id(), "Revised essay", "Assignment", LocalDate.of(2026, 11, 21), "New scope");
             check(reloaded.deadline(late.id()).dueDate().equals(LocalDate.of(2026, 11, 21)), "Edit persists");
             reloaded.deleteDeadline(undated.id());
-            check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 3,
+            check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 4,
                     "Delete removes deadline");
             System.out.println("PASS: persistence, priority, filtering, validation, materials, progress, edits, observer");
         } finally {

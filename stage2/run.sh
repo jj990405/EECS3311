@@ -34,7 +34,7 @@ if [[ "$mode" == test ]]; then
   "$javac_command" --release 17 -encoding UTF-8 -cp "$classpath" -d "$build_directory" "${tests[@]}"
   "$java_command" -Dproject2.root="$root" -cp "$classpath" eecs3311.studyagent.AgentControllerTest
 elif [[ "$mode" == cli ]]; then
-  "$java_command" -cp "$classpath" eecs3311.studyagent.Main --cli --data "$data_directory"
+  "$java_command" -Dproject2.root="$root" -cp "$classpath" eecs3311.studyagent.Main --cli --data "$data_directory"
 else
-  "$java_command" -cp "$classpath" eecs3311.studyagent.Main --data "$data_directory"
+  "$java_command" -Dproject2.root="$root" -cp "$classpath" eecs3311.studyagent.Main --data "$data_directory"
 fi

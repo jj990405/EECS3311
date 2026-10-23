@@ -18,9 +18,18 @@ public final class AgentController {
 
     private final DataStore store;
     private final PriorityRecommender recommender = new PriorityRecommender();
+    private final CommandInvoker invoker = new CommandInvoker();
+    private final PromptBuilder prompts = new PromptBuilder();
+    private final ResponseParser parser = new ResponseParser();
+    private final LlmClient llm;
 
     public AgentController(Path dataDirectory) throws IOException {
+        this(dataDirectory, new HttpLlmClient(Path.of(System.getProperty("project2.root", "."))));
+    }
+
+    public AgentController(Path dataDirectory, LlmClient llm) throws IOException {
         this.store = new DataStore(dataDirectory);
+        this.llm = llm;
     }
 
     public void addChangeListener(Runnable listener) { store.addChangeListener(listener); }
@@ -35,6 +44,45 @@ public final class AgentController {
     public List<String> materialPages(UUID id) throws IOException { return store.materialPages(id); }
     public MaterialFile assignLectureWeek(UUID id, Integer week) throws IOException {
         return store.assignLectureWeek(id, week);
+    }
+    public List<CommandInvoker.Proposal> pendingProposals() { return invoker.pending(); }
+    public void approveProposal(UUID id) throws IOException { invoker.approve(id); }
+    public void rejectProposal(UUID id) { invoker.reject(id); }
+
+    public List<CommandInvoker.Proposal> suggestSyllabusDeadlines(UUID materialId) throws IOException {
+        MaterialFile file = store.material(materialId);
+        if (file.category() != Category.SYLLABUS || !file.textAvailable())
+            throw new IllegalArgumentException("Select a syllabus with extractable text.");
+        Course course = store.course(file.courseId());
+        Semester semester = store.semester(course.semesterId());
+        String context = "Semester " + semester.startDate() + " to " + semester.endDate()
+                + "; course " + course.name() + "; source " + file.originalName() + "\n"
+                + prompts.pages(store.materialPages(materialId), 30000);
+        String response = llm.complete(prompts.system(PromptBuilder.Task.DEADLINE_EXTRACTION),
+                prompts.user(PromptBuilder.Task.DEADLINE_EXTRACTION, context, "Extract assessment deadlines."));
+        List<CommandInvoker.Proposal> result = new java.util.ArrayList<>();
+        DeadlineValidator validator = new DeadlineValidator();
+        for (ResponseParser.DeadlineDraft draft : parser.deadlines(response)) {
+            validator.validate(draft, semester);
+            result.add(invoker.propose("Add " + course.name() + " / " + draft.title() + " / "
+                    + (draft.dueDate() == null ? "TBD" : draft.dueDate()) + " / evidence: " + draft.evidence(),
+                    new AddDeadlineCommand(store, course.id(), draft)));
+        }
+        return result;
+    }
+
+    public CommandInvoker.Proposal suggestLectureWeek(UUID materialId) throws IOException {
+        MaterialFile file = store.material(materialId);
+        if (file.category() != Category.LECTURE_MATERIALS || !file.textAvailable())
+            throw new IllegalArgumentException("Select lecture material with extractable text.");
+        Integer week = parser.week(llm.complete(prompts.system(PromptBuilder.Task.WEEK_MATCH),
+                prompts.user(PromptBuilder.Task.WEEK_MATCH,
+                        "Course: " + store.course(file.courseId()).name() + "\n"
+                                + prompts.pages(store.materialPages(materialId), 20000),
+                        "Suggest the lecture week. Use null if the source does not support a week.")));
+        if (week == null) throw new IllegalArgumentException("No supported lecture week was found.");
+        return invoker.propose("Assign " + file.originalName() + " to lecture week " + week,
+                new AssignWeekCommand(store, materialId, week));
     }
 
     public Semester createSemester(String name, LocalDate start, LocalDate end) throws IOException {

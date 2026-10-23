@@ -39,8 +39,8 @@ if ($Mode -eq 'test') {
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & (Join-Path $javaBin 'java.exe') "-Dproject2.root=$PSScriptRoot" -cp $classpath eecs3311.studyagent.AgentControllerTest
 } elseif ($Mode -eq 'cli') {
-    & (Join-Path $javaBin 'java.exe') -cp $classpath eecs3311.studyagent.Main --cli --data $DataDirectory
+    & (Join-Path $javaBin 'java.exe') "-Dproject2.root=$PSScriptRoot" -cp $classpath eecs3311.studyagent.Main --cli --data $DataDirectory
 } else {
-    & (Join-Path $javaBin 'java.exe') -cp $classpath eecs3311.studyagent.Main --data $DataDirectory
+    & (Join-Path $javaBin 'java.exe') "-Dproject2.root=$PSScriptRoot" -cp $classpath eecs3311.studyagent.Main --data $DataDirectory
 }
 exit $LASTEXITCODE

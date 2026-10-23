@@ -36,6 +36,11 @@ public final class CommandLineInterface {
                     case "complete" -> complete();
                     case "progress" -> progress();
                     case "tree" -> showTree();
+                    case "ai syllabus" -> suggestSyllabus();
+                    case "ai week" -> suggestWeek();
+                    case "proposals" -> proposals();
+                    case "approve" -> approve();
+                    case "reject" -> reject();
                     case "exit", "quit" -> { return; }
                     case "" -> { }
                     default -> System.out.println("Unknown command. Type help.");
@@ -49,6 +54,7 @@ public final class CommandLineInterface {
     private void help() {
         System.out.println("semester add | course add | material add | deadline add | deadline edit");
         System.out.println("deadline delete | timeline | complete | progress | tree | exit");
+        System.out.println("ai syllabus | ai week | proposals | approve | reject");
         System.out.println("Dates use YYYY-MM-DD. Leave a deadline date blank for TBD.");
     }
 
@@ -108,6 +114,34 @@ public final class CommandLineInterface {
         }
         return items.get(number("Deadline number", items.size()));
     }
+
+    private MaterialFile chooseMaterial(Category category) {
+        List<MaterialFile> items = controller.materials().stream().filter(m -> m.category() == category).toList();
+        if (items.isEmpty()) throw new IllegalStateException("No material in " + category);
+        for (int i = 0; i < items.size(); i++) System.out.printf("%d. %s%n", i + 1, items.get(i).originalName());
+        return items.get(number("Material number", items.size()));
+    }
+
+    private CommandInvoker.Proposal chooseProposal() {
+        List<CommandInvoker.Proposal> items = controller.pendingProposals();
+        if (items.isEmpty()) throw new IllegalStateException("No pending proposals.");
+        for (int i = 0; i < items.size(); i++) System.out.printf("%d. %s%n", i + 1, items.get(i).description());
+        return items.get(number("Proposal number", items.size()));
+    }
+
+    private void suggestSyllabus() throws IOException {
+        var results = controller.suggestSyllabusDeadlines(chooseMaterial(Category.SYLLABUS).id());
+        System.out.println(results.size() + " deadline proposals. Review with 'proposals'.");
+    }
+
+    private void suggestWeek() throws IOException {
+        var result = controller.suggestLectureWeek(chooseMaterial(Category.LECTURE_MATERIALS).id());
+        System.out.println(result.description());
+    }
+
+    private void proposals() { for (var item : controller.pendingProposals()) System.out.println(item.description()); }
+    private void approve() throws IOException { controller.approveProposal(chooseProposal().id()); System.out.println("Approved."); }
+    private void reject() { controller.rejectProposal(chooseProposal().id()); System.out.println("Rejected."); }
 
     private void addSemester() throws IOException {
         Semester s = controller.createSemester(ask("Name"), date("Start date", false), date("End date", false));

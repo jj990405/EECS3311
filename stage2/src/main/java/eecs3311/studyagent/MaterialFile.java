@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public record MaterialFile(UUID id, UUID courseId, Category category, String originalName,
-                           String storedName) {
+                           String storedName, boolean textAvailable, String extractionWarning, Integer lectureWeek) {
     public MaterialFile {
         Objects.requireNonNull(id, "id");
         Objects.requireNonNull(courseId, "courseId");
@@ -12,5 +12,14 @@ public record MaterialFile(UUID id, UUID courseId, Category category, String ori
         if (originalName == null || originalName.isBlank() || storedName == null || storedName.isBlank()) {
             throw new IllegalArgumentException("Material file names are required.");
         }
+        if (lectureWeek != null && lectureWeek < 1) {
+            throw new IllegalArgumentException("Lecture week must be positive.");
+        }
+        extractionWarning = extractionWarning == null ? "" : extractionWarning;
+    }
+
+    public MaterialFile withLectureWeek(Integer week) {
+        return new MaterialFile(id, courseId, category, originalName, storedName,
+                textAvailable, extractionWarning, week);
     }
 }

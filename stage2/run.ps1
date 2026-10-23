@@ -25,19 +25,22 @@ if ($env:JAVA_HOME -and (Test-Path (Join-Path $env:JAVA_HOME 'bin\javac.exe'))) 
 if (-not $javaBin) { throw 'JDK 17+ not found. Set JAVA_HOME to a JDK installation.' }
 
 $buildDir = Join-Path $PSScriptRoot 'build\classes'
+$pdfboxJar = Join-Path $PSScriptRoot 'lib\pdfbox-app-3.0.8.jar'
+if (-not (Test-Path $pdfboxJar)) { throw 'Missing lib\pdfbox-app-3.0.8.jar.' }
+$classpath = "$buildDir;$pdfboxJar"
 New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
 $sources = @(Get-ChildItem (Join-Path $PSScriptRoot 'src\main\java') -Filter '*.java' -Recurse | ForEach-Object FullName)
-& (Join-Path $javaBin 'javac.exe') --release 17 -encoding UTF-8 -d $buildDir @sources
+& (Join-Path $javaBin 'javac.exe') --release 17 -encoding UTF-8 -cp $pdfboxJar -d $buildDir @sources
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 if ($Mode -eq 'test') {
     $tests = @(Get-ChildItem (Join-Path $PSScriptRoot 'src\test\java') -Filter '*.java' -Recurse | ForEach-Object FullName)
-    & (Join-Path $javaBin 'javac.exe') --release 17 -encoding UTF-8 -cp $buildDir -d $buildDir @tests
+    & (Join-Path $javaBin 'javac.exe') --release 17 -encoding UTF-8 -cp $classpath -d $buildDir @tests
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & (Join-Path $javaBin 'java.exe') -cp $buildDir eecs3311.studyagent.AgentControllerTest
+    & (Join-Path $javaBin 'java.exe') "-Dproject2.root=$PSScriptRoot" -cp $classpath eecs3311.studyagent.AgentControllerTest
 } elseif ($Mode -eq 'cli') {
-    & (Join-Path $javaBin 'java.exe') -cp $buildDir eecs3311.studyagent.Main --cli --data $DataDirectory
+    & (Join-Path $javaBin 'java.exe') -cp $classpath eecs3311.studyagent.Main --cli --data $DataDirectory
 } else {
-    & (Join-Path $javaBin 'java.exe') -cp $buildDir eecs3311.studyagent.Main --data $DataDirectory
+    & (Join-Path $javaBin 'java.exe') -cp $classpath eecs3311.studyagent.Main --data $DataDirectory
 }
 exit $LASTEXITCODE

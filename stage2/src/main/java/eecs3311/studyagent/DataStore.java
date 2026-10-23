@@ -24,11 +24,12 @@ public final class DataStore {
     private final Map<UUID, Course> courses = new HashMap<>();
     private final Map<UUID, Deadline> deadlines = new HashMap<>();
     private final Map<UUID, MaterialFile> materials = new HashMap<>();
+    private final DocumentReaderFactory readers = new DocumentReaderFactory();
     private final List<Runnable> listeners = new CopyOnWriteArrayList<>();
 
     public DataStore(Path root) throws IOException {
         this.root = root.toAbsolutePath().normalize();
-        for (String directory : List.of("semesters", "courses", "deadlines", "materials", "files")) {
+        for (String directory : List.of("semesters", "courses", "deadlines", "materials", "files", "extracted")) {
             Files.createDirectories(this.root.resolve(directory));
         }
         load();
@@ -159,17 +160,62 @@ public final class DataStore {
         String storedName = id + "-" + originalName.replaceAll("[^a-zA-Z0-9._-]", "_");
         Path destination = root.resolve("files").resolve(storedName);
         Files.copy(source, destination);
-        MaterialFile item = new MaterialFile(id, courseId, category, originalName, storedName);
+        List<String> pages = List.of();
+        String warning = "";
+        var reader = readers.getReader(originalName);
+        if (reader.isEmpty()) {
+            warning = "Unsupported file type; stored without extracted text.";
+        } else {
+            try {
+                pages = reader.get().extractText(destination);
+                if (pages.stream().allMatch(String::isBlank)) {
+                    warning = "No extractable text was found; this file is excluded from AI features.";
+                }
+            } catch (IOException ex) {
+                warning = "Text extraction failed: " + ex.getMessage();
+            }
+        }
+        boolean textAvailable = !pages.isEmpty() && pages.stream().anyMatch(page -> !page.isBlank());
+        Path extractedPath = root.resolve("extracted").resolve(id + ".txt");
+        MaterialFile item = new MaterialFile(id, courseId, category, originalName, storedName,
+                textAvailable, warning, null);
         try {
-            save("materials", id, props("course", courseId.toString(), "category", category.name(),
-                    "original", originalName, "stored", storedName));
+            if (textAvailable) Files.writeString(extractedPath, String.join("\f", pages), StandardCharsets.UTF_8);
+            saveMaterial(item);
         } catch (IOException ex) {
             Files.deleteIfExists(destination);
+            Files.deleteIfExists(extractedPath);
             throw ex;
         }
         materials.put(id, item);
         changed();
         return item;
+    }
+
+    public synchronized List<String> materialPages(UUID id) throws IOException {
+        MaterialFile material = material(id);
+        if (!material.textAvailable()) return List.of();
+        Path path = root.resolve("extracted").resolve(id + ".txt");
+        return List.of(Files.readString(path, StandardCharsets.UTF_8).split("\\f", -1));
+    }
+
+    public synchronized MaterialFile assignLectureWeek(UUID id, Integer week) throws IOException {
+        MaterialFile item = material(id).withLectureWeek(week);
+        if (item.category() != Category.LECTURE_MATERIALS) {
+            throw new IllegalArgumentException("Lecture weeks can only be assigned to lecture materials.");
+        }
+        saveMaterial(item);
+        materials.put(id, item);
+        changed();
+        return item;
+    }
+
+    private void saveMaterial(MaterialFile item) throws IOException {
+        save("materials", item.id(), props("course", item.courseId().toString(),
+                "category", item.category().name(), "original", item.originalName(),
+                "stored", item.storedName(), "textAvailable", Boolean.toString(item.textAvailable()),
+                "warning", item.extractionWarning(),
+                "week", item.lectureWeek() == null ? "" : item.lectureWeek().toString()));
     }
 
     public synchronized Path materialPath(UUID id) {
@@ -245,8 +291,11 @@ public final class DataStore {
         for (Path file : propertyFiles("materials")) {
             Properties p = read(file);
             UUID id = id(file);
+            String week = p.getProperty("week", "");
             MaterialFile item = new MaterialFile(id, UUID.fromString(required(p, "course")),
-                    Category.valueOf(required(p, "category")), required(p, "original"), required(p, "stored"));
+                    Category.valueOf(required(p, "category")), required(p, "original"), required(p, "stored"),
+                    Boolean.parseBoolean(p.getProperty("textAvailable", "false")), p.getProperty("warning", ""),
+                    week.isBlank() ? null : Integer.parseInt(week));
             course(item.courseId());
             materials.put(id, item);
         }

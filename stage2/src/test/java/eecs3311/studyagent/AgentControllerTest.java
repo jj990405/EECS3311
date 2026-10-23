@@ -46,6 +46,15 @@ public final class AgentControllerTest {
             Files.writeString(source, "Study notes");
             MaterialFile material = agent.uploadMaterial(harder.id(), Category.LECTURE_MATERIALS, source);
             check(Files.readString(agent.materialPath(material.id())).equals("Study notes"), "Uploaded file bytes");
+            check(agent.materialPages(material.id()).equals(List.of("Study notes")), "TXT extraction persists");
+            Path projectRoot = Path.of(System.getProperty("project2.root", "."));
+            Path stage2Pdf = projectRoot.resolve("Project-Stage2-Instruction.pdf");
+            if (Files.exists(stage2Pdf)) {
+                List<String> pdfPages = new PdfReader().extractText(stage2Pdf);
+                check(pdfPages.size() == 5, "Stage 2 instructions should have five PDF pages");
+                check(pdfPages.stream().anyMatch(p -> p.contains("October 20") || p.contains("Oct 20")),
+                        "PDF extraction should find the commit period");
+            }
             expectInvalid(() -> agent.uploadMaterial(harder.id(), Category.LECTURE_MATERIALS, source),
                     "Duplicate material must fail");
             check(agent.workspace().get(0).children().size() == 2, "Composite workspace contains both courses");

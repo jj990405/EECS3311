@@ -147,7 +147,10 @@ public final class MainWindow extends JFrame {
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
         try {
-            controller.uploadMaterial(course.id(), category, chooser.getSelectedFile().toPath());
+            MaterialFile material = controller.uploadMaterial(course.id(), category, chooser.getSelectedFile().toPath());
+            if (!material.extractionWarning().isBlank()) {
+                JOptionPane.showMessageDialog(this, material.extractionWarning(), "File stored", JOptionPane.WARNING_MESSAGE);
+            }
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 

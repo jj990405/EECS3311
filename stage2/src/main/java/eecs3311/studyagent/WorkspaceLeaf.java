@@ -15,6 +15,7 @@ public record WorkspaceLeaf(MaterialFile file) implements WorkspaceNode {
 
     @Override
     public String toString() {
-        return label();
+        return label() + (file.textAvailable() ? "" : " (no extracted text)")
+                + (file.lectureWeek() == null ? "" : " [week " + file.lectureWeek() + "]");
     }
 }

@@ -130,6 +130,7 @@ public final class CommandLineInterface {
         Category category = categories[number("Category number", categories.length)];
         MaterialFile material = controller.uploadMaterial(course.id(), category, Path.of(ask("File path")));
         System.out.println("Stored: " + material.originalName());
+        if (!material.extractionWarning().isBlank()) System.out.println(material.extractionWarning());
     }
 
     private void addDeadline() throws IOException {

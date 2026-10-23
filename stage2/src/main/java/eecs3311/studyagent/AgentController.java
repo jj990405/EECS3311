@@ -32,6 +32,10 @@ public final class AgentController {
     public Course course(UUID id) { return store.course(id); }
     public Deadline deadline(UUID id) { return store.deadline(id); }
     public Path materialPath(UUID id) { return store.materialPath(id); }
+    public List<String> materialPages(UUID id) throws IOException { return store.materialPages(id); }
+    public MaterialFile assignLectureWeek(UUID id, Integer week) throws IOException {
+        return store.assignLectureWeek(id, week);
+    }
 
     public Semester createSemester(String name, LocalDate start, LocalDate end) throws IOException {
         return store.createSemester(name, start, end);

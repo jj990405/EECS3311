@@ -1,0 +1,9 @@
+# Generated files and private local data
+build/
+data/
+.env
+.env.*
+!.env.example
+config.local.json
+*.class
+commit-bundles/

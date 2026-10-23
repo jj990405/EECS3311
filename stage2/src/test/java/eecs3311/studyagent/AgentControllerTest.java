@@ -55,6 +55,12 @@ public final class AgentControllerTest {
                 check(pdfPages.stream().anyMatch(p -> p.contains("October 20") || p.contains("Oct 20")),
                         "PDF extraction should find the commit period");
             }
+            ResponseParser parser = new ResponseParser();
+            check(parser.week("{\"week\":3,\"reason\":\"matches lecture\"}") == 3,
+                    "Structured week response");
+            check(parser.deadlines("{\"deadlines\":[{\"title\":\"Test\",\"type\":\"Exam\","
+                    + "\"dueDate\":\"2026-11-01\",\"scope\":\"Ch 1\",\"evidence\":\"Nov 1\"}]}")
+                    .get(0).dueDate().equals(LocalDate.of(2026, 11, 1)), "Structured deadline response");
             expectInvalid(() -> agent.uploadMaterial(harder.id(), Category.LECTURE_MATERIALS, source),
                     "Duplicate material must fail");
             check(agent.workspace().get(0).children().size() == 2, "Composite workspace contains both courses");

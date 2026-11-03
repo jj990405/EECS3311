@@ -96,6 +96,16 @@ public final class AgentControllerTest {
             check(qaAgent.suggestReferences(sameDayHard.id()).size() == 1, "AI selects an uploaded file");
             check(qaAgent.answerQuestion(harder.id(), "What is in the notes?").citations().size() == 1,
                     "Question answer validates a page citation");
+            AgentController studyAi = new AgentController(temporary.resolve("data"), (system, user) ->
+                    system.contains("SUMMARY") ? "{\"summary\":\"Notes overview\",\"citations\":[{\"fileName\":\"notes.txt\",\"page\":1}]}"
+                    : "{\"questions\":[{\"topic\":\"patterns\",\"question\":\"Which pattern?\","
+                    + "\"choices\":[\"Facade\",\"Other\",\"Third\",\"Fourth\"],\"answerIndex\":0,"
+                    + "\"explanation\":\"Facade is correct\"}]}");
+            studyAi.generateSummary(material.id());
+            check(studyAi.summaries(material.id()).size() == 1, "Saved summary is retrievable");
+            StudyArtifacts.Quiz quiz = studyAi.generateQuiz(material.id());
+            check(studyAi.gradeQuiz(quiz, List.of(1)).correct() == 0, "Wrong MCQ answer is graded locally");
+            check(studyAi.quizAttempts(quiz.id()).size() == 1, "Quiz attempt persists");
 
             agent.setCompleted(sameDayHard.id(), true);
             AgentController.Progress progress = agent.progress(harder.id(), LocalDate.of(2026, 11, 11));

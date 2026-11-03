@@ -42,6 +42,10 @@ public final class CommandLineInterface {
                     case "study week" -> studyWeek();
                     case "ai references" -> references();
                     case "ask" -> askQuestion();
+                    case "summary create" -> createSummary();
+                    case "summary list" -> listSummaries();
+                    case "quiz create" -> createQuiz();
+                    case "quiz take" -> takeQuiz();
                     case "complete" -> complete();
                     case "progress" -> progress();
                     case "tree" -> showTree();
@@ -66,6 +70,7 @@ public final class CommandLineInterface {
         System.out.println("ai syllabus | ai week | proposals | approve | reject");
         System.out.println("study start | study pause | study resume | study stop | study week");
         System.out.println("ai references | ask");
+        System.out.println("summary create | summary list | quiz create | quiz take");
         System.out.println("Dates use YYYY-MM-DD. Leave a deadline date blank for TBD.");
     }
 
@@ -129,6 +134,13 @@ public final class CommandLineInterface {
     private MaterialFile chooseMaterial(Category category) {
         List<MaterialFile> items = controller.materials().stream().filter(m -> m.category() == category).toList();
         if (items.isEmpty()) throw new IllegalStateException("No material in " + category);
+        for (int i = 0; i < items.size(); i++) System.out.printf("%d. %s%n", i + 1, items.get(i).originalName());
+        return items.get(number("Material number", items.size()));
+    }
+
+    private MaterialFile chooseReadableMaterial() {
+        List<MaterialFile> items = controller.materials().stream().filter(MaterialFile::textAvailable).toList();
+        if (items.isEmpty()) throw new IllegalStateException("Upload a readable material first.");
         for (int i = 0; i < items.size(); i++) System.out.printf("%d. %s%n", i + 1, items.get(i).originalName());
         return items.get(number("Material number", items.size()));
     }
@@ -275,6 +287,33 @@ public final class CommandLineInterface {
         System.out.println(answer.answer());
         for (GroundedAnswer.Citation citation : answer.citations())
             System.out.println("Source: " + citation.fileName() + " p." + citation.page());
+    }
+
+    private void createSummary() throws IOException {
+        System.out.println(controller.generateSummary(chooseReadableMaterial().id()).text());
+    }
+    private void listSummaries() throws IOException {
+        for (var item : controller.summaries(chooseReadableMaterial().id())) System.out.println(item.text() + "\n");
+    }
+    private void createQuiz() throws IOException {
+        var quiz = controller.generateQuiz(chooseReadableMaterial().id());
+        System.out.println("Saved quiz " + quiz.id() + " with " + quiz.questions().size() + " questions.");
+    }
+    private void takeQuiz() throws IOException {
+        List<StudyArtifacts.Quiz> quizzes = controller.quizzes(chooseCourse().id());
+        if (quizzes.isEmpty()) throw new IllegalStateException("Generate a quiz first.");
+        for (int i = 0; i < quizzes.size(); i++) System.out.printf("%d. %s%n", i + 1, quizzes.get(i).id());
+        StudyArtifacts.Quiz quiz = quizzes.get(number("Quiz number", quizzes.size()));
+        List<Integer> answers = new java.util.ArrayList<>();
+        for (var question : quiz.questions()) {
+            System.out.println(question.text());
+            for (int i = 0; i < 4; i++) System.out.printf("%d. %s%n", i + 1, question.choices().get(i));
+            answers.add(number("Answer", 4));
+        }
+        var result = controller.gradeQuiz(quiz, answers);
+        System.out.println("Score: " + result.correct() + "/" + quiz.questions().size());
+        for (int i = 0; i < answers.size(); i++) if (answers.get(i) != quiz.questions().get(i).answerIndex())
+            System.out.println("Review " + quiz.questions().get(i).topic() + ": " + quiz.questions().get(i).explanation());
     }
 
     private void showTree() {

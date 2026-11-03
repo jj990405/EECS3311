@@ -23,6 +23,7 @@ public final class AgentController {
     private final ResponseParser parser = new ResponseParser();
     private final LlmClient llm;
     private final StudyTimer timer = new StudyTimer();
+    private final StudyArtifacts artifacts;
 
     public AgentController(Path dataDirectory) throws IOException {
         this(dataDirectory, new HttpLlmClient(Path.of(System.getProperty("project2.root", "."))));
@@ -31,6 +32,7 @@ public final class AgentController {
     public AgentController(Path dataDirectory, LlmClient llm) throws IOException {
         this.store = new DataStore(dataDirectory);
         this.llm = llm;
+        this.artifacts = new StudyArtifacts(dataDirectory);
     }
 
     public void addChangeListener(Runnable listener) { store.addChangeListener(listener); }
@@ -200,4 +202,49 @@ public final class AgentController {
         if (citations.isEmpty()) throw new IllegalArgumentException("AI answer has no verifiable source citation.");
         return new GroundedAnswer(Json.string(response, "answer"), citations);
     }
+
+    public StudyArtifacts.Summary generateSummary(UUID materialId) throws IOException {
+        MaterialFile file = store.material(materialId);
+        if (!file.textAvailable()) throw new IllegalArgumentException("This file has no extractable text.");
+        Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.SUMMARY),
+                prompts.user(PromptBuilder.Task.SUMMARY, "File: " + file.originalName() + "\n"
+                        + prompts.pages(store.materialPages(materialId), 25000), "Summarize the study material.")));
+        List<String> sources = new java.util.ArrayList<>();
+        for (Object raw : Json.array(response.get("citations"))) {
+            var citation = Json.object(raw);
+            int page = ((Number) citation.get("page")).intValue();
+            if (!file.originalName().equals(Json.string(citation, "fileName"))
+                    || page < 1 || page > store.materialPages(materialId).size())
+                throw new IllegalArgumentException("Summary contains an invalid citation.");
+            sources.add(file.originalName() + " p." + page);
+        }
+        if (sources.isEmpty()) throw new IllegalArgumentException("Summary requires a source citation.");
+        return artifacts.saveSummary(materialId, Json.string(response, "summary") + "\nSources: "
+                + String.join(", ", sources));
+    }
+
+    public List<StudyArtifacts.Summary> summaries(UUID materialId) throws IOException { return artifacts.summaries(materialId); }
+
+    public StudyArtifacts.Quiz generateQuiz(UUID materialId) throws IOException {
+        MaterialFile file = store.material(materialId);
+        if (!file.textAvailable()) throw new IllegalArgumentException("This file has no extractable text.");
+        Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.QUIZ),
+                prompts.user(PromptBuilder.Task.QUIZ, "File: " + file.originalName() + "\n"
+                        + prompts.pages(store.materialPages(materialId), 25000),
+                        "Create three multiple-choice study questions from the source.")));
+        List<StudyArtifacts.Question> questions = new java.util.ArrayList<>();
+        for (Object raw : Json.array(response.get("questions"))) {
+            var q = Json.object(raw);
+            questions.add(new StudyArtifacts.Question(Json.string(q, "topic"), Json.string(q, "question"),
+                    Json.array(q.get("choices")).stream().map(Object::toString).toList(),
+                    ((Number) q.get("answerIndex")).intValue(), Json.string(q, "explanation")));
+        }
+        return artifacts.saveQuiz(file.courseId(), materialId, questions);
+    }
+
+    public List<StudyArtifacts.Quiz> quizzes(UUID courseId) throws IOException { return artifacts.quizzes(courseId); }
+    public StudyArtifacts.Attempt gradeQuiz(StudyArtifacts.Quiz quiz, List<Integer> answers) throws IOException {
+        return artifacts.grade(quiz, answers);
+    }
+    public List<StudyArtifacts.Attempt> quizAttempts(UUID quizId) throws IOException { return artifacts.attempts(quizId); }
 }

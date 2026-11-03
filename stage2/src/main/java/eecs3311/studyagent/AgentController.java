@@ -247,4 +247,29 @@ public final class AgentController {
         return artifacts.grade(quiz, answers);
     }
     public List<StudyArtifacts.Attempt> quizAttempts(UUID quizId) throws IOException { return artifacts.attempts(quizId); }
+
+    public CommandInvoker.Proposal planScheduleChange(UUID courseId, String request) throws IOException {
+        if (request == null || request.isBlank()) throw new IllegalArgumentException("Enter a schedule change request.");
+        return new SchedulePlanner().plan(store, llm, prompts, parser, invoker, courseId, request);
+    }
+
+    public List<Map.Entry<String, Integer>> weakTopics(UUID courseId) throws IOException {
+        store.course(courseId);
+        return new WeakTopicAnalyzer().analyze(artifacts, courseId);
+    }
+
+    public String weeklyBriefing(UUID courseId, LocalDate today) throws IOException {
+        Course course = store.course(courseId);
+        LocalDate monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        StringBuilder context = new StringBuilder("Course: " + course.name() + "\nWeek of " + monday + "\nDeadlines:\n");
+        for (Deadline deadline : schedule(Period.THIS_WEEK, courseId, "", today))
+            context.append(deadline.dueDate()).append(" ").append(deadline.title())
+                    .append(deadline.completed() ? " completed" : " pending").append('\n');
+        context.append("Study seconds this week: ").append(weeklyStudySeconds(courseId, today));
+        context.append("\nWeak topics: ").append(weakTopics(courseId));
+        Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.WEEKLY_BRIEF),
+                prompts.user(PromptBuilder.Task.WEEKLY_BRIEF, context.toString(),
+                        "Give a concise weekly briefing and suggest what to study next.")));
+        return Json.string(response, "briefing");
+    }
 }

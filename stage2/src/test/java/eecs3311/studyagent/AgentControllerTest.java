@@ -106,6 +106,21 @@ public final class AgentControllerTest {
             StudyArtifacts.Quiz quiz = studyAi.generateQuiz(material.id());
             check(studyAi.gradeQuiz(quiz, List.of(1)).correct() == 0, "Wrong MCQ answer is graded locally");
             check(studyAi.quizAttempts(quiz.id()).size() == 1, "Quiz attempt persists");
+            check(studyAi.weakTopics(harder.id()).get(0).getKey().equals("patterns"),
+                    "Missed quiz topic becomes a weak topic");
+            AgentController planner = new AgentController(temporary.resolve("data"), (system, user) ->
+                    system.contains("SCHEDULE_PLAN")
+                    ? "{\"action\":\"add\",\"deadlineId\":null,\"title\":\"AI planned task\","
+                    + "\"type\":\"Assignment\",\"dueDate\":\"2026-11-22\",\"scope\":\"Ch 2\"}"
+                    : "{\"briefing\":\"Review patterns before the project deadline.\"}");
+            var scheduleProposal = planner.planScheduleChange(harder.id(), "Add assignment on Nov 22");
+            check(planner.schedule(AgentController.Period.ALL, null, "AI planned", LocalDate.now()).isEmpty(),
+                    "Natural-language plan requires approval");
+            planner.approveProposal(scheduleProposal.id());
+            check(planner.schedule(AgentController.Period.ALL, null, "AI planned", LocalDate.now()).size() == 1,
+                    "Approved natural-language plan persists");
+            check(planner.weeklyBriefing(harder.id(), LocalDate.of(2026, 11, 10)).contains("Review patterns"),
+                    "Weekly briefing uses the LLM adapter");
 
             agent.setCompleted(sameDayHard.id(), true);
             AgentController.Progress progress = agent.progress(harder.id(), LocalDate.of(2026, 11, 11));
@@ -116,7 +131,7 @@ public final class AgentControllerTest {
             AgentController reloaded = new AgentController(temporary.resolve("data"));
             check(reloaded.semesters().size() == 1 && reloaded.courses().size() == 2,
                     "Semester and course survive restart");
-            check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 5,
+            check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 6,
                     "Deadlines survive restart");
             check(reloaded.deadline(sameDayHard.id()).completed(), "Completion survives restart");
             check(reloaded.materials().size() == 2, "Material metadata survives restart");
@@ -125,7 +140,7 @@ public final class AgentControllerTest {
             reloaded.editDeadline(late.id(), "Revised essay", "Assignment", LocalDate.of(2026, 11, 21), "New scope");
             check(reloaded.deadline(late.id()).dueDate().equals(LocalDate.of(2026, 11, 21)), "Edit persists");
             reloaded.deleteDeadline(undated.id());
-            check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 4,
+            check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 5,
                     "Delete removes deadline");
             System.out.println("PASS: persistence, priority, filtering, validation, materials, progress, edits, observer");
         } finally {

@@ -46,6 +46,9 @@ public final class CommandLineInterface {
                     case "summary list" -> listSummaries();
                     case "quiz create" -> createQuiz();
                     case "quiz take" -> takeQuiz();
+                    case "ai schedule" -> planSchedule();
+                    case "weak topics" -> weakTopics();
+                    case "weekly brief" -> weeklyBrief();
                     case "complete" -> complete();
                     case "progress" -> progress();
                     case "tree" -> showTree();
@@ -71,6 +74,7 @@ public final class CommandLineInterface {
         System.out.println("study start | study pause | study resume | study stop | study week");
         System.out.println("ai references | ask");
         System.out.println("summary create | summary list | quiz create | quiz take");
+        System.out.println("ai schedule | weak topics | weekly brief");
         System.out.println("Dates use YYYY-MM-DD. Leave a deadline date blank for TBD.");
     }
 
@@ -314,6 +318,20 @@ public final class CommandLineInterface {
         System.out.println("Score: " + result.correct() + "/" + quiz.questions().size());
         for (int i = 0; i < answers.size(); i++) if (answers.get(i) != quiz.questions().get(i).answerIndex())
             System.out.println("Review " + quiz.questions().get(i).topic() + ": " + quiz.questions().get(i).explanation());
+    }
+
+    private void planSchedule() throws IOException {
+        Course course = chooseCourse();
+        System.out.println(controller.planScheduleChange(course.id(), ask("Schedule change request")).description());
+        System.out.println("Review and approve it with 'proposals' and 'approve'.");
+    }
+    private void weakTopics() throws IOException {
+        var topics = controller.weakTopics(chooseCourse().id());
+        if (topics.isEmpty()) System.out.println("No missed quiz topics yet.");
+        for (var topic : topics) System.out.println(topic.getKey() + " — " + topic.getValue() + " missed answers");
+    }
+    private void weeklyBrief() throws IOException {
+        System.out.println(controller.weeklyBriefing(chooseCourse().id(), LocalDate.now()));
     }
 
     private void showTree() {

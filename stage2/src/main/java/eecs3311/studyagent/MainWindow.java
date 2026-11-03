@@ -61,6 +61,7 @@ public final class MainWindow extends JFrame {
         button(actions, "Resume", controller::resumeStudy);
         button(actions, "Stop study", this::stopStudy);
         button(actions, "Ask sources", this::askSources);
+        button(actions, "Weekly brief", this::weeklyBrief);
         button(actions, "Edit deadline", this::editDeadline);
         button(actions, "Toggle done", this::toggleDone);
         button(actions, "Delete deadline", this::deleteDeadline);
@@ -207,6 +208,13 @@ public final class MainWindow extends JFrame {
                     .collect(java.util.stream.Collectors.joining("\n"));
             JOptionPane.showMessageDialog(this, answer.answer() + "\n\nSources:\n" + citations,
                     "Material answer", JOptionPane.INFORMATION_MESSAGE);
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void weeklyBrief() {
+        try {
+            JOptionPane.showMessageDialog(this, controller.weeklyBriefing(chooseCourse().id(), LocalDate.now()),
+                    "Weekly briefing", JOptionPane.INFORMATION_MESSAGE);
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 

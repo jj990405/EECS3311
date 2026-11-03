@@ -35,6 +35,11 @@ public final class CommandLineInterface {
                     case "timeline" -> timeline();
                     case "calendar" -> calendar();
                     case "reminders" -> reminders();
+                    case "study start" -> studyStart();
+                    case "study pause" -> controller.pauseStudy();
+                    case "study resume" -> controller.resumeStudy();
+                    case "study stop" -> studyStop();
+                    case "study week" -> studyWeek();
                     case "complete" -> complete();
                     case "progress" -> progress();
                     case "tree" -> showTree();
@@ -57,6 +62,7 @@ public final class CommandLineInterface {
         System.out.println("semester add | course add | material add | deadline add | deadline edit");
         System.out.println("deadline delete | timeline | calendar | reminders | complete | progress | tree | exit");
         System.out.println("ai syllabus | ai week | proposals | approve | reject");
+        System.out.println("study start | study pause | study resume | study stop | study week");
         System.out.println("Dates use YYYY-MM-DD. Leave a deadline date blank for TBD.");
     }
 
@@ -241,6 +247,17 @@ public final class CommandLineInterface {
         if (items.isEmpty()) System.out.println("No upcoming deadlines.");
         for (Deadline item : items) System.out.println(item.dueDate() + " " + controller.course(item.courseId()).name()
                 + " " + item.title());
+    }
+
+    private void studyStart() { controller.startStudy(chooseCourse().id(), ask("Study topic")); System.out.println("Timer started."); }
+    private void studyStop() throws IOException {
+        StudySession session = controller.stopStudy();
+        System.out.println("Saved " + session.seconds() + " seconds for " + session.topic());
+    }
+    private void studyWeek() {
+        Course course = chooseCourse();
+        System.out.println(course.name() + ": " + controller.weeklyStudySeconds(course.id(), LocalDate.now())
+                + " seconds this week.");
     }
 
     private void showTree() {

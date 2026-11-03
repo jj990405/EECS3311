@@ -24,12 +24,13 @@ public final class DataStore {
     private final Map<UUID, Course> courses = new HashMap<>();
     private final Map<UUID, Deadline> deadlines = new HashMap<>();
     private final Map<UUID, MaterialFile> materials = new HashMap<>();
+    private final Map<UUID, StudySession> sessions = new HashMap<>();
     private final DocumentReaderFactory readers = new DocumentReaderFactory();
     private final List<Runnable> listeners = new CopyOnWriteArrayList<>();
 
     public DataStore(Path root) throws IOException {
         this.root = root.toAbsolutePath().normalize();
-        for (String directory : List.of("semesters", "courses", "deadlines", "materials", "files", "extracted")) {
+        for (String directory : List.of("semesters", "courses", "deadlines", "materials", "files", "extracted", "sessions")) {
             Files.createDirectories(this.root.resolve(directory));
         }
         load();
@@ -58,6 +59,21 @@ public final class DataStore {
 
     public synchronized List<MaterialFile> materials() {
         return materials.values().stream().sorted(Comparator.comparing(MaterialFile::originalName)).toList();
+    }
+
+    public synchronized List<StudySession> studySessions(UUID courseId) {
+        course(courseId);
+        return sessions.values().stream().filter(s -> s.courseId().equals(courseId))
+                .sorted(Comparator.comparing(StudySession::startedAt)).toList();
+    }
+
+    public synchronized StudySession recordStudySession(StudySession session) throws IOException {
+        course(session.courseId());
+        save("sessions", session.id(), props("course", session.courseId().toString(), "topic", session.topic(),
+                "started", session.startedAt().toString(), "seconds", Long.toString(session.seconds())));
+        sessions.put(session.id(), session);
+        changed();
+        return session;
     }
 
     public synchronized Semester semester(UUID id) {
@@ -298,6 +314,15 @@ public final class DataStore {
                     week.isBlank() ? null : Integer.parseInt(week));
             course(item.courseId());
             materials.put(id, item);
+        }
+        for (Path file : propertyFiles("sessions")) {
+            Properties p = read(file);
+            UUID id = id(file);
+            StudySession item = new StudySession(id, UUID.fromString(required(p, "course")),
+                    required(p, "topic"), java.time.LocalDateTime.parse(required(p, "started")),
+                    Long.parseLong(required(p, "seconds")));
+            course(item.courseId());
+            sessions.put(id, item);
         }
     }
 

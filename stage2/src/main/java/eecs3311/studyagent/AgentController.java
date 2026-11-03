@@ -22,6 +22,7 @@ public final class AgentController {
     private final PromptBuilder prompts = new PromptBuilder();
     private final ResponseParser parser = new ResponseParser();
     private final LlmClient llm;
+    private final StudyTimer timer = new StudyTimer();
 
     public AgentController(Path dataDirectory) throws IOException {
         this(dataDirectory, new HttpLlmClient(Path.of(System.getProperty("project2.root", "."))));
@@ -149,5 +150,17 @@ public final class AgentController {
 
     public List<Deadline> reminders(LocalDate today, int daysAhead) {
         return new ReminderService().upcoming(schedule(Period.ALL, null, "", today), today, daysAhead);
+    }
+
+    public void startStudy(UUID courseId, String topic) { store.course(courseId); timer.start(courseId, topic); }
+    public void pauseStudy() { timer.pause(); }
+    public void resumeStudy() { timer.resume(); }
+    public StudySession stopStudy() throws IOException { return store.recordStudySession(timer.stop()); }
+    public List<StudySession> studySessions(UUID courseId) { return store.studySessions(courseId); }
+    public long weeklyStudySeconds(UUID courseId, LocalDate weekDate) {
+        LocalDate monday = weekDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        return studySessions(courseId).stream().filter(s -> !s.startedAt().toLocalDate().isBefore(monday)
+                && !s.startedAt().toLocalDate().isAfter(monday.plusDays(6)))
+                .mapToLong(StudySession::seconds).sum();
     }
 }

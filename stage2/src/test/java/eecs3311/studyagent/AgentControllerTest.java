@@ -85,6 +85,11 @@ public final class AgentControllerTest {
             aiAgent.rejectProposal(proposedWeek.id());
             check(aiAgent.materials().stream().filter(m -> m.id().equals(material.id())).findFirst().orElseThrow()
                     .lectureWeek() == null, "Rejected week has no effect");
+            aiAgent.startStudy(harder.id(), "Design patterns");
+            aiAgent.pauseStudy();
+            aiAgent.resumeStudy();
+            aiAgent.stopStudy();
+            check(aiAgent.studySessions(harder.id()).size() == 1, "Timer records a study session");
 
             agent.setCompleted(sameDayHard.id(), true);
             AgentController.Progress progress = agent.progress(harder.id(), LocalDate.of(2026, 11, 11));
@@ -99,6 +104,7 @@ public final class AgentControllerTest {
                     "Deadlines survive restart");
             check(reloaded.deadline(sameDayHard.id()).completed(), "Completion survives restart");
             check(reloaded.materials().size() == 2, "Material metadata survives restart");
+            check(reloaded.studySessions(harder.id()).size() == 1, "Study sessions survive restart");
 
             reloaded.editDeadline(late.id(), "Revised essay", "Assignment", LocalDate.of(2026, 11, 21), "New scope");
             check(reloaded.deadline(late.id()).dueDate().equals(LocalDate.of(2026, 11, 21)), "Edit persists");

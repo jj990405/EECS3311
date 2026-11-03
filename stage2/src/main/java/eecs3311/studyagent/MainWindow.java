@@ -56,6 +56,10 @@ public final class MainWindow extends JFrame {
         button(actions, "New deadline", this::addDeadline);
         button(actions, "Calendar", this::showCalendar);
         button(actions, "Reminders", this::showReminders);
+        button(actions, "Start study", this::startStudy);
+        button(actions, "Pause", controller::pauseStudy);
+        button(actions, "Resume", controller::resumeStudy);
+        button(actions, "Stop study", this::stopStudy);
         button(actions, "Edit deadline", this::editDeadline);
         button(actions, "Toggle done", this::toggleDone);
         button(actions, "Delete deadline", this::deleteDeadline);
@@ -178,6 +182,19 @@ public final class MainWindow extends JFrame {
                 : items.stream().map(d -> d.dueDate() + " " + controller.course(d.courseId()).name()
                         + " " + d.title()).collect(java.util.stream.Collectors.joining("\n"));
         JOptionPane.showMessageDialog(this, message, "Upcoming deadlines", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void startStudy() {
+        Course course = chooseCourse();
+        controller.startStudy(course.id(), ask("Study topic", ""));
+        status.setText("Studying " + course.name() + " — timer running");
+    }
+
+    private void stopStudy() {
+        try {
+            StudySession session = controller.stopStudy();
+            JOptionPane.showMessageDialog(this, "Saved " + session.seconds() + " seconds for " + session.topic());
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 
     private Deadline selectedDeadline() {

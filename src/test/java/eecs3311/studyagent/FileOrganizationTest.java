@@ -21,6 +21,19 @@ class FileOrganizationTest {
                 FileCategorySuggester.suggest("Project 2 specification.pdf").orElseThrow());
         assertEquals(Category.SYLLABUS,
                 FileCategorySuggester.suggest("EECS3311_F26_syllabus.pdf").orElseThrow());
+        assertEquals(Category.LECTURE_MATERIALS,
+                FileCategorySuggester.defaultDestination("EECS3311-1- OOP Design.pdf", Category.SYLLABUS));
+        assertEquals(Category.LECTURE_MATERIALS,
+                FileCategorySuggester.defaultDestination("EECS3311-1- OOP Design (1).pdf", Category.SYLLABUS));
+        assertEquals(Category.LECTURE_MATERIALS,
+                FileCategorySuggester.defaultDestination("Java_SDK_Design_Patterns.pdf", Category.SYLLABUS));
+        assertEquals(Category.ASSIGNMENT_SPECIFICATIONS,
+                FileCategorySuggester.defaultDestination("stage1 (1).pdf", Category.SYLLABUS));
+        assertEquals(Category.ASSIGNMENT_SPECIFICATIONS,
+                FileCategorySuggester.defaultDestination("Project-Instruction.pdf", Category.SYLLABUS));
+        assertEquals(Category.LECTURE_MATERIALS,
+                FileCategorySuggester.defaultDestination("EECS3311-0-Admin.pdf", Category.LECTURE_MATERIALS));
+        assertEquals(Category.OTHER, FileCategorySuggester.defaultDestination("notes.pdf", null));
         assertTrue(FileCategorySuggester.suggest("notes.pdf").isEmpty());
     }
 

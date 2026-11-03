@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.io.File;
@@ -23,6 +22,7 @@ import java.util.function.Consumer;
 import javax.swing.JButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -122,6 +122,7 @@ public final class MainWindow extends JFrame {
         button(actions, "New semester", this::addSemester);
         button(actions, "New course", this::addCourse);
         button(actions, "Add files", this::uploadFiles);
+        button(actions, "AI sort files", this::classifyFilesWithAi);
         button(actions, "New deadline", this::addDeadline);
         JButton sync = AppTheme.button("Analyze files for calendar", true);
         sync.addActionListener(e -> perform(this::analyzeCalendarFiles));
@@ -325,7 +326,7 @@ public final class MainWindow extends JFrame {
                 menuItemForSemester(menu, branch);
             } else if (branch.kind() == WorkspaceBranch.Kind.COURSE) {
                 Course course = controller.course(branch.id());
-                popupItem(menu, "Upload files...", () -> uploadFiles(course, chooseCategory()));
+                popupItem(menu, "Upload and sort files...", () -> uploadFiles(course, null));
                 popupItem(menu, "New deadline...", () -> addDeadline(course));
                 popupItem(menu, "Change course color...", () -> changeCourseColor(course));
                 popupItem(menu, "View calendar", this::showCalendar);
@@ -653,8 +654,6 @@ public final class MainWindow extends JFrame {
         catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 
-    private Category chooseCategory() { return choose("Choose file category", List.of(Category.values())); }
-
     private void uploadFiles() {
         Object value = selectedTreeValue();
         if (value instanceof WorkspaceLeaf leaf) {
@@ -662,9 +661,9 @@ public final class MainWindow extends JFrame {
         } else if (value instanceof WorkspaceBranch branch && branch.kind() == WorkspaceBranch.Kind.CATEGORY) {
             uploadFiles(controller.course(branch.id()), categoryOf(branch));
         } else if (value instanceof WorkspaceBranch branch && branch.kind() == WorkspaceBranch.Kind.COURSE) {
-            uploadFiles(controller.course(branch.id()), chooseCategory());
+            uploadFiles(controller.course(branch.id()), null);
         } else {
-            uploadFiles(chooseCourse(), chooseCategory());
+            uploadFiles(chooseCourse(), null);
         }
     }
 
@@ -674,39 +673,38 @@ public final class MainWindow extends JFrame {
     }
 
     private void uploadFiles(Course course, Category category) {
-        FileDialog chooser = new FileDialog(this, "Upload files to " + course.name() + " / " + category,
-                FileDialog.LOAD);
-        chooser.setMultipleMode(true);
-        chooser.setDirectory(lastUploadDirectory);
-        chooser.setVisible(true);
-        File[] files = chooser.getFiles();
+        JFileChooser chooser = new JFileChooser(lastUploadDirectory);
+        chooser.setDialogTitle("Choose files for " + course.name());
+        chooser.setMultiSelectionEnabled(true);
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
+        File[] files = chooser.getSelectedFiles();
         if (files.length == 0) return;
-        lastUploadDirectory = chooser.getDirectory();
+        lastUploadDirectory = chooser.getCurrentDirectory().getAbsolutePath();
+        List<Category> destinations = reviewUploadDestinations(files, category);
+        if (destinations == null) return;
         int added = 0;
         MaterialFile last = null;
         List<String> problems = new ArrayList<>();
-        List<AgentController.CategorySuggestion> folderHints = new ArrayList<>();
-        for (File file : files) {
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
+            Category destination = destinations.get(i);
             try {
                 boolean duplicate = controller.materials().stream().anyMatch(m -> m.courseId().equals(course.id())
-                        && m.category() == category && m.originalName().equalsIgnoreCase(file.getName()));
+                        && m.category() == destination && m.originalName().equalsIgnoreCase(file.getName()));
                 boolean replace = false;
                 if (duplicate) {
                     int choice = JOptionPane.showOptionDialog(this,
-                            file.getName() + " already exists in " + category + ". Replace it?",
+                            file.getName() + " already exists in " + destination + ". Replace it?",
                             "Duplicate file", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
                             new Object[] {"Replace", "Skip", "Stop upload"}, "Skip");
                     if (choice == 2 || choice < 0) break;
                     if (choice == 1) continue;
                     replace = true;
                 }
-                MaterialFile material = controller.uploadMaterial(course.id(), category, file.toPath(), replace);
+                MaterialFile material = controller.uploadMaterial(course.id(), destination, file.toPath(), replace);
                 added++;
                 last = material;
-                FileCategorySuggester.suggest(file.getName())
-                        .filter(suggested -> suggested != category)
-                        .ifPresent(suggested -> folderHints.add(new AgentController.CategorySuggestion(
-                                material.id(), suggested, "File name suggests " + suggested + ".")));
                 if (!material.extractionWarning().isBlank())
                     problems.add(file.getName() + ": " + material.extractionWarning());
             } catch (Exception ex) {
@@ -716,11 +714,47 @@ public final class MainWindow extends JFrame {
         refresh();
         if (last != null) selectMaterial(last.id());
         status.setText(added + " file" + (added == 1 ? "" : "s") + " added to " + course.name()
-                + " / " + category + (problems.isEmpty() ? "" : " | " + problems.size() + " need attention"));
+                + (problems.isEmpty() ? "" : " | " + problems.size() + " need attention"));
         if (!problems.isEmpty()) JOptionPane.showMessageDialog(this, String.join("\n", problems),
                 "Upload details", JOptionPane.WARNING_MESSAGE);
-        if (!folderHints.isEmpty()) reviewCategorySuggestions(folderHints,
-                "Some files may be in the wrong folder");
+    }
+
+    private List<Category> reviewUploadDestinations(File[] files, Category selectedFolder) {
+        DefaultTableModel model = new DefaultTableModel(new Object[] {"File", "Destination folder", "Basis"}, 0) {
+            @Override public Class<?> getColumnClass(int column) {
+                return column == 1 ? Category.class : String.class;
+            }
+            @Override public boolean isCellEditable(int row, int column) { return column == 1; }
+        };
+        for (File file : files) {
+            var hint = FileCategorySuggester.suggest(file.getName());
+            model.addRow(new Object[] {file.getName(), FileCategorySuggester.defaultDestination(
+                    file.getName(), selectedFolder),
+                    hint.isPresent() ? "File-name suggestion" : selectedFolder == null
+                            ? "No clear hint; review this row" : "Selected folder; review this row"});
+        }
+        JTable destinations = new JTable(model);
+        destinations.setRowHeight(32);
+        destinations.getColumnModel().getColumn(0).setPreferredWidth(390);
+        destinations.getColumnModel().getColumn(1).setPreferredWidth(190);
+        destinations.getColumnModel().getColumn(2).setPreferredWidth(240);
+        destinations.getColumnModel().getColumn(1).setCellEditor(
+                new javax.swing.DefaultCellEditor(new JComboBox<>(Category.values())));
+        JPanel review = new JPanel(new BorderLayout(0, 10));
+        review.setBorder(AppTheme.padding(16, 16, 16, 16));
+        review.add(new JLabel("Check each destination. Click a folder cell to change it before upload."),
+                BorderLayout.NORTH);
+        JScrollPane scroll = new JScrollPane(destinations);
+        scroll.setPreferredSize(new Dimension(850, Math.min(460, 65 + files.length * 32)));
+        review.add(scroll, BorderLayout.CENTER);
+        int choice = JOptionPane.showOptionDialog(this, review, "Sort files before upload",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                new Object[] {"Upload to shown folders", "Cancel"}, "Upload to shown folders");
+        if (choice != 0) return null;
+        if (destinations.isEditing()) destinations.getCellEditor().stopCellEditing();
+        List<Category> result = new ArrayList<>();
+        for (int row = 0; row < model.getRowCount(); row++) result.add((Category) model.getValueAt(row, 1));
+        return result;
     }
 
     private void moveMaterial(MaterialFile file) {

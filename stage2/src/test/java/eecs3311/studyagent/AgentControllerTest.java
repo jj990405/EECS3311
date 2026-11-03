@@ -38,6 +38,13 @@ public final class AgentControllerTest {
                     LocalDate.of(2026, 11, 1)).size() == 1, "Month, course, and search filter");
             check(agent.calendar(java.time.YearMonth.of(2026, 11)).contains("Project 2"), "Monthly calendar entry");
             check(agent.reminders(LocalDate.of(2026, 11, 8), 2).size() == 2, "Due-soon reminders");
+            agent.setNotification(sameDayHard.id(), java.time.LocalTime.of(15, 0), 60);
+            check(agent.checkNotifications(java.time.LocalDateTime.of(2026, 11, 10, 14, 30)).stream()
+                    .anyMatch(d -> d.id().equals(sameDayHard.id())),
+                    "Notification fires inside the configured lead window");
+            check(agent.checkNotifications(java.time.LocalDateTime.of(2026, 11, 10, 13, 0)).stream()
+                    .noneMatch(d -> d.id().equals(sameDayHard.id())),
+                    "Notification does not fire too early");
 
             expectInvalid(() -> agent.addDeadline(harder.id(), "Invalid", "Assignment",
                     LocalDate.of(2027, 1, 1), ""), "Out-of-semester deadline must fail");
@@ -60,6 +67,8 @@ public final class AgentControllerTest {
             ResponseParser parser = new ResponseParser();
             check(parser.week("{\"week\":3,\"reason\":\"matches lecture\"}") == 3,
                     "Structured week response");
+            check(!new PromptBuilder().pages(List.of("x".repeat(500)), 100).isBlank(),
+                    "Oversized first page still contributes grounded context");
             check(parser.deadlines("{\"deadlines\":[{\"title\":\"Test\",\"type\":\"Exam\","
                     + "\"dueDate\":\"2026-11-01\",\"scope\":\"Ch 1\",\"evidence\":\"Nov 1\"}]}")
                     .get(0).dueDate().equals(LocalDate.of(2026, 11, 1)), "Structured deadline response");
@@ -86,6 +95,7 @@ public final class AgentControllerTest {
             check(aiAgent.materials().stream().filter(m -> m.id().equals(material.id())).findFirst().orElseThrow()
                     .lectureWeek() == null, "Rejected week has no effect");
             aiAgent.startStudy(harder.id(), "Design patterns");
+            check(aiAgent.remainingStudySeconds() > 0, "Countdown has remaining study time");
             aiAgent.pauseStudy();
             aiAgent.resumeStudy();
             aiAgent.stopStudy();
@@ -96,6 +106,8 @@ public final class AgentControllerTest {
             check(qaAgent.suggestReferences(sameDayHard.id()).size() == 1, "AI selects an uploaded file");
             check(qaAgent.answerQuestion(harder.id(), "What is in the notes?").citations().size() == 1,
                     "Question answer validates a page citation");
+            check(ExplanationStrategy.forDifficulty(Difficulty.HIGH).instruction().contains("step"),
+                    "Course difficulty selects an explanation strategy");
             AgentController studyAi = new AgentController(temporary.resolve("data"), (system, user) ->
                     system.contains("SUMMARY") ? "{\"summary\":\"Notes overview\",\"citations\":[{\"fileName\":\"notes.txt\",\"page\":1}]}"
                     : "{\"questions\":[{\"topic\":\"patterns\",\"question\":\"Which pattern?\","
@@ -108,6 +120,13 @@ public final class AgentControllerTest {
             check(studyAi.quizAttempts(quiz.id()).size() == 1, "Quiz attempt persists");
             check(studyAi.weakTopics(harder.id()).get(0).getKey().equals("patterns"),
                     "Missed quiz topic becomes a weak topic");
+            studyAi.saveSelfAssessment(harder.id(), "UML", 1);
+            check(studyAi.weakTopics(harder.id()).get(0).getKey().equals("UML"),
+                    "Low self-confidence contributes to weak-topic ranking");
+            AgentController weakAi = new AgentController(temporary.resolve("data"), (system, user) ->
+                    "{\"explanation\":\"Review UML relationships.\",\"lecturesToReview\":[\"UML lecture\"]}");
+            check(weakAi.weakTopicAdvice(harder.id()).contains("UML lecture"),
+                    "Weak-topic explanation includes review guidance");
             AgentController planner = new AgentController(temporary.resolve("data"), (system, user) ->
                     system.contains("SCHEDULE_PLAN")
                     ? "{\"action\":\"add\",\"deadlineId\":null,\"title\":\"AI planned task\","
@@ -121,12 +140,24 @@ public final class AgentControllerTest {
                     "Approved natural-language plan persists");
             check(planner.weeklyBriefing(harder.id(), LocalDate.of(2026, 11, 10)).contains("Review patterns"),
                     "Weekly briefing uses the LLM adapter");
+            AgentController essayAi = new AgentController(temporary.resolve("data"), (system, user) ->
+                    system.contains("ESSAY_QUESTION") ? "{\"topic\":\"patterns\",\"question\":\"Explain Facade\"}"
+                    : "{\"score\":78,\"feedback\":\"Explain the pattern roles more clearly.\"}");
+            var essayPrompt = essayAi.generateEssayPrompt(material.id());
+            check(essayAi.essayPrompts(harder.id()).size() == 1, "Generated essay question persists");
+            var essayProposal = essayAi.proposeEssayGrade(essayPrompt, "It simplifies access");
+            check(essayAi.essayGrades(material.id()).isEmpty(), "Essay feedback needs user approval");
+            essayAi.approveProposal(essayProposal.id());
+            check(essayAi.essayGrades(material.id()).get(0).score() == 78, "Approved essay grade persists");
+            check(!essayAi.history().isEmpty(), "AI interactions are saved in history");
+            essayAi.deleteHistory();
+            check(essayAi.history().isEmpty(), "History can be deleted");
 
             agent.setCompleted(sameDayHard.id(), true);
             AgentController.Progress progress = agent.progress(harder.id(), LocalDate.of(2026, 11, 11));
             check(progress.completed() == 1 && progress.total() == 2 && progress.overdue() == 0,
                     "Progress counts completed and undated items correctly");
-            check(changes.get() == 9, "Observer should run once for each successful change");
+            check(changes.get() == 10, "Observer should run once for each successful change");
 
             AgentController reloaded = new AgentController(temporary.resolve("data"));
             check(reloaded.semesters().size() == 1 && reloaded.courses().size() == 2,
@@ -134,6 +165,8 @@ public final class AgentControllerTest {
             check(reloaded.schedule(AgentController.Period.ALL, null, "", LocalDate.now()).size() == 6,
                     "Deadlines survive restart");
             check(reloaded.deadline(sameDayHard.id()).completed(), "Completion survives restart");
+            check(reloaded.deadline(sameDayHard.id()).dueTime().equals(java.time.LocalTime.of(15, 0)),
+                    "Notification settings survive restart");
             check(reloaded.materials().size() == 2, "Material metadata survives restart");
             check(reloaded.studySessions(harder.id()).size() == 1, "Study sessions survive restart");
 

@@ -1,43 +1,54 @@
 # Semester Study and Deadline Management Agent
 
-This is an incremental implementation of the EECS3311 Stage 1 design. It uses Java 17+ and the bundled Apache PDFBox 3.0.8 application JAR for real PDF text extraction. No API key is needed for local features.
+Java 17 Swing and CLI implementation of the Stage 1 design for EECS3311. The application lives under `stage2/` in the same EECS3311 repository as the Stage 1 design.
 
-## Build and run
+## Run
 
-From this directory in PowerShell:
+From `stage2/` in PowerShell:
 
 ```powershell
-.\run.ps1 -Mode gui
-.\run.ps1 -Mode cli
-.\run.ps1 -Mode test
+powershell -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 -Mode test
+powershell -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 -Mode cli
+powershell -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 -Mode gui
 ```
 
-On macOS or Linux, use `./run.sh gui`, `./run.sh cli`, or `./run.sh test` (or `bash run.sh ...`). Both scripts compile the Java sources with the standard JDK compiler, add PDFBox to the classpath, and run `Main`. `run.ps1` uses `JAVA_HOME`, then `javac` on `PATH`, then an Eclipse JustJ JDK if installed. If PowerShell blocks local scripts, use `powershell -ExecutionPolicy Bypass -File .\run.ps1 -Mode cli`. User data is saved under `data/`; pass `-DataDirectory <path>` on Windows or a second argument on macOS/Linux to use another directory. `data/` is excluded from Git.
+Java 17+ is required. `run.ps1` finds `JAVA_HOME`, `javac` on `PATH`, or an installed Eclipse JustJ JDK. On macOS/Linux use `./run.sh test`, `./run.sh cli`, or `./run.sh gui`. Both scripts use the bundled Apache PDFBox 3.0.8 JAR in `lib/` for PDF text extraction. Its SHA-512 verification file is adjacent to the JAR. The application stores personal data under `data/`, which Git ignores.
 
-## Working workflow
+To use AI features, copy `.env.example` to `.env` and supply your own `LLM_API_KEY`. The example key is intentionally empty. The default is an OpenAI-compatible DeepSeek chat-completions endpoint; `LLM_BASE_URL` and `LLM_MODEL` are configurable. No live LLM call was tested without a key. All non-AI features and injected fake-client AI integration tests run without a key. Do not commit `.env`.
 
-1. Create a semester with start and end dates.
-2. Create courses with a color and difficulty (high, medium, or low).
-3. Upload PDF, PPTX, DOCX, or TXT into the four fixed categories. The original file bytes and extracted text are stored locally; double-click a file in the GUI tree to open it. Scanned PDFs without selectable text show a warning and are excluded from AI features.
-4. Enter deadlines, including an optional TBD date. Dates outside the semester are rejected.
-5. View deadlines in the GUI table or CLI timeline. The timeline supports period, course, and title/type filters. Earlier dates come first; deadlines on the same date put the more difficult course first.
-6. Edit or delete deadlines, mark them complete, and inspect course progress and overdue counts. Close and reopen the application to verify persistence.
+## Workflow
 
-The GUI and CLI share `AgentController` and `DataStore`, so changes made in one interface appear in the other after restart. The local data format is one UTF-8 `.properties` file per entity plus copied material files.
+1. Create a semester, course, and upload a syllabus or study file (PDF, PPTX, DOCX, or TXT). Scanned PDFs without selectable text are stored but cannot feed AI features.
+2. Add/edit/delete deadlines, view the timeline or month calendar, configure due time and notification lead time, and inspect due-soon reminders. Course difficulty breaks same-date priority ties.
+3. Use `ai syllabus` to propose deadlines and `ai week` to propose lecture-week assignment. Review with `proposals`, then `approve` or `reject`. AI never directly changes these records.
+4. Use `study start`, `study pause`, `study resume`, `study stop`, and `study week` to record study time. The GUI countdown sounds an alarm and saves the session when the set duration ends.
+5. Use `ai references`, `ask`, `summary create`, `quiz create`, `quiz take`, `weak topics`, and `weekly brief` for material-based study assistance.
+6. Use `ai schedule` for a natural-language schedule edit; review the resulting command before approval. `essay create` generates a question; `essay take` proposes a grade and saves it only after approval. `self assess` and `weak advice` add confidence-based review guidance. `history` displays saved AI interactions; `history delete` clears them.
 
-## Design traceability and current limits
+Type `help` in the CLI for all commands. The GUI exposes the workspace, timeline, calendar, manual reminders, timer, source Q&A, weekly briefing, syllabus/week proposals, approval, and history. Some study tools are CLI-only.
 
-| Stage 1 feature | Current status | Main classes |
+## Design traceability
+
+| Stage 1 ID / diagram | Implementation and diagram flow | Limits |
 | --- | --- | --- |
-| F01 Semester, Course, and Material Management | Partial: workspace tree, categories, file storage/opening, PDF/PPTX/DOCX/TXT extraction, course difficulty/color, and persistence work. AI lecture-week matching remains. | `WorkspaceTree`, `DocumentReaderFactory`, `DataStore`, `AgentController`, both viewers |
-| F03 Schedule View | Partial: GUI schedule table and CLI timeline, search/filter, edit/delete, and TBD dates work. The planned monthly calendar is not built yet. | `AgentController`, `MainWindow`, `CommandLineInterface` |
-| F04 Priority Recommendation | Implemented: date first, then course difficulty for same-day deadlines. | `PriorityRecommender` |
-| F09 Progress Tracking | Implemented: completion state, completed/total count, and overdue count. | `AgentController`, `DataStore`, both viewers |
+| F01 / SD01 | `AgentController` → `DataStore` → `DocumentReaderFactory`/reader → `PromptBuilder`/`LlmClient`/`ResponseParser` → `AssignWeekCommand` → approval. Composite workspace tree and local extraction. | One AI week candidate per file; no OCR for scanned PDFs. |
+| F02 / SD02 | Syllabus extraction → deadline drafts → `DeadlineValidator` → `AddDeadlineCommand` → approval and persistence. | Model dates need selectable source text; duplicates are not merged automatically. |
+| F03 / SD03 | Filtered timeline, editable deadlines, graphical month grid with current-week strip, and CLI calendar. | Calendar cells are read-only; edit through the deadline table. |
+| F04 / SD03, SD08 | `PriorityStrategy`/`PriorityRecommender` orders due date, then course difficulty. | No other strategy is exposed to users. |
+| F05 / SD04 | Pause/resume countdown timer, GUI alarm, persisted sessions and weekly totals. | One running timer at a time; CLI countdown is not animated. |
+| F06 / SD05 | `ReferenceSelector` uses deadline scope and uploaded-file snippets, then checks model-selected names against readable files. | Selection is AI dependent. |
+| F07 / SD06 | `ReminderService` checks each deadline's due time and lead minutes. CLI checks on launch; GUI checks every minute and alerts in the status bar. | Alerts require the app to be running; no OS background service. |
+| F08 / SD07 | `SchedulePlanner` parses add/edit/delete requests into reviewable commands. | One deadline action per request. |
+| F09 / SD03 | Completion flags, counts, and overdue progress. | Deadline progress, not chapter-level progress. |
+| F10 / SD08 | Weekly briefing uses schedule, study seconds, weak topics, and LLM. | Generated on demand; not scheduled. |
+| F11 / SD09 | `MaterialSearcher` retrieves relevant pages; difficulty-based `ExplanationStrategy` shapes the answer; Q&A only accepts citations to pages supplied as evidence. | Citation validation cannot prove the answer's factual correctness. |
+| F12 / SD09 | Cited summaries are saved and can be listed later. | A summary covers one material at a time. |
+| F13 / SD10 | AI multiple-choice and essay-question generation, local MCQ grading, saved attempts; AI essay grade proposal requires approval. | Essay grades can be approved or rejected, but the proposed numeric score cannot be edited. |
+| F14 / SD11 | Missed quiz answers and self-assessments produce ranked weak topics; AI gives review guidance. | Ranking is a simple score based on misses and confidence. |
+| F15 / SD12 | Local interaction history records AI proposals, approvals, generated items, and responses; recent entries inform later Q&A and history can be deleted. | It does not capture every manual UI action. |
 
-The other Stage 1 features are **not implemented yet**. In particular, syllabus deadline extraction, an LLM connection, AI approval proposals, study tools, timer, reminders, weekly briefing, and history still need implementation before the Stage 2 submission. This slice alone does **not** satisfy the full Stage 2 requirements.
+Implemented patterns: Facade (`AgentController`), Composite (`WorkspaceNode` hierarchy), Factory (`DocumentReaderFactory`), Adapter (`HttpLlmClient` behind `LlmClient`), Observer (`DataStore` listeners), Command (`AgentCommand` and `CommandInvoker`), and Strategy (`PriorityStrategy`, `ExplanationStrategy`). These classes follow the Stage 1 class/sequence diagram roles while retaining the explicit differences above.
 
-Patterns already visible in code: **Facade** (`AgentController`), **Composite** (`WorkspaceNode`, `WorkspaceBranch`, `WorkspaceLeaf`), and **Observer** (`DataStore` change listeners used by `MainWindow`). The final project needs at least five distinct implemented patterns.
+## Stage 2 submission notes
 
-## Source and secrets
-
-Commit the source, this README, `lib/pdfbox-app-3.0.8.jar`, and `.gitignore` to the same Stage 1 GitHub repository. The JAR is the Apache PDFBox 3.0.8 release; its SHA-512 is in `lib/pdfbox-app-3.0.8.jar.sha512`. Do not commit `data/`, `build/`, or a real API key. When an LLM client is added, use a local secret configuration and commit only a placeholder example.
+The Stage 2 PDF requires five meaningful source commits **pushed during each** of Oct 20–26, Oct 27–Nov 2, and Nov 3–9 (Toronto time), plus the final report and demonstration videos. A later author or committer date cannot recreate a past push. The report and videos remain to be produced for submission, and a live API demonstration needs your own key.

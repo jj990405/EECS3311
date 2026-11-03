@@ -40,6 +40,8 @@ public final class MainWindow extends JFrame {
     private final JTable table = new JTable(tableModel);
     private final JLabel status = new JLabel(" ");
     private final List<UUID> rowIds = new ArrayList<>();
+    private final java.util.Set<UUID> notified = new java.util.HashSet<>();
+    private javax.swing.Timer studyDisplayTimer;
     private UUID selectedCourseId;
 
     public MainWindow(AgentController controller) {
@@ -56,17 +58,26 @@ public final class MainWindow extends JFrame {
         button(actions, "New deadline", this::addDeadline);
         button(actions, "Calendar", this::showCalendar);
         button(actions, "Reminders", this::showReminders);
+        button(actions, "Notify time", this::configureNotification);
         button(actions, "Start study", this::startStudy);
         button(actions, "Pause", controller::pauseStudy);
         button(actions, "Resume", controller::resumeStudy);
         button(actions, "Stop study", this::stopStudy);
         button(actions, "Ask sources", this::askSources);
         button(actions, "Weekly brief", this::weeklyBrief);
+        button(actions, "AI syllabus", this::aiSyllabus);
+        button(actions, "AI week", this::aiWeek);
+        button(actions, "Review proposals", this::reviewProposals);
+        button(actions, "History", this::showHistory);
+        button(actions, "Self assess", this::selfAssess);
         button(actions, "Edit deadline", this::editDeadline);
         button(actions, "Toggle done", this::toggleDone);
         button(actions, "Delete deadline", this::deleteDeadline);
         button(actions, "Show all", () -> { selectedCourseId = null; refresh(); });
-        add(actions, BorderLayout.NORTH);
+        JScrollPane actionScroll = new JScrollPane(actions,
+                JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        actionScroll.setPreferredSize(new java.awt.Dimension(1000, 58));
+        add(actionScroll, BorderLayout.NORTH);
 
         tree.addTreeSelectionListener(this::selectionChanged);
         tree.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -84,6 +95,9 @@ public final class MainWindow extends JFrame {
 
         controller.addChangeListener(() -> SwingUtilities.invokeLater(this::refresh));
         refresh();
+        javax.swing.Timer notificationTimer = new javax.swing.Timer(60_000, event -> showDueNotifications());
+        notificationTimer.start();
+        SwingUtilities.invokeLater(this::showDueNotifications);
     }
 
     private void button(JPanel parent, String title, Runnable action) {
@@ -172,10 +186,10 @@ public final class MainWindow extends JFrame {
 
     private void showCalendar() {
         String value = ask("Month (YYYY-MM)", java.time.YearMonth.now().toString());
-        javax.swing.JTextArea area = new javax.swing.JTextArea(controller.calendar(java.time.YearMonth.parse(value)));
-        area.setEditable(false);
-        area.setFont(new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 13));
-        JOptionPane.showMessageDialog(this, new JScrollPane(area), "Monthly calendar", JOptionPane.INFORMATION_MESSAGE);
+        java.time.YearMonth month = java.time.YearMonth.parse(value);
+        CalendarPanel calendar = new CalendarPanel(month, LocalDate.now(),
+                controller.schedule(AgentController.Period.ALL, selectedCourseId, "", LocalDate.now()));
+        JOptionPane.showMessageDialog(this, calendar, "Monthly calendar", JOptionPane.PLAIN_MESSAGE);
     }
 
     private void showReminders() {
@@ -186,14 +200,46 @@ public final class MainWindow extends JFrame {
         JOptionPane.showMessageDialog(this, message, "Upcoming deadlines", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    private void configureNotification() {
+        Deadline deadline = selectedDeadline();
+        java.time.LocalTime time = java.time.LocalTime.parse(ask("Due time (HH:MM)", deadline.dueTime().toString()));
+        int minutes = Integer.parseInt(ask("Notify minutes before", Integer.toString(deadline.notifyBeforeMinutes())));
+        try { controller.setNotification(deadline.id(), time, minutes); }
+        catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void showDueNotifications() {
+        var newlyDue = controller.checkNotifications(java.time.LocalDateTime.now()).stream()
+                .filter(d -> notified.add(d.id())).toList();
+        if (!newlyDue.isEmpty()) {
+            java.awt.Toolkit.getDefaultToolkit().beep();
+            status.setText("Due soon: " + newlyDue.stream().map(Deadline::title)
+                    .collect(java.util.stream.Collectors.joining(", ")));
+        }
+    }
+
     private void startStudy() {
         Course course = chooseCourse();
-        controller.startStudy(course.id(), ask("Study topic", ""));
+        String topic = ask("Study topic", "");
+        int minutes = Integer.parseInt(ask("Duration in minutes (1-240)", "25"));
+        controller.startStudy(course.id(), topic, minutes);
         status.setText("Studying " + course.name() + " — timer running");
+        if (studyDisplayTimer != null) studyDisplayTimer.stop();
+        studyDisplayTimer = new javax.swing.Timer(1000, event -> {
+            long remaining = controller.remainingStudySeconds();
+            status.setText("Studying " + course.name() + " — " + remaining / 60 + ":"
+                    + String.format("%02d", remaining % 60) + " remaining");
+            if (remaining == 0 && controller.studyActive()) {
+                java.awt.Toolkit.getDefaultToolkit().beep();
+                stopStudy();
+            }
+        });
+        studyDisplayTimer.start();
     }
 
     private void stopStudy() {
         try {
+            if (studyDisplayTimer != null) studyDisplayTimer.stop();
             StudySession session = controller.stopStudy();
             JOptionPane.showMessageDialog(this, "Saved " + session.seconds() + " seconds for " + session.topic());
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
@@ -215,6 +261,56 @@ public final class MainWindow extends JFrame {
         try {
             JOptionPane.showMessageDialog(this, controller.weeklyBriefing(chooseCourse().id(), LocalDate.now()),
                     "Weekly briefing", JOptionPane.INFORMATION_MESSAGE);
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private MaterialFile chooseMaterial(Category category) {
+        return choose("Choose " + category + " file", controller.materials().stream()
+                .filter(m -> m.category() == category).toList());
+    }
+
+    private void aiSyllabus() {
+        try {
+            var proposals = controller.suggestSyllabusDeadlines(chooseMaterial(Category.SYLLABUS).id());
+            JOptionPane.showMessageDialog(this, proposals.size() + " suggestions ready. Open Review proposals.");
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void aiWeek() {
+        try {
+            var proposal = controller.suggestLectureWeek(chooseMaterial(Category.LECTURE_MATERIALS).id());
+            JOptionPane.showMessageDialog(this, proposal.description() + "\nOpen Review proposals to approve.");
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void reviewProposals() {
+        var proposal = choose("Choose a proposal", controller.pendingProposals());
+        int decision = JOptionPane.showOptionDialog(this, proposal.description(), "Review AI proposal",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                new Object[] {"Approve", "Reject", "Cancel"}, "Cancel");
+        try {
+            if (decision == 0) controller.approveProposal(proposal.id());
+            if (decision == 1) controller.rejectProposal(proposal.id());
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void showHistory() {
+        try {
+            String content = controller.history().stream().map(e -> e.time() + " " + e.event() + " " + e.detail())
+                    .collect(java.util.stream.Collectors.joining("\n"));
+            javax.swing.JTextArea area = new javax.swing.JTextArea(content.isBlank() ? "No interactions yet." : content, 18, 65);
+            area.setEditable(false);
+            JOptionPane.showMessageDialog(this, new JScrollPane(area), "Agent history", JOptionPane.INFORMATION_MESSAGE);
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void selfAssess() {
+        Course course = chooseCourse();
+        String topic = ask("Topic to assess", "");
+        int confidence = Integer.parseInt(ask("Confidence from 1 to 5", "3"));
+        try {
+            controller.saveSelfAssessment(course.id(), topic, confidence);
+            JOptionPane.showMessageDialog(this, "Saved. Use the CLI 'weak advice' command for AI guidance.");
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 

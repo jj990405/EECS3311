@@ -17,13 +17,14 @@ public final class AgentController {
     public record Progress(int completed, int total, int overdue) { }
 
     private final DataStore store;
-    private final PriorityRecommender recommender = new PriorityRecommender();
+    private final PriorityStrategy recommender = new PriorityRecommender();
     private final CommandInvoker invoker = new CommandInvoker();
     private final PromptBuilder prompts = new PromptBuilder();
     private final ResponseParser parser = new ResponseParser();
     private final LlmClient llm;
     private final StudyTimer timer = new StudyTimer();
     private final StudyArtifacts artifacts;
+    private final InteractionHistory history;
 
     public AgentController(Path dataDirectory) throws IOException {
         this(dataDirectory, new HttpLlmClient(Path.of(System.getProperty("project2.root", "."))));
@@ -33,6 +34,7 @@ public final class AgentController {
         this.store = new DataStore(dataDirectory);
         this.llm = llm;
         this.artifacts = new StudyArtifacts(dataDirectory);
+        this.history = new InteractionHistory(dataDirectory);
     }
 
     public void addChangeListener(Runnable listener) { store.addChangeListener(listener); }
@@ -49,8 +51,11 @@ public final class AgentController {
         return store.assignLectureWeek(id, week);
     }
     public List<CommandInvoker.Proposal> pendingProposals() { return invoker.pending(); }
-    public void approveProposal(UUID id) throws IOException { invoker.approve(id); }
-    public void rejectProposal(UUID id) { invoker.reject(id); }
+    public void approveProposal(UUID id) throws IOException { invoker.approve(id); history.add("approved", id.toString()); }
+    public void rejectProposal(UUID id) { invoker.reject(id); try { history.add("rejected", id.toString()); }
+        catch (IOException ex) { throw new IllegalStateException(ex); } }
+    public List<InteractionHistory.Entry> history() throws IOException { return history.list(); }
+    public void deleteHistory() throws IOException { history.deleteAll(); }
 
     public List<CommandInvoker.Proposal> suggestSyllabusDeadlines(UUID materialId) throws IOException {
         MaterialFile file = store.material(materialId);
@@ -71,6 +76,7 @@ public final class AgentController {
                     + (draft.dueDate() == null ? "TBD" : draft.dueDate()) + " / evidence: " + draft.evidence(),
                     new AddDeadlineCommand(store, course.id(), draft)));
         }
+        history.add("syllabus proposals", file.originalName() + ": " + result.size());
         return result;
     }
 
@@ -84,8 +90,10 @@ public final class AgentController {
                                 + prompts.pages(store.materialPages(materialId), 20000),
                         "Suggest the lecture week. Use null if the source does not support a week.")));
         if (week == null) throw new IllegalArgumentException("No supported lecture week was found.");
-        return invoker.propose("Assign " + file.originalName() + " to lecture week " + week,
+        CommandInvoker.Proposal proposal = invoker.propose("Assign " + file.originalName() + " to lecture week " + week,
                 new AssignWeekCommand(store, materialId, week));
+        history.add("lecture week proposal", proposal.description());
+        return proposal;
     }
 
     public Semester createSemester(String name, LocalDate start, LocalDate end) throws IOException {
@@ -153,10 +161,23 @@ public final class AgentController {
     public List<Deadline> reminders(LocalDate today, int daysAhead) {
         return new ReminderService().upcoming(schedule(Period.ALL, null, "", today), today, daysAhead);
     }
+    public Deadline setNotification(UUID deadlineId, java.time.LocalTime dueTime, int minutesBefore) throws IOException {
+        return store.setNotification(deadlineId, dueTime, minutesBefore);
+    }
+    public List<Deadline> checkNotifications(java.time.LocalDateTime now) {
+        return new ReminderService().dueNotifications(store.deadlines(), now);
+    }
 
     public void startStudy(UUID courseId, String topic) { store.course(courseId); timer.start(courseId, topic); }
+    public void startStudy(UUID courseId, String topic, int minutes) {
+        store.course(courseId);
+        if (minutes < 1 || minutes > 240) throw new IllegalArgumentException("Choose 1-240 minutes.");
+        timer.start(courseId, topic, minutes * 60L);
+    }
     public void pauseStudy() { timer.pause(); }
     public void resumeStudy() { timer.resume(); }
+    public long remainingStudySeconds() { return timer.remainingSeconds(); }
+    public boolean studyActive() { return timer.active(); }
     public StudySession stopStudy() throws IOException { return store.recordStudySession(timer.stop()); }
     public List<StudySession> studySessions(UUID courseId) { return store.studySessions(courseId); }
     public long weeklyStudySeconds(UUID courseId, LocalDate weekDate) {
@@ -171,7 +192,18 @@ public final class AgentController {
         List<MaterialFile> candidates = store.materials().stream().filter(m -> m.courseId().equals(deadline.courseId())
                 && m.textAvailable()).toList();
         return new ReferenceSelector().select(llm, prompts, parser,
-                "Select files relevant to " + deadline.title() + " / " + deadline.scope(), candidates);
+                "Select files relevant to " + deadline.title() + " / " + deadline.scope() + "\n"
+                        + candidateSnippets(candidates), candidates);
+    }
+
+    private String candidateSnippets(List<MaterialFile> candidates) throws IOException {
+        StringBuilder result = new StringBuilder();
+        for (MaterialFile file : candidates) {
+            List<String> pages = store.materialPages(file.id());
+            if (!pages.isEmpty()) result.append(file.originalName()).append(": ")
+                    .append(pages.get(0), 0, Math.min(400, pages.get(0).length())).append('\n');
+        }
+        return result.toString();
     }
 
     public GroundedAnswer answerQuestion(UUID courseId, String question) throws IOException {
@@ -179,13 +211,18 @@ public final class AgentController {
         if (question == null || question.isBlank()) throw new IllegalArgumentException("Enter a question.");
         List<MaterialFile> candidates = store.materials().stream().filter(m -> m.courseId().equals(courseId)
                 && m.textAvailable()).toList();
-        List<MaterialFile> selected = new ReferenceSelector().select(llm, prompts, parser, question, candidates);
+        List<MaterialFile> selected = new ReferenceSelector().select(llm, prompts, parser,
+                question + "\n" + candidateSnippets(candidates), candidates);
         if (selected.isEmpty()) throw new IllegalArgumentException("No uploaded source supports this question.");
         StringBuilder context = new StringBuilder();
-        for (MaterialFile file : selected) {
-            context.append("\n[File: ").append(file.originalName()).append("]\n")
-                    .append(prompts.pages(store.materialPages(file.id()), 8000));
-        }
+        List<MaterialSearcher.Passage> passages = new MaterialSearcher().search(store, selected, question, 8);
+        if (passages.isEmpty()) throw new IllegalArgumentException("Selected sources contain no readable passages.");
+        for (var passage : passages) context.append("\n[File: ").append(passage.fileName())
+                .append("; Page: ").append(passage.page()).append("]\n").append(passage.text()).append('\n');
+        context.append("\nExplanation style: ")
+                .append(ExplanationStrategy.forDifficulty(store.course(courseId).difficulty()).instruction());
+        context.append("\nRecent interaction context (not source evidence):\n");
+        for (var entry : history.recent(5)) context.append(entry.event()).append(": ").append(entry.detail()).append('\n');
         Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.QA),
                 prompts.user(PromptBuilder.Task.QA, context.toString(), question)));
         List<GroundedAnswer.Citation> citations = new java.util.ArrayList<>();
@@ -193,14 +230,14 @@ public final class AgentController {
             Map<String, Object> citation = Json.object(raw);
             String name = Json.string(citation, "fileName");
             int page = ((Number) citation.get("page")).intValue();
-            MaterialFile source = selected.stream().filter(m -> m.originalName().equals(name)).findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("Answer cites an unselected file: " + name));
-            if (page < 1 || page > store.materialPages(source.id()).size())
-                throw new IllegalArgumentException("Answer cites an invalid page: " + page);
+            if (passages.stream().noneMatch(p -> p.fileName().equals(name) && p.page() == page))
+                throw new IllegalArgumentException("Answer cites a page not supplied as evidence: " + name + " p." + page);
             citations.add(new GroundedAnswer.Citation(name, page));
         }
         if (citations.isEmpty()) throw new IllegalArgumentException("AI answer has no verifiable source citation.");
-        return new GroundedAnswer(Json.string(response, "answer"), citations);
+        GroundedAnswer result = new GroundedAnswer(Json.string(response, "answer"), citations);
+        history.add("question answered", question);
+        return result;
     }
 
     public StudyArtifacts.Summary generateSummary(UUID materialId) throws IOException {
@@ -208,7 +245,9 @@ public final class AgentController {
         if (!file.textAvailable()) throw new IllegalArgumentException("This file has no extractable text.");
         Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.SUMMARY),
                 prompts.user(PromptBuilder.Task.SUMMARY, "File: " + file.originalName() + "\n"
-                        + prompts.pages(store.materialPages(materialId), 25000), "Summarize the study material.")));
+                        + prompts.pages(store.materialPages(materialId), 25000),
+                        "Summarize the study material. " + ExplanationStrategy.forDifficulty(
+                                store.course(file.courseId()).difficulty()).instruction())));
         List<String> sources = new java.util.ArrayList<>();
         for (Object raw : Json.array(response.get("citations"))) {
             var citation = Json.object(raw);
@@ -219,8 +258,10 @@ public final class AgentController {
             sources.add(file.originalName() + " p." + page);
         }
         if (sources.isEmpty()) throw new IllegalArgumentException("Summary requires a source citation.");
-        return artifacts.saveSummary(materialId, Json.string(response, "summary") + "\nSources: "
+        StudyArtifacts.Summary summary = artifacts.saveSummary(materialId, Json.string(response, "summary") + "\nSources: "
                 + String.join(", ", sources));
+        history.add("summary saved", file.originalName());
+        return summary;
     }
 
     public List<StudyArtifacts.Summary> summaries(UUID materialId) throws IOException { return artifacts.summaries(materialId); }
@@ -231,7 +272,8 @@ public final class AgentController {
         Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.QUIZ),
                 prompts.user(PromptBuilder.Task.QUIZ, "File: " + file.originalName() + "\n"
                         + prompts.pages(store.materialPages(materialId), 25000),
-                        "Create three multiple-choice study questions from the source.")));
+                        "Create three multiple-choice study questions from the source. "
+                                + ExplanationStrategy.forDifficulty(store.course(file.courseId()).difficulty()).instruction())));
         List<StudyArtifacts.Question> questions = new java.util.ArrayList<>();
         for (Object raw : Json.array(response.get("questions"))) {
             var q = Json.object(raw);
@@ -239,23 +281,50 @@ public final class AgentController {
                     Json.array(q.get("choices")).stream().map(Object::toString).toList(),
                     ((Number) q.get("answerIndex")).intValue(), Json.string(q, "explanation")));
         }
-        return artifacts.saveQuiz(file.courseId(), materialId, questions);
+        StudyArtifacts.Quiz quiz = artifacts.saveQuiz(file.courseId(), materialId, questions);
+        history.add("quiz generated", file.originalName() + ": " + questions.size() + " questions");
+        return quiz;
     }
 
     public List<StudyArtifacts.Quiz> quizzes(UUID courseId) throws IOException { return artifacts.quizzes(courseId); }
     public StudyArtifacts.Attempt gradeQuiz(StudyArtifacts.Quiz quiz, List<Integer> answers) throws IOException {
-        return artifacts.grade(quiz, answers);
+        StudyArtifacts.Attempt result = artifacts.grade(quiz, answers);
+        history.add("quiz graded", result.correct() + "/" + quiz.questions().size());
+        return result;
     }
     public List<StudyArtifacts.Attempt> quizAttempts(UUID quizId) throws IOException { return artifacts.attempts(quizId); }
 
     public CommandInvoker.Proposal planScheduleChange(UUID courseId, String request) throws IOException {
         if (request == null || request.isBlank()) throw new IllegalArgumentException("Enter a schedule change request.");
-        return new SchedulePlanner().plan(store, llm, prompts, parser, invoker, courseId, request);
+        CommandInvoker.Proposal proposal = new SchedulePlanner().plan(store, llm, prompts, parser, invoker, courseId, request);
+        history.add("schedule proposal", proposal.description());
+        return proposal;
     }
 
     public List<Map.Entry<String, Integer>> weakTopics(UUID courseId) throws IOException {
         store.course(courseId);
         return new WeakTopicAnalyzer().analyze(artifacts, courseId);
+    }
+    public StudyArtifacts.SelfAssessment saveSelfAssessment(UUID courseId, String topic, int confidence) throws IOException {
+        store.course(courseId);
+        StudyArtifacts.SelfAssessment result = artifacts.saveAssessment(courseId, topic, confidence);
+        history.add("self assessment", topic + " confidence " + confidence);
+        return result;
+    }
+
+    public String weakTopicAdvice(UUID courseId) throws IOException {
+        Course course = store.course(courseId);
+        var ranking = weakTopics(courseId);
+        if (ranking.isEmpty()) return "No quiz misses or self-assessments to analyze yet.";
+        var response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.WEAK_TOPICS),
+                prompts.user(PromptBuilder.Task.WEAK_TOPICS,
+                        "Course " + course.name() + "; weak-topic scores: " + ranking,
+                        "Explain weak topics and name lectures to review without inventing material. "
+                                + ExplanationStrategy.forDifficulty(course.difficulty()).instruction())));
+        String advice = Json.string(response, "explanation") + "\nLectures to review: "
+                + Json.array(response.get("lecturesToReview"));
+        history.add("weak topic advice", course.name());
+        return advice;
     }
 
     public String weeklyBriefing(UUID courseId, LocalDate today) throws IOException {
@@ -270,6 +339,50 @@ public final class AgentController {
         Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.WEEKLY_BRIEF),
                 prompts.user(PromptBuilder.Task.WEEKLY_BRIEF, context.toString(),
                         "Give a concise weekly briefing and suggest what to study next.")));
-        return Json.string(response, "briefing");
+        String briefing = Json.string(response, "briefing");
+        history.add("weekly briefing", course.name());
+        return briefing;
+    }
+
+    public CommandInvoker.Proposal proposeEssayGrade(UUID materialId, String question, String answer) throws IOException {
+        MaterialFile file = store.material(materialId);
+        if (!file.textAvailable() || question.isBlank() || answer.isBlank())
+            throw new IllegalArgumentException("Enter an essay question and answer for a readable material.");
+        Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.ESSAY_GRADE),
+                prompts.user(PromptBuilder.Task.ESSAY_GRADE,
+                        "Source " + file.originalName() + "\n" + prompts.pages(store.materialPages(materialId), 20000),
+                        "Question: " + question + "\nStudent answer: " + answer + "\nGive a score and feedback.")));
+        int score = ((Number) response.get("score")).intValue();
+        String feedback = Json.string(response, "feedback");
+        if (score < 0 || score > 100 || feedback.isBlank()) throw new IllegalArgumentException("Invalid essay grade.");
+        CommandInvoker.Proposal proposal = invoker.propose("Save essay grade " + score + "/100: " + feedback,
+                () -> artifacts.saveEssayGrade(materialId, question, answer, score, feedback));
+        history.add("essay grade proposal", file.originalName() + " score " + score);
+        return proposal;
+    }
+    public List<StudyArtifacts.EssayGrade> essayGrades(UUID materialId) throws IOException {
+        return artifacts.essayGrades(materialId);
+    }
+    public StudyArtifacts.EssayPrompt generateEssayPrompt(UUID materialId) throws IOException {
+        MaterialFile file = store.material(materialId);
+        if (!file.textAvailable()) throw new IllegalArgumentException("This file has no extractable text.");
+        Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.ESSAY_QUESTION),
+                prompts.user(PromptBuilder.Task.ESSAY_QUESTION,
+                        "File: " + file.originalName() + "\n" + prompts.pages(store.materialPages(materialId), 25000),
+                        "Generate one essay question grounded in this material. "
+                                + ExplanationStrategy.forDifficulty(store.course(file.courseId()).difficulty()).instruction())));
+        StudyArtifacts.EssayPrompt result = artifacts.saveEssayPrompt(file.courseId(), materialId,
+                Json.string(response, "topic"), Json.string(response, "question"));
+        history.add("essay question generated", file.originalName() + " / " + result.topic());
+        return result;
+    }
+    public List<StudyArtifacts.EssayPrompt> essayPrompts(UUID courseId) throws IOException {
+        store.course(courseId);
+        return artifacts.essayPrompts(courseId);
+    }
+    public CommandInvoker.Proposal proposeEssayGrade(StudyArtifacts.EssayPrompt prompt, String answer) throws IOException {
+        if (!essayPrompts(prompt.courseId()).stream().anyMatch(p -> p.id().equals(prompt.id())))
+            throw new IllegalArgumentException("Unknown saved essay prompt.");
+        return proposeEssayGrade(prompt.materialId(), prompt.question(), answer);
     }
 }

@@ -19,6 +19,7 @@ public final class CommandLineInterface {
 
     public void run() {
         System.out.println("EECS3311 Study Agent - type help for commands.");
+        printDueNotifications();
         while (true) {
             System.out.print("study> ");
             if (!input.hasNextLine()) return;
@@ -35,6 +36,8 @@ public final class CommandLineInterface {
                     case "timeline" -> timeline();
                     case "calendar" -> calendar();
                     case "reminders" -> reminders();
+                    case "notifications" -> printDueNotifications();
+                    case "deadline notify" -> configureNotification();
                     case "study start" -> studyStart();
                     case "study pause" -> controller.pauseStudy();
                     case "study resume" -> controller.resumeStudy();
@@ -49,6 +52,14 @@ public final class CommandLineInterface {
                     case "ai schedule" -> planSchedule();
                     case "weak topics" -> weakTopics();
                     case "weekly brief" -> weeklyBrief();
+                    case "essay grade" -> essayGrade();
+                    case "essay create" -> essayCreate();
+                    case "essay take" -> essayTake();
+                    case "essay list" -> essayList();
+                    case "history" -> history();
+                    case "history delete" -> deleteHistory();
+                    case "self assess" -> selfAssess();
+                    case "weak advice" -> weakAdvice();
                     case "complete" -> complete();
                     case "progress" -> progress();
                     case "tree" -> showTree();
@@ -69,12 +80,15 @@ public final class CommandLineInterface {
 
     private void help() {
         System.out.println("semester add | course add | material add | deadline add | deadline edit");
-        System.out.println("deadline delete | timeline | calendar | reminders | complete | progress | tree | exit");
+        System.out.println("deadline delete | deadline notify | timeline | calendar | reminders | notifications");
+        System.out.println("complete | progress | tree | exit");
         System.out.println("ai syllabus | ai week | proposals | approve | reject");
         System.out.println("study start | study pause | study resume | study stop | study week");
         System.out.println("ai references | ask");
         System.out.println("summary create | summary list | quiz create | quiz take");
         System.out.println("ai schedule | weak topics | weekly brief");
+        System.out.println("essay create | essay take | essay grade | essay list | history");
+        System.out.println("self assess | weak advice | history delete");
         System.out.println("Dates use YYYY-MM-DD. Leave a deadline date blank for TBD.");
     }
 
@@ -268,7 +282,26 @@ public final class CommandLineInterface {
                 + " " + item.title());
     }
 
-    private void studyStart() { controller.startStudy(chooseCourse().id(), ask("Study topic")); System.out.println("Timer started."); }
+    private void configureNotification() throws IOException {
+        Deadline deadline = chooseDeadline();
+        java.time.LocalTime time = java.time.LocalTime.parse(ask("Due time (HH:MM, 24-hour)"));
+        int minutes = Integer.parseInt(ask("Notify minutes before due time"));
+        controller.setNotification(deadline.id(), time, minutes);
+        System.out.println("Notification time saved.");
+    }
+
+    private void printDueNotifications() {
+        for (Deadline deadline : controller.checkNotifications(java.time.LocalDateTime.now()))
+            System.out.println("DUE SOON: " + controller.course(deadline.courseId()).name() + " "
+                    + deadline.title() + " at " + deadline.dueDate() + " " + deadline.dueTime());
+    }
+
+    private void studyStart() {
+        Course course = chooseCourse();
+        String topic = ask("Study topic");
+        controller.startStudy(course.id(), topic, Integer.parseInt(ask("Duration in minutes (1-240)")));
+        System.out.println("Timer started.");
+    }
     private void studyStop() throws IOException {
         StudySession session = controller.stopStudy();
         System.out.println("Saved " + session.seconds() + " seconds for " + session.topic());
@@ -332,6 +365,48 @@ public final class CommandLineInterface {
     }
     private void weeklyBrief() throws IOException {
         System.out.println(controller.weeklyBriefing(chooseCourse().id(), LocalDate.now()));
+    }
+
+    private void essayGrade() throws IOException {
+        MaterialFile material = chooseReadableMaterial();
+        System.out.println(controller.proposeEssayGrade(material.id(), ask("Essay question"), ask("Your answer"))
+                .description());
+        System.out.println("Approve to save this grade.");
+    }
+    private void essayCreate() throws IOException {
+        var prompt = controller.generateEssayPrompt(chooseReadableMaterial().id());
+        System.out.println("Saved essay question: " + prompt.question());
+    }
+    private void essayTake() throws IOException {
+        Course course = chooseCourse();
+        var prompts = controller.essayPrompts(course.id());
+        if (prompts.isEmpty()) throw new IllegalStateException("Generate an essay question first.");
+        for (int i = 0; i < prompts.size(); i++) System.out.printf("%d. %s%n", i + 1, prompts.get(i).question());
+        var prompt = prompts.get(number("Essay question number", prompts.size()));
+        System.out.println(controller.proposeEssayGrade(prompt, ask("Your answer")).description());
+        System.out.println("Review and approve this grade to save it.");
+    }
+    private void essayList() throws IOException {
+        for (var item : controller.essayGrades(chooseReadableMaterial().id()))
+            System.out.println(item.score() + "/100 " + item.feedback());
+    }
+    private void history() throws IOException {
+        for (var entry : controller.history()) System.out.println(entry.time() + " " + entry.event()
+                + " — " + entry.detail());
+    }
+    private void deleteHistory() throws IOException {
+        if (ask("Delete all saved interaction history? (y/N)").equalsIgnoreCase("y")) {
+            controller.deleteHistory();
+            System.out.println("History deleted.");
+        }
+    }
+    private void selfAssess() throws IOException {
+        Course course = chooseCourse();
+        controller.saveSelfAssessment(course.id(), ask("Topic"), Integer.parseInt(ask("Confidence (1-5)")));
+        System.out.println("Self-assessment saved.");
+    }
+    private void weakAdvice() throws IOException {
+        System.out.println(controller.weakTopicAdvice(chooseCourse().id()));
     }
 
     private void showTree() {

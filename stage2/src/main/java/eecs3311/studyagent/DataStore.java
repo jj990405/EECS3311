@@ -141,7 +141,8 @@ public final class DataStore {
                                                LocalDate dueDate, String scope) throws IOException {
         Deadline existing = deadline(id);
         validateDate(course(existing.courseId()), dueDate);
-        Deadline updated = new Deadline(id, existing.courseId(), title, type, dueDate, scope, existing.completed());
+        Deadline updated = new Deadline(id, existing.courseId(), title, type, dueDate, scope,
+                existing.completed(), existing.dueTime(), existing.notifyBeforeMinutes());
         saveDeadline(updated);
         deadlines.put(id, updated);
         changed();
@@ -150,6 +151,15 @@ public final class DataStore {
 
     public synchronized Deadline setCompleted(UUID id, boolean completed) throws IOException {
         Deadline updated = deadline(id).withCompleted(completed);
+        saveDeadline(updated);
+        deadlines.put(id, updated);
+        changed();
+        return updated;
+    }
+
+    public synchronized Deadline setNotification(UUID id, java.time.LocalTime dueTime,
+                                                 int notifyBeforeMinutes) throws IOException {
+        Deadline updated = deadline(id).withNotification(dueTime, notifyBeforeMinutes);
         saveDeadline(updated);
         deadlines.put(id, updated);
         changed();
@@ -251,7 +261,8 @@ public final class DataStore {
     private void saveDeadline(Deadline item) throws IOException {
         save("deadlines", item.id(), props("course", item.courseId().toString(), "title", item.title(),
                 "type", item.type(), "due", item.dueDate() == null ? "" : item.dueDate().toString(),
-                "scope", item.scope(), "completed", Boolean.toString(item.completed())));
+                "scope", item.scope(), "completed", Boolean.toString(item.completed()),
+                "dueTime", item.dueTime().toString(), "notifyBefore", Integer.toString(item.notifyBeforeMinutes())));
     }
 
     private void save(String directory, UUID id, Properties values) throws IOException {
@@ -300,7 +311,9 @@ public final class DataStore {
             String date = required(p, "due");
             Deadline item = new Deadline(id, courseId, required(p, "title"), required(p, "type"),
                     date.isBlank() ? null : LocalDate.parse(date), required(p, "scope"),
-                    Boolean.parseBoolean(required(p, "completed")));
+                    Boolean.parseBoolean(required(p, "completed")),
+                    java.time.LocalTime.parse(p.getProperty("dueTime", "23:59")),
+                    Integer.parseInt(p.getProperty("notifyBefore", "1440")));
             validateDate(course(courseId), item.dueDate());
             deadlines.put(id, item);
         }

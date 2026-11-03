@@ -17,6 +17,8 @@ public final class WeakTopicAnalyzer {
                         misses.merge(quiz.questions().get(i).topic(), 1, Integer::sum);
             }
         }
+        for (StudyArtifacts.SelfAssessment assessment : artifacts.assessments(courseId))
+            misses.merge(assessment.topic(), 5 - assessment.confidence(), Integer::sum);
         return misses.entrySet().stream().sorted((a, b) -> Integer.compare(b.getValue(), a.getValue())).toList();
     }
 }

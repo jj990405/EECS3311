@@ -11,15 +11,22 @@ public final class StudyTimer {
     private long startedNanos;
     private long accumulatedNanos;
     private boolean running;
+    private long targetSeconds;
 
     public synchronized void start(UUID courseId, String topic) {
+        start(courseId, topic, 25 * 60);
+    }
+
+    public synchronized void start(UUID courseId, String topic, long targetSeconds) {
         if (this.courseId != null) throw new IllegalStateException("Stop the active timer first.");
         if (topic == null || topic.isBlank()) throw new IllegalArgumentException("Enter a study topic.");
+        if (targetSeconds < 1) throw new IllegalArgumentException("Timer duration must be positive.");
         this.courseId = courseId;
         this.topic = topic.trim();
         this.startedAt = LocalDateTime.now();
         this.startedNanos = System.nanoTime();
         this.running = true;
+        this.targetSeconds = targetSeconds;
     }
 
     public synchronized void pause() {
@@ -45,4 +52,9 @@ public final class StudyTimer {
     }
 
     public synchronized boolean active() { return courseId != null; }
+    public synchronized long remainingSeconds() {
+        if (courseId == null) return 0;
+        long nanos = accumulatedNanos + (running ? System.nanoTime() - startedNanos : 0);
+        return Math.max(0, targetSeconds - nanos / 1_000_000_000L);
+    }
 }

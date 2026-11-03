@@ -19,8 +19,18 @@ public final class Json {
 
     public static String write(Object value) {
         if (value == null) return "null";
-        if (value instanceof String s) return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"")
-                .replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t") + "\"";
+        if (value instanceof String s) {
+            StringBuilder escaped = new StringBuilder("\"");
+            for (char c : s.toCharArray()) {
+                if (c == '"' || c == '\\') escaped.append('\\').append(c);
+                else if (c == '\n') escaped.append("\\n");
+                else if (c == '\r') escaped.append("\\r");
+                else if (c == '\t') escaped.append("\\t");
+                else if (c < 32) escaped.append(String.format("\\u%04x", (int) c));
+                else escaped.append(c);
+            }
+            return escaped.append('"').toString();
+        }
         if (value instanceof Boolean || value instanceof Number) return value.toString();
         if (value instanceof Map<?, ?> map) {
             List<String> parts = new ArrayList<>();
@@ -140,8 +150,8 @@ public final class Json {
             while (position < input.length() && "-+0123456789.eE".indexOf(input.charAt(position)) >= 0) position++;
             if (start == position) throw new IllegalArgumentException("Invalid JSON value");
             String text = input.substring(start, position);
-            return text.contains(".") || text.contains("e") || text.contains("E")
-                    ? Double.valueOf(text) : Long.valueOf(text);
+            if (text.contains(".") || text.contains("e") || text.contains("E")) return Double.valueOf(text);
+            return Long.valueOf(text);
         }
     }
 }

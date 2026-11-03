@@ -43,6 +43,10 @@ public final class StudyArtifacts {
     private final Path root;
     public StudyArtifacts(Path dataRoot) throws IOException {
         root = dataRoot.toAbsolutePath().normalize().resolve("artifacts");
+        ensureDirectories();
+    }
+
+    void ensureDirectories() throws IOException {
         for (String name : List.of("summaries", "quizzes", "attempts", "essays", "assessments", "essay-prompts"))
             Files.createDirectories(root.resolve(name));
     }

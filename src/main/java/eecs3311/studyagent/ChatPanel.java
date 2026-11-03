@@ -45,4 +45,9 @@ public final class ChatPanel extends JPanel {
         conversation.append("\n\n" + message);
         conversation.setCaretPosition(conversation.getDocument().getLength());
     }
+
+    public void clear() {
+        conversation.setText("Ask about uploaded course materials or describe a schedule change.");
+        input.setText("");
+    }
 }

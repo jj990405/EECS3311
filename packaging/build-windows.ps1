@@ -55,7 +55,8 @@ $after = if (Test-Path -LiteralPath $dataDir) {
     @(Get-ChildItem -LiteralPath $dataDir -Recurse -File | Get-FileHash -Algorithm SHA256 |
         Sort-Object Path | ForEach-Object { $_.Path + ':' + $_.Hash })
 } else { @() }
-if ($before.Count -ne $after.Count -or (Compare-Object $before $after)) {
+if ($before.Count -ne $after.Count -or
+        ($before.Count -gt 0 -and (Compare-Object $before $after))) {
     throw 'User data changed while updating the app.'
 }
 Write-Output "Windows GUI, CLI, and ZIP updated in $projectRoot; $($after.Count) data files preserved."

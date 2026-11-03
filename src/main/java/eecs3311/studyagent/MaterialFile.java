@@ -22,4 +22,10 @@ public record MaterialFile(UUID id, UUID courseId, Category category, String ori
         return new MaterialFile(id, courseId, category, originalName, storedName,
                 textAvailable, extractionWarning, week);
     }
+
+    public MaterialFile withCategory(Category target) {
+        return new MaterialFile(id, courseId, target, originalName, storedName,
+                textAvailable, extractionWarning,
+                target == Category.LECTURE_MATERIALS ? lectureWeek : null);
+    }
 }

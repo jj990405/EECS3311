@@ -85,6 +85,14 @@ public final class CoursePage extends JPanel {
         content.repaint();
     }
 
+    public void clear() {
+        heading.setText("Select a course");
+        summary.setText("Choose a course in the workspace to see its work and files.");
+        content.removeAll();
+        content.revalidate();
+        content.repaint();
+    }
+
     private void section(String name, int count) {
         JLabel label = new JLabel(name + "   " + count);
         label.setFont(AppTheme.SECTION);

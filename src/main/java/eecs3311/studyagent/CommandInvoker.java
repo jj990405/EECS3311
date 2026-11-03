@@ -42,4 +42,9 @@ public final class CommandInvoker {
         if (commands.remove(id) == null) throw new IllegalArgumentException("Unknown proposal: " + id);
         descriptions.remove(id);
     }
+
+    public synchronized void clear() {
+        commands.clear();
+        descriptions.clear();
+    }
 }

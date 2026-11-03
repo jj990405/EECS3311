@@ -277,6 +277,42 @@ public final class DataStore {
         return item;
     }
 
+    public synchronized MaterialFile moveMaterial(UUID id, Category target) throws IOException {
+        MaterialFile previous = material(id);
+        if (previous.category() == target) return previous;
+        if (materials.values().stream().anyMatch(other -> !other.id().equals(id)
+                && other.courseId().equals(previous.courseId()) && other.category() == target
+                && other.originalName().equalsIgnoreCase(previous.originalName())))
+            throw new IllegalArgumentException("The destination already has " + previous.originalName());
+        MaterialFile updated = previous.withCategory(target);
+        saveMaterial(updated);
+        materials.put(id, updated);
+        changed();
+        return updated;
+    }
+
+    /** Clears only the application's known data, never the project root or API configuration. */
+    public synchronized void clearAllData() throws IOException {
+        for (String directory : List.of("semesters", "courses", "deadlines", "materials", "files",
+                "extracted", "sessions", "artifacts")) {
+            Path folder = root.resolve(directory);
+            if (!Files.exists(folder)) continue;
+            try (var entries = Files.walk(folder)) {
+                for (Path entry : entries.sorted(Comparator.reverseOrder()).toList()) {
+                    if (!entry.equals(folder)) Files.delete(entry);
+                }
+            }
+        }
+        for (String name : List.of("interaction-history.jsonl", "last-weekly-brief.txt",
+                "shown-notifications.txt")) Files.deleteIfExists(root.resolve(name));
+        semesters.clear();
+        courses.clear();
+        deadlines.clear();
+        materials.clear();
+        sessions.clear();
+        changed();
+    }
+
     private void saveMaterial(MaterialFile item) throws IOException {
         save("materials", item.id(), props("course", item.courseId().toString(),
                 "category", item.category().name(), "original", item.originalName(),

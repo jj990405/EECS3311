@@ -63,6 +63,14 @@ public final class MainWindow extends JFrame {
     private final JTable table = new JTable(tableModel);
     private final JLabel status = new JLabel(" ");
     private final JTabbedPane contentTabs = new JTabbedPane();
+    private final JTabbedPane viewerTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+    private final JSplitPane centerRightSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+    private final JPanel mainArea = new JPanel(new BorderLayout());
+    private JPanel calendarTab;
+    private JPanel filePanel;
+    private boolean viewerOpen;
+    private int restoredDivider = 480;
+    private boolean viewerExpanded;
     private final CoursePage coursePage;
     private final TimerPanel timerPanel;
     private final TimerRecordPanel timerRecords;
@@ -71,7 +79,6 @@ public final class MainWindow extends JFrame {
     private final JLabel fileHeading = new JLabel("Select a file in the workspace");
     private final JLabel fileMeta = new JLabel("Uploaded files are stored locally.");
     private final JTextArea filePreview = new JTextArea();
-    private final JTabbedPane documentTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
     private final Map<UUID, Component> openDocuments = new java.util.HashMap<>();
     private final JButton openFileButton = new JButton("Open original");
     private YearMonth visibleMonth = YearMonth.now();
@@ -94,9 +101,10 @@ public final class MainWindow extends JFrame {
         this.chatPanel = new ChatPanel(question -> perform(() -> askSources(question)),
                 change -> perform(() -> requestScheduleChange(change)));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(1280, 800);
+        setSize(1460, 900);
         setMinimumSize(new Dimension(900, 600));
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setBackground(AppTheme.BACKGROUND);
 
         setJMenuBar(createMenuBar());
@@ -104,18 +112,11 @@ public final class MainWindow extends JFrame {
         header.setBackground(AppTheme.SURFACE);
         header.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                 javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, AppTheme.BORDER),
-                AppTheme.padding(14, 18, 14, 18)));
-        JPanel identity = new JPanel(new GridLayout(2, 1, 0, 3));
-        identity.setOpaque(false);
+                AppTheme.padding(3, 12, 3, 12)));
         JLabel appName = new JLabel("Study Agent");
         appName.setFont(AppTheme.SECTION);
         appName.setForeground(AppTheme.TEXT);
-        JLabel appContext = new JLabel("Courses, files and deadlines");
-        appContext.setFont(AppTheme.SMALL);
-        appContext.setForeground(AppTheme.MUTED);
-        identity.add(appName);
-        identity.add(appContext);
-        header.add(identity, BorderLayout.WEST);
+        header.add(appName, BorderLayout.WEST);
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         actions.setOpaque(false);
         button(actions, "New semester", this::addSemester);
@@ -148,7 +149,21 @@ public final class MainWindow extends JFrame {
             @Override public void mousePressed(java.awt.event.MouseEvent event) { showTreeMenu(event); }
             @Override public void mouseReleased(java.awt.event.MouseEvent event) { showTreeMenu(event); }
             @Override public void mouseClicked(java.awt.event.MouseEvent event) {
-                if (event.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(event)) openSelectedFile();
+                if (!SwingUtilities.isLeftMouseButton(event)) return;
+                TreePath path = tree.getPathForLocation(event.getX(), event.getY());
+                if (path == null) return;
+                Object value = ((DefaultMutableTreeNode) path.getLastPathComponent()).getUserObject();
+                if (event.getClickCount() == 2 && value instanceof WorkspaceLeaf) {
+                    openSelectedFile();
+                } else if (value instanceof WorkspaceLeaf leaf) {
+                    perform(() -> showMaterial(leaf.file()));
+                } else if (value instanceof WorkspaceBranch branch
+                        && branch.kind() == WorkspaceBranch.Kind.CATEGORY) {
+                    perform(() -> showCategoryFiles(controller.course(branch.id()), categoryOf(branch)));
+                } else if (value instanceof WorkspaceBranch branch
+                        && branch.kind() == WorkspaceBranch.Kind.COURSE) {
+                    perform(() -> showCourseFiles(controller.course(branch.id())));
+                }
             }
         });
         table.setAutoCreateRowSorter(true);
@@ -161,15 +176,15 @@ public final class MainWindow extends JFrame {
         table.getTableHeader().setBackground(AppTheme.RAISED);
         table.getTableHeader().setForeground(AppTheme.TEXT);
         contentTabs.addTab("Timeline", new JScrollPane(table));
-        JPanel calendarTab = new JPanel(new BorderLayout(0, 8));
+        calendarTab = new JPanel(new BorderLayout(0, 8));
         JPanel monthActions = new JPanel(new FlowLayout(FlowLayout.LEFT));
         button(monthActions, "Previous month", () -> changeMonth(-1));
         button(monthActions, "Today", () -> { visibleMonth = YearMonth.now(); refreshCalendar(); });
         button(monthActions, "Next month", () -> changeMonth(1));
+        button(monthActions, "Expand / restore", this::toggleViewer);
         calendarTab.add(monthActions, BorderLayout.NORTH);
         calendarTab.add(calendarHost, BorderLayout.CENTER);
-        contentTabs.addTab("Calendar", calendarTab);
-        contentTabs.addTab("Files", createFilePanel());
+        filePanel = createFilePanel();
         contentTabs.addTab("Course", coursePage);
         contentTabs.addTab("Study timer", timerPanel);
         contentTabs.addTab("Study records", timerRecords);
@@ -185,12 +200,29 @@ public final class MainWindow extends JFrame {
         treeScroll.setBorder(null);
         treeScroll.getViewport().setBackground(AppTheme.SURFACE);
         workspace.add(treeScroll, BorderLayout.CENTER);
+        JButton clear = AppTheme.button("Delete all local data...", false);
+        clear.setBackground(new Color(0x5A2929));
+        clear.setForeground(Color.WHITE);
+        clear.setToolTipText("Delete courses, files, deadlines, study records and history from this device");
+        clear.addActionListener(e -> perform(this::clearAllData));
+        JPanel danger = new JPanel(new BorderLayout());
+        danger.setBackground(AppTheme.SURFACE);
+        danger.setBorder(AppTheme.padding(10, 12, 10, 12));
+        danger.add(clear, BorderLayout.CENTER);
+        workspace.add(danger, BorderLayout.SOUTH);
         contentTabs.setBackground(AppTheme.SURFACE);
         contentTabs.setForeground(AppTheme.TEXT);
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, workspace, contentTabs);
+        viewerTabs.setBackground(AppTheme.SURFACE);
+        viewerTabs.setForeground(AppTheme.TEXT);
+        centerRightSplit.setRightComponent(viewerTabs);
+        centerRightSplit.setBorder(null);
+        centerRightSplit.setDividerSize(6);
+        centerRightSplit.setResizeWeight(0.38);
+        mainArea.add(contentTabs, BorderLayout.CENTER);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, workspace, mainArea);
         split.setBorder(null);
-        split.setDividerSize(1);
-        split.setDividerLocation(290);
+        split.setDividerSize(6);
+        split.setDividerLocation(245);
         add(split, BorderLayout.CENTER);
         status.setForeground(AppTheme.MUTED);
         status.setOpaque(true);
@@ -225,6 +257,8 @@ public final class MainWindow extends JFrame {
         menuItem(workspace, "New course", this::addCourse);
         menuItem(workspace, "Upload files", this::uploadFiles);
         menuItem(workspace, "Show all courses", () -> { selectedCourseId = null; tree.clearSelection(); refresh(); });
+        workspace.addSeparator();
+        menuItem(workspace, "Delete all local data...", this::clearAllData);
         bar.add(workspace);
         JMenu schedule = new JMenu("Schedule");
         menuItem(schedule, "New deadline", this::addDeadline);
@@ -257,6 +291,7 @@ public final class MainWindow extends JFrame {
         menuItem(ai, "Answer essay question", this::answerEssayQuestion);
         menuItem(ai, "Extract syllabus deadlines", this::aiSyllabus);
         menuItem(ai, "Analyze uploaded files for calendar", this::analyzeCalendarFiles);
+        menuItem(ai, "Classify uploaded files", this::classifyFilesWithAi);
         menuItem(ai, "Suggest lecture week", this::aiWeek);
         menuItem(ai, "Review proposals", this::reviewProposals);
         bar.add(ai);
@@ -302,6 +337,7 @@ public final class MainWindow extends JFrame {
         } else if (value instanceof WorkspaceLeaf leaf) {
             popupItem(menu, "Show file details", () -> showMaterial(leaf.file()));
             popupItem(menu, "Open original", this::openSelectedFile);
+            popupItem(menu, "Move to another folder...", () -> moveMaterial(leaf.file()));
             if (leaf.file().category() == Category.LECTURE_MATERIALS)
                 popupItem(menu, "Assign lecture week...", () -> assignLectureWeek(leaf.file()));
             popupItem(menu, "Upload more to " + leaf.file().category() + "...",
@@ -337,6 +373,10 @@ public final class MainWindow extends JFrame {
         JButton addFiles = new JButton("Upload more files");
         addFiles.addActionListener(e -> perform(this::uploadFiles));
         controls.add(addFiles);
+        JButton classify = AppTheme.button("Classify files with AI", false);
+        classify.addActionListener(e -> perform(this::classifyFilesWithAi));
+        controls.add(classify);
+        button(controls, "Expand / restore", this::toggleViewer);
         heading.add(controls, BorderLayout.SOUTH);
         panel.add(heading, BorderLayout.NORTH);
         filePreview.setEditable(false);
@@ -345,14 +385,66 @@ public final class MainWindow extends JFrame {
         filePreview.setText("Choose a file on the left. PDFs open here as original pages.\n\n"
                 + "Text is extracted separately for search and AI, without changing the stored original.");
         filePreview.setBorder(AppTheme.padding(20, 20, 20, 20));
-        documentTabs.addTab("Overview", new JScrollPane(filePreview));
-        panel.add(documentTabs, BorderLayout.CENTER);
+        panel.add(new JScrollPane(filePreview), BorderLayout.CENTER);
         return panel;
+    }
+
+    private void showViewerTab(String title, Component component, Runnable onClose) {
+        if (viewerTabs.indexOfComponent(component) < 0) {
+            viewerTabs.addTab(title, component);
+            int index = viewerTabs.indexOfComponent(component);
+            JPanel tab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            tab.setOpaque(false);
+            JLabel label = new JLabel(title.length() > 30 ? title.substring(0, 27) + "…" : title);
+            label.setToolTipText(title);
+            tab.add(label);
+            JButton close = new JButton("×");
+            close.setToolTipText("Close " + title);
+            close.setBorder(AppTheme.padding(2, 4, 2, 4));
+            close.addActionListener(e -> {
+                viewerTabs.remove(component);
+                onClose.run();
+                if (viewerTabs.getTabCount() == 0) hideViewer();
+            });
+            tab.add(close);
+            viewerTabs.setTabComponentAt(index, tab);
+        }
+        if (!viewerOpen) {
+            mainArea.remove(contentTabs);
+            centerRightSplit.setLeftComponent(contentTabs);
+            mainArea.add(centerRightSplit, BorderLayout.CENTER);
+            viewerOpen = true;
+            mainArea.revalidate();
+            mainArea.repaint();
+            SwingUtilities.invokeLater(() -> centerRightSplit.setDividerLocation(0.38));
+        }
+        viewerTabs.setSelectedComponent(component);
+    }
+
+    private void hideViewer() {
+        if (!viewerOpen) return;
+        mainArea.remove(centerRightSplit);
+        centerRightSplit.setLeftComponent(null);
+        mainArea.add(contentTabs, BorderLayout.CENTER);
+        viewerOpen = false;
+        viewerExpanded = false;
+        mainArea.revalidate();
+        mainArea.repaint();
     }
 
     private void changeMonth(int offset) {
         visibleMonth = visibleMonth.plusMonths(offset);
         refreshCalendar();
+    }
+
+    private void toggleViewer() {
+        if (viewerExpanded) {
+            centerRightSplit.setDividerLocation(restoredDivider);
+        } else {
+            restoredDivider = Math.max(250, centerRightSplit.getDividerLocation());
+            centerRightSplit.setDividerLocation(0);
+        }
+        viewerExpanded = !viewerExpanded;
     }
 
     private void refreshCalendar() {
@@ -593,6 +685,7 @@ public final class MainWindow extends JFrame {
         int added = 0;
         MaterialFile last = null;
         List<String> problems = new ArrayList<>();
+        List<AgentController.CategorySuggestion> folderHints = new ArrayList<>();
         for (File file : files) {
             try {
                 boolean duplicate = controller.materials().stream().anyMatch(m -> m.courseId().equals(course.id())
@@ -610,6 +703,10 @@ public final class MainWindow extends JFrame {
                 MaterialFile material = controller.uploadMaterial(course.id(), category, file.toPath(), replace);
                 added++;
                 last = material;
+                FileCategorySuggester.suggest(file.getName())
+                        .filter(suggested -> suggested != category)
+                        .ifPresent(suggested -> folderHints.add(new AgentController.CategorySuggestion(
+                                material.id(), suggested, "File name suggests " + suggested + ".")));
                 if (!material.extractionWarning().isBlank())
                     problems.add(file.getName() + ": " + material.extractionWarning());
             } catch (Exception ex) {
@@ -622,6 +719,116 @@ public final class MainWindow extends JFrame {
                 + " / " + category + (problems.isEmpty() ? "" : " | " + problems.size() + " need attention"));
         if (!problems.isEmpty()) JOptionPane.showMessageDialog(this, String.join("\n", problems),
                 "Upload details", JOptionPane.WARNING_MESSAGE);
+        if (!folderHints.isEmpty()) reviewCategorySuggestions(folderHints,
+                "Some files may be in the wrong folder");
+    }
+
+    private void moveMaterial(MaterialFile file) {
+        Category target = choose("Move " + file.originalName() + " to", List.of(Category.values()));
+        if (target == file.category()) return;
+        try {
+            controller.moveMaterial(file.id(), target);
+            closeMaterialTab(file.id());
+            refresh();
+            selectMaterial(file.id());
+            status.setText("Moved " + file.originalName() + " to " + target + ".");
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void classifyFilesWithAi() {
+        runAi("Classifying uploaded files", controller::suggestFileCategories, suggestions -> {
+            if (suggestions.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No folder changes were suggested.",
+                        "File classification", JOptionPane.INFORMATION_MESSAGE);
+            } else reviewCategorySuggestions(suggestions, "Review AI folder suggestions");
+        });
+    }
+
+    private void reviewCategorySuggestions(List<AgentController.CategorySuggestion> hints, String title) {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[] {"Move", "File", "Current folder", "Suggested folder", "Why"}, 0) {
+            @Override public Class<?> getColumnClass(int column) {
+                return column == 0 ? Boolean.class : String.class;
+            }
+            @Override public boolean isCellEditable(int row, int column) { return column == 0; }
+        };
+        List<AgentController.CategorySuggestion> displayed = new ArrayList<>();
+        for (var hint : hints) {
+            MaterialFile file = controller.materials().stream()
+                    .filter(m -> m.id().equals(hint.materialId())).findFirst().orElse(null);
+            if (file != null) {
+                displayed.add(hint);
+                model.addRow(new Object[] {true, file.originalName(), file.category().toString(),
+                        hint.category().toString(), hint.reason()});
+            }
+        }
+        JTable table = new JTable(model);
+        table.setRowHeight(31);
+        table.getColumnModel().getColumn(0).setMaxWidth(54);
+        table.getColumnModel().getColumn(1).setPreferredWidth(280);
+        JScrollPane rows = new JScrollPane(table);
+        rows.setPreferredSize(new Dimension(950, Math.min(480, 74 + model.getRowCount() * 31)));
+        JPanel view = new JPanel(new BorderLayout(0, 10));
+        view.setBorder(AppTheme.padding(16, 16, 16, 16));
+        view.add(new JLabel("Review the suggestions. Only checked files will move; originals stay unchanged."),
+                BorderLayout.NORTH);
+        view.add(rows, BorderLayout.CENTER);
+        int choice = JOptionPane.showOptionDialog(this, view, title, JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, new Object[] {"Move checked files", "Keep current folders"},
+                "Keep current folders");
+        if (choice != 0) return;
+        int moved = 0;
+        List<String> errors = new ArrayList<>();
+        for (int row = 0; row < model.getRowCount(); row++) {
+            if (!Boolean.TRUE.equals(model.getValueAt(row, 0))) continue;
+            var hint = displayed.get(row);
+            try {
+                controller.moveMaterial(hint.materialId(), hint.category());
+                closeMaterialTab(hint.materialId());
+                moved++;
+            }
+            catch (Exception ex) { errors.add(model.getValueAt(row, 1) + ": " + ex.getMessage()); }
+        }
+        refresh();
+        status.setText(moved + " file" + (moved == 1 ? "" : "s") + " moved to suggested folders.");
+        if (!errors.isEmpty()) JOptionPane.showMessageDialog(this, String.join("\n", errors),
+                "Some files were not moved", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void clearAllData() {
+        if (aiBusy) {
+            JOptionPane.showMessageDialog(this, "Wait for the current AI request to finish first.",
+                    "Data deletion", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String message = "Delete all local study data from this app?\n\n"
+                + controller.semesters().size() + " semesters, " + controller.courses().size()
+                + " courses, and " + controller.materials().size() + " uploaded files, plus deadlines,"
+                + " quizzes, study records and history will be removed.\n\nThis cannot be undone.";
+        int choice = JOptionPane.showOptionDialog(this, message, "Delete all local data?",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
+                new Object[] {"Delete all data", "Cancel"}, "Cancel");
+        if (choice != 0) return;
+        try {
+            selectedCourseId = null;
+            tree.clearSelection();
+            controller.clearAllData();
+            if (studyDisplayTimer != null) studyDisplayTimer.stop();
+            timerPanel.showIdle();
+            timerRecords.refresh();
+            coursePage.clear();
+            chatPanel.clear();
+            viewerTabs.removeAll();
+            openDocuments.clear();
+            hideViewer();
+            fileHeading.setText("Select a file in the workspace");
+            fileMeta.setText("Uploaded files are stored locally.");
+            filePreview.setText("Create a semester and course to start again.");
+            openFileButton.setEnabled(false);
+            contentTabs.setSelectedIndex(0);
+            refresh();
+            status.setText("All local study data deleted. Start with New semester.");
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 
     private void assignLectureWeek(MaterialFile file) {
@@ -647,7 +854,7 @@ public final class MainWindow extends JFrame {
 
     private void showCalendar() {
         refreshCalendar();
-        contentTabs.setSelectedIndex(1);
+        showViewerTab("Calendar", calendarTab, () -> { });
     }
 
     private void showReminders() {
@@ -1060,7 +1267,7 @@ public final class MainWindow extends JFrame {
             catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
         }
         refresh();
-        contentTabs.setSelectedIndex(1);
+        showViewerTab("Calendar", calendarTab, () -> { });
         status.setText(applied + " deadline" + (applied == 1 ? "" : "s") + " added to the calendar.");
     }
 
@@ -1221,13 +1428,13 @@ public final class MainWindow extends JFrame {
             refreshCalendar();
             showCourseFiles(controller.course(branch.id()));
             coursePage.showCourse(controller.course(branch.id()));
-            contentTabs.setSelectedIndex(3);
+            contentTabs.setSelectedComponent(coursePage);
         } else if (value instanceof WorkspaceBranch branch && branch.kind() == WorkspaceBranch.Kind.CATEGORY) {
             selectedCourseId = branch.id();
             refreshSchedule();
             refreshCalendar();
             showCategoryFiles(controller.course(branch.id()), categoryOf(branch));
-            contentTabs.setSelectedIndex(2);
+            showViewerTab("Files", filePanel, () -> { });
         } else if (value instanceof WorkspaceLeaf leaf) {
             selectedCourseId = leaf.file().courseId();
             refreshSchedule();
@@ -1260,22 +1467,26 @@ public final class MainWindow extends JFrame {
                 : files.stream().map(m -> m.originalName() + (m.textAvailable() ? " · text ready"
                         : " · no extracted text")).collect(java.util.stream.Collectors.joining("\n")));
         filePreview.setCaretPosition(0);
-        documentTabs.setSelectedIndex(0);
+        showViewerTab("Files", filePanel, () -> { });
     }
 
     private void showMaterial(MaterialFile material) {
         Course course = controller.course(material.courseId());
-        fileHeading.setText(material.originalName());
-        fileMeta.setText(course.name() + " / " + material.category() + " · "
-                + (material.originalName().toLowerCase(java.util.Locale.ROOT).endsWith(".pdf")
-                    ? "Original PDF preview" : "Original file")
-                + (material.textAvailable() ? " · Text available to AI" : " · No readable text for AI"));
-        openFileButton.setEnabled(true);
         Component opened = openDocuments.get(material.id());
         if (opened == null) {
             try {
+                JPanel document = new JPanel(new BorderLayout(0, 8));
+                document.setBorder(AppTheme.padding(4, 8, 8, 8));
+                JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+                JLabel meta = new JLabel(course.name() + " / " + material.category());
+                meta.setForeground(AppTheme.MUTED);
+                controls.add(meta);
+                button(controls, "Open original", () -> openOriginal(material));
+                button(controls, "Move to another folder...", () -> moveMaterial(material));
+                button(controls, "Expand / restore", this::toggleViewer);
+                document.add(controls, BorderLayout.NORTH);
                 if (material.originalName().toLowerCase(java.util.Locale.ROOT).endsWith(".pdf")) {
-                    opened = new PdfPreviewPanel(controller.materialPath(material.id()));
+                    document.add(new PdfPreviewPanel(controller.materialPath(material.id())), BorderLayout.CENTER);
                 } else {
                     JTextArea details = new JTextArea("Original file: " + material.originalName()
                             + "\n\nUse Open original to view this file in its normal application."
@@ -1285,27 +1496,21 @@ public final class MainWindow extends JFrame {
                     details.setLineWrap(true);
                     details.setWrapStyleWord(true);
                     details.setBorder(AppTheme.padding(24, 24, 24, 24));
-                    opened = new JScrollPane(details);
+                    document.add(new JScrollPane(details), BorderLayout.CENTER);
                 }
+                opened = document;
             } catch (java.io.IOException ex) { throw new IllegalStateException("Unable to open PDF: " + ex.getMessage(), ex); }
-            documentTabs.addTab(material.originalName(), opened);
             openDocuments.put(material.id(), opened);
-            int tabIndex = documentTabs.indexOfComponent(opened);
-            JPanel tab = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
-            tab.setOpaque(false);
-            tab.add(new JLabel(material.originalName()));
-            JButton close = new JButton("×");
-            close.setToolTipText("Close " + material.originalName());
-            close.setBorder(AppTheme.padding(2, 4, 2, 4));
-            close.addActionListener(e -> {
-                documentTabs.remove(openDocuments.remove(material.id()));
-            });
-            tab.add(close);
-            documentTabs.setTabComponentAt(tabIndex, tab);
         }
-        documentTabs.setSelectedComponent(opened);
-        contentTabs.setSelectedIndex(2);
+        showViewerTab(material.originalName(), opened, () -> openDocuments.remove(material.id()));
         status.setText(material.originalName() + " · Original file preview");
+    }
+
+    private void closeMaterialTab(UUID id) {
+        Component opened = openDocuments.remove(id);
+        if (opened == null) return;
+        viewerTabs.remove(opened);
+        if (viewerTabs.getTabCount() == 0) hideViewer();
     }
 
     private void selectMaterial(UUID id) {
@@ -1326,13 +1531,15 @@ public final class MainWindow extends JFrame {
         Object selected = tree.getLastSelectedPathComponent();
         if (!(selected instanceof DefaultMutableTreeNode node)
                 || !(node.getUserObject() instanceof WorkspaceLeaf leaf)) return;
-        perform(() -> {
-            try {
-                var path = controller.materialPath(leaf.file().id());
-                if (!Files.isRegularFile(path)) throw new IllegalStateException("Stored file is missing: " + path);
-                Desktop.getDesktop().open(path.toFile());
-            } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
-        });
+        perform(() -> openOriginal(leaf.file()));
+    }
+
+    private void openOriginal(MaterialFile material) {
+        try {
+            var path = controller.materialPath(material.id());
+            if (!Files.isRegularFile(path)) throw new IllegalStateException("Stored file is missing: " + path);
+            Desktop.getDesktop().open(path.toFile());
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 
     private void refresh() {

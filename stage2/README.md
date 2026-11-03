@@ -48,7 +48,3 @@ Type `help` in the CLI for all commands. The GUI exposes the workspace, timeline
 | F15 / SD12 | Local interaction history records AI proposals, approvals, generated items, and responses; recent entries inform later Q&A and history can be deleted. | It does not capture every manual UI action. |
 
 Implemented patterns: Facade (`AgentController`), Composite (`WorkspaceNode` hierarchy), Factory (`DocumentReaderFactory`), Adapter (`HttpLlmClient` behind `LlmClient`), Observer (`DataStore` listeners), Command (`AgentCommand` and `CommandInvoker`), and Strategy (`PriorityStrategy`, `ExplanationStrategy`). These classes follow the Stage 1 class/sequence diagram roles while retaining the explicit differences above.
-
-## Stage 2 submission notes
-
-The Stage 2 PDF requires five meaningful source commits **pushed during each** of Oct 20–26, Oct 27–Nov 2, and Nov 3–9 (Toronto time), plus the final report and demonstration videos. A later author or committer date cannot recreate a past push. The report and videos remain to be produced for submission, and a live API demonstration needs your own key.

@@ -71,6 +71,8 @@ public final class MainWindow extends JFrame {
     private final JLabel fileHeading = new JLabel("Select a file in the workspace");
     private final JLabel fileMeta = new JLabel("Uploaded files are stored locally.");
     private final JTextArea filePreview = new JTextArea();
+    private final JTabbedPane documentTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+    private final Map<UUID, Component> openDocuments = new java.util.HashMap<>();
     private final JButton openFileButton = new JButton("Open original");
     private YearMonth visibleMonth = YearMonth.now();
     private String lastUploadDirectory = System.getProperty("user.home");
@@ -92,17 +94,39 @@ public final class MainWindow extends JFrame {
         this.chatPanel = new ChatPanel(question -> perform(() -> askSources(question)),
                 change -> perform(() -> requestScheduleChange(change)));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(1180, 760);
+        setSize(1280, 800);
+        setMinimumSize(new Dimension(900, 600));
         setLocationRelativeTo(null);
+        getContentPane().setBackground(AppTheme.BACKGROUND);
 
         setJMenuBar(createMenuBar());
-        JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(AppTheme.SURFACE);
+        header.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, AppTheme.BORDER),
+                AppTheme.padding(14, 18, 14, 18)));
+        JPanel identity = new JPanel(new GridLayout(2, 1, 0, 3));
+        identity.setOpaque(false);
+        JLabel appName = new JLabel("Study Agent");
+        appName.setFont(AppTheme.SECTION);
+        appName.setForeground(AppTheme.TEXT);
+        JLabel appContext = new JLabel("Courses, files and deadlines");
+        appContext.setFont(AppTheme.SMALL);
+        appContext.setForeground(AppTheme.MUTED);
+        identity.add(appName);
+        identity.add(appContext);
+        header.add(identity, BorderLayout.WEST);
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        actions.setOpaque(false);
         button(actions, "New semester", this::addSemester);
         button(actions, "New course", this::addCourse);
-        button(actions, "Upload files", this::uploadFiles);
+        button(actions, "Add files", this::uploadFiles);
         button(actions, "New deadline", this::addDeadline);
-        button(actions, "Calendar", this::showCalendar);
-        add(actions, BorderLayout.NORTH);
+        JButton sync = AppTheme.button("Analyze files for calendar", true);
+        sync.addActionListener(e -> perform(this::analyzeCalendarFiles));
+        actions.add(sync);
+        header.add(actions, BorderLayout.EAST);
+        add(header, BorderLayout.NORTH);
 
         tree.setCellRenderer(new DefaultTreeCellRenderer() {
             @Override public Component getTreeCellRendererComponent(JTree target, Object value,
@@ -116,6 +140,9 @@ public final class MainWindow extends JFrame {
                 return this;
             }
         });
+        tree.setBackground(AppTheme.SURFACE);
+        tree.setForeground(AppTheme.TEXT);
+        tree.setRowHeight(26);
         tree.addTreeSelectionListener(this::selectionChanged);
         tree.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override public void mousePressed(java.awt.event.MouseEvent event) { showTreeMenu(event); }
@@ -125,7 +152,14 @@ public final class MainWindow extends JFrame {
             }
         });
         table.setAutoCreateRowSorter(true);
-        table.setRowHeight(25);
+        table.setRowHeight(32);
+        table.setBackground(AppTheme.SURFACE);
+        table.setForeground(AppTheme.TEXT);
+        table.setSelectionBackground(AppTheme.BLUE_TINT);
+        table.setSelectionForeground(AppTheme.TEXT);
+        table.setGridColor(AppTheme.BORDER);
+        table.getTableHeader().setBackground(AppTheme.RAISED);
+        table.getTableHeader().setForeground(AppTheme.TEXT);
         contentTabs.addTab("Timeline", new JScrollPane(table));
         JPanel calendarTab = new JPanel(new BorderLayout(0, 8));
         JPanel monthActions = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -140,10 +174,28 @@ public final class MainWindow extends JFrame {
         contentTabs.addTab("Study timer", timerPanel);
         contentTabs.addTab("Study records", timerRecords);
         contentTabs.addTab("Chat", chatPanel);
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(tree),
-                contentTabs);
-        split.setDividerLocation(330);
+        JPanel workspace = new JPanel(new BorderLayout());
+        workspace.setBackground(AppTheme.SURFACE);
+        JLabel workspaceHeading = new JLabel("WORKSPACE");
+        workspaceHeading.setFont(AppTheme.SMALL.deriveFont(java.awt.Font.BOLD));
+        workspaceHeading.setForeground(AppTheme.MUTED);
+        workspaceHeading.setBorder(AppTheme.padding(18, 18, 12, 18));
+        workspace.add(workspaceHeading, BorderLayout.NORTH);
+        JScrollPane treeScroll = new JScrollPane(tree);
+        treeScroll.setBorder(null);
+        treeScroll.getViewport().setBackground(AppTheme.SURFACE);
+        workspace.add(treeScroll, BorderLayout.CENTER);
+        contentTabs.setBackground(AppTheme.SURFACE);
+        contentTabs.setForeground(AppTheme.TEXT);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, workspace, contentTabs);
+        split.setBorder(null);
+        split.setDividerSize(1);
+        split.setDividerLocation(290);
         add(split, BorderLayout.CENTER);
+        status.setForeground(AppTheme.MUTED);
+        status.setOpaque(true);
+        status.setBackground(AppTheme.SURFACE);
+        status.setBorder(AppTheme.padding(8, 16, 8, 16));
         status.setToolTipText("Click to inspect undated deadlines");
         status.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override public void mouseClicked(java.awt.event.MouseEvent event) {
@@ -161,7 +213,7 @@ public final class MainWindow extends JFrame {
     }
 
     private void button(JPanel parent, String title, Runnable action) {
-        JButton button = new JButton(title);
+        JButton button = AppTheme.button(title, false);
         button.addActionListener(e -> perform(action));
         parent.add(button);
     }
@@ -204,6 +256,7 @@ public final class MainWindow extends JFrame {
         menuItem(ai, "Generate essay question", this::generateEssayQuestion);
         menuItem(ai, "Answer essay question", this::answerEssayQuestion);
         menuItem(ai, "Extract syllabus deadlines", this::aiSyllabus);
+        menuItem(ai, "Analyze uploaded files for calendar", this::analyzeCalendarFiles);
         menuItem(ai, "Suggest lecture week", this::aiWeek);
         menuItem(ai, "Review proposals", this::reviewProposals);
         bar.add(ai);
@@ -289,8 +342,11 @@ public final class MainWindow extends JFrame {
         filePreview.setEditable(false);
         filePreview.setLineWrap(true);
         filePreview.setWrapStyleWord(true);
-        filePreview.setText("Choose a file on the left to see its extracted text here. Text extraction works without an AI key.");
-        panel.add(new JScrollPane(filePreview), BorderLayout.CENTER);
+        filePreview.setText("Choose a file on the left. PDFs open here as original pages.\n\n"
+                + "Text is extracted separately for search and AI, without changing the stored original.");
+        filePreview.setBorder(AppTheme.padding(20, 20, 20, 20));
+        documentTabs.addTab("Overview", new JScrollPane(filePreview));
+        panel.add(documentTabs, BorderLayout.CENTER);
         return panel;
     }
 
@@ -439,7 +495,8 @@ public final class MainWindow extends JFrame {
                 return row;
             }
         });
-        box.setPreferredSize(new Dimension(480, 30));
+        int longest = choices.stream().mapToInt(choice -> displayName(choice).length()).max().orElse(0);
+        box.setPreferredSize(new Dimension(Math.min(480, Math.max(190, 14 + longest * 7)), 30));
         int answer = JOptionPane.showConfirmDialog(this, box, label, JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
         if (answer != JOptionPane.OK_OPTION) throw new CancellationException();
@@ -449,6 +506,10 @@ public final class MainWindow extends JFrame {
     private String displayName(Object value) {
         if (value instanceof MaterialFile material)
             return controller.course(material.courseId()).name() + " / " + material.originalName();
+        if (value instanceof StudyArtifacts.Quiz quiz)
+            return quiz.questions().size() + " questions · " + quiz.questions().get(0).topic();
+        if (value instanceof Semester semester) return semester.name();
+        if (value instanceof Course course) return course.name();
         if (value instanceof CommandInvoker.Proposal proposal) return proposal.description();
         return String.valueOf(value);
     }
@@ -531,8 +592,6 @@ public final class MainWindow extends JFrame {
         lastUploadDirectory = chooser.getDirectory();
         int added = 0;
         MaterialFile last = null;
-        List<MaterialFile> lectureFiles = new ArrayList<>();
-        List<MaterialFile> syllabusFiles = new ArrayList<>();
         List<String> problems = new ArrayList<>();
         for (File file : files) {
             try {
@@ -551,8 +610,6 @@ public final class MainWindow extends JFrame {
                 MaterialFile material = controller.uploadMaterial(course.id(), category, file.toPath(), replace);
                 added++;
                 last = material;
-                if (category == Category.LECTURE_MATERIALS && material.textAvailable()) lectureFiles.add(material);
-                if (category == Category.SYLLABUS && material.textAvailable()) syllabusFiles.add(material);
                 if (!material.extractionWarning().isBlank())
                     problems.add(file.getName() + ": " + material.extractionWarning());
             } catch (Exception ex) {
@@ -565,46 +622,6 @@ public final class MainWindow extends JFrame {
                 + " / " + category + (problems.isEmpty() ? "" : " | " + problems.size() + " need attention"));
         if (!problems.isEmpty()) JOptionPane.showMessageDialog(this, String.join("\n", problems),
                 "Upload details", JOptionPane.WARNING_MESSAGE);
-        if (!syllabusFiles.isEmpty()) suggestUploadedSyllabi(syllabusFiles);
-        else if (!lectureFiles.isEmpty()) suggestUploadedWeeks(lectureFiles);
-    }
-
-    private void suggestUploadedSyllabi(List<MaterialFile> files) {
-        runAi("Extracting uploaded syllabus deadlines", () -> {
-            List<String> results = new ArrayList<>();
-            for (MaterialFile file : files) {
-                try {
-                    int count = controller.suggestSyllabusDeadlines(file.id()).size();
-                    results.add(file.originalName() + ": " + count + " deadline candidate(s)");
-                } catch (Exception ex) {
-                    results.add(file.originalName() + ": " + ex.getMessage()
-                            + " (use New deadline to enter dates manually)");
-                }
-            }
-            return results;
-        }, results -> {
-            showText("Syllabus extraction", String.join("\n", results));
-            if (!controller.pendingProposals().isEmpty()) reviewProposals();
-        });
-    }
-
-    private void suggestUploadedWeeks(List<MaterialFile> files) {
-        runAi("Matching uploaded lecture weeks", () -> {
-            List<String> results = new ArrayList<>();
-            for (MaterialFile file : files) {
-                try {
-                    CommandInvoker.Proposal proposal = controller.suggestLectureWeek(file.id());
-                    results.add(file.originalName() + ": " + proposal.description());
-                } catch (Exception ex) {
-                    results.add(file.originalName() + ": " + ex.getMessage()
-                            + " (right-click the file to assign a week manually)");
-                }
-            }
-            return results;
-        }, results -> {
-            showText("Lecture week suggestions", String.join("\n\n", results));
-            if (!controller.pendingProposals().isEmpty()) reviewProposals();
-        });
     }
 
     private void assignLectureWeek(MaterialFile file) {
@@ -816,25 +833,11 @@ public final class MainWindow extends JFrame {
     }
 
     private void takeQuiz(StudyArtifacts.Quiz quiz) {
-        List<Integer> answers = new ArrayList<>();
-        for (StudyArtifacts.Question question : quiz.questions()) {
-            String[] choices = question.choices().toArray(String[]::new);
-            int selected = JOptionPane.showOptionDialog(this, question.text(), "Quiz · " + question.topic(),
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
-            if (selected < 0) throw new CancellationException();
-            answers.add(selected);
-        }
+        List<Integer> answers = QuizDialog.take(this, quiz);
+        if (answers == null) return;
         try {
             StudyArtifacts.Attempt result = controller.gradeQuiz(quiz, answers);
-            StringBuilder review = new StringBuilder(result.correct() + "/" + quiz.questions().size() + " correct\n\n");
-            for (int i = 0; i < quiz.questions().size(); i++) {
-                StudyArtifacts.Question question = quiz.questions().get(i);
-                review.append(i + 1).append(". ").append(question.text()).append("\nYour answer: ")
-                        .append(question.choices().get(answers.get(i))).append("\nCorrect: ")
-                        .append(question.choices().get(question.answerIndex())).append("\n")
-                        .append(question.explanation()).append("\n\n");
-            }
-            showText("Quiz result", review.toString());
+            QuizDialog.showResult(this, quiz, answers, result);
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 
@@ -957,6 +960,108 @@ public final class MainWindow extends JFrame {
                             new Object[] {"Review proposals", "Later"}, "Review proposals");
                     if (next == 0) reviewProposals();
                 });
+    }
+
+    private void analyzeCalendarFiles() {
+        runAi("Analyzing uploaded syllabus and assignment files",
+                controller::suggestCalendarFromFiles, result -> {
+                    if (result.proposals().isEmpty()) {
+                        JOptionPane.showMessageDialog(this,
+                                "No new deadlines were found in " + result.filesAnalyzed() + " files.",
+                                "Calendar analysis", JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                    reviewCalendarSuggestions(result);
+                });
+    }
+
+    private void reviewCalendarSuggestions(AgentController.CalendarSuggestions result) {
+        List<CommandInvoker.Proposal> proposals = result.proposals();
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[] {"Add", "Course", "Due", "Deadline", "Source", "Review"}, 0) {
+            @Override public Class<?> getColumnClass(int column) {
+                return column == 0 ? Boolean.class : String.class;
+            }
+            @Override public boolean isCellEditable(int row, int column) { return column == 0; }
+        };
+        for (CommandInvoker.Proposal proposal : proposals) {
+            var candidate = controller.syllabusCandidate(proposal.id());
+            var file = controller.materials().stream()
+                    .filter(m -> m.id().equals(candidate.materialId())).findFirst().orElseThrow();
+            boolean timeOnlyWarning = !candidate.warnings().isEmpty() && candidate.warnings().stream()
+                    .allMatch(w -> w.startsWith("Due 24 hours after release;"));
+            boolean selectedByDefault = candidate.draft().dueDate() != null
+                    && (candidate.warnings().isEmpty() || timeOnlyWarning);
+            model.addRow(new Object[] {selectedByDefault,
+                    controller.course(candidate.courseId()).name(),
+                    candidate.draft().dueDate() == null ? "TBD" : candidate.draft().dueDate().toString(),
+                    candidate.draft().title(), file.originalName(),
+                    candidate.warnings().isEmpty() ? "Ready"
+                            : timeOnlyWarning ? "Confirm time" : "Check warning"});
+        }
+        JTable suggestions = new JTable(model);
+        suggestions.setRowHeight(31);
+        suggestions.setAutoCreateRowSorter(true);
+        suggestions.getColumnModel().getColumn(0).setMaxWidth(50);
+        suggestions.getColumnModel().getColumn(2).setPreferredWidth(105);
+        suggestions.getColumnModel().getColumn(3).setPreferredWidth(260);
+        suggestions.getColumnModel().getColumn(4).setPreferredWidth(200);
+        JTextArea details = new JTextArea("Select a row to see its source wording and warnings.");
+        details.setEditable(false);
+        details.setLineWrap(true);
+        details.setWrapStyleWord(true);
+        details.setBorder(AppTheme.padding(12, 12, 12, 12));
+        suggestions.getSelectionModel().addListSelectionListener(e -> {
+            int row = suggestions.getSelectedRow();
+            if (row < 0) return;
+            CommandInvoker.Proposal proposal = proposals.get(suggestions.convertRowIndexToModel(row));
+            details.setText(proposal.description());
+            details.setCaretPosition(0);
+        });
+        JPanel view = new JPanel(new BorderLayout(0, 12));
+        view.setBorder(AppTheme.padding(18, 18, 18, 18));
+        JLabel introduction = new JLabel(result.filesAnalyzed() + " files analyzed · " + proposals.size()
+                + " suggestions. Check the dates and source before adding them to your calendar.");
+        introduction.setForeground(AppTheme.TEXT);
+        view.add(introduction, BorderLayout.NORTH);
+        JScrollPane rows = new JScrollPane(suggestions);
+        rows.setPreferredSize(new Dimension(930, 340));
+        view.add(rows, BorderLayout.CENTER);
+        JScrollPane source = new JScrollPane(details);
+        source.setPreferredSize(new Dimension(930, 130));
+        view.add(source, BorderLayout.SOUTH);
+        int decision = JOptionPane.showOptionDialog(this, view, "Review calendar suggestions",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+                new Object[] {"Add checked to calendar", "Review one", "Later"}, "Later");
+        if (decision == 1) {
+            int row = suggestions.getSelectedRow();
+            if (row >= 0) reviewProposal(proposals.get(suggestions.convertRowIndexToModel(row)));
+            else status.setText("Select a suggestion to review.");
+            return;
+        }
+        if (decision != 0) return;
+        List<String> selectedWarnings = new ArrayList<>();
+        for (int row = 0; row < model.getRowCount(); row++) {
+            if (!Boolean.TRUE.equals(model.getValueAt(row, 0))) continue;
+            var candidate = controller.syllabusCandidate(proposals.get(row).id());
+            if (!candidate.warnings().isEmpty())
+                selectedWarnings.add(candidate.draft().title() + ": "
+                        + String.join("; ", candidate.warnings()));
+        }
+        if (!selectedWarnings.isEmpty() && JOptionPane.showConfirmDialog(this,
+                "Review these details before adding the selected dates:\n\n"
+                        + String.join("\n", selectedWarnings), "Confirm calendar details",
+                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+        int applied = 0;
+        for (int row = 0; row < model.getRowCount(); row++) {
+            if (!Boolean.TRUE.equals(model.getValueAt(row, 0))) continue;
+            CommandInvoker.Proposal proposal = proposals.get(row);
+            try { controller.approveProposal(proposal.id()); applied++; }
+            catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+        }
+        refresh();
+        contentTabs.setSelectedIndex(1);
+        status.setText(applied + " deadline" + (applied == 1 ? "" : "s") + " added to the calendar.");
     }
 
     private void aiWeek() {
@@ -1155,36 +1260,52 @@ public final class MainWindow extends JFrame {
                 : files.stream().map(m -> m.originalName() + (m.textAvailable() ? " · text ready"
                         : " · no extracted text")).collect(java.util.stream.Collectors.joining("\n")));
         filePreview.setCaretPosition(0);
+        documentTabs.setSelectedIndex(0);
     }
 
     private void showMaterial(MaterialFile material) {
         Course course = controller.course(material.courseId());
         fileHeading.setText(material.originalName());
         fileMeta.setText(course.name() + " / " + material.category() + " · "
-                + (material.textAvailable() ? "Text extracted locally" : "No extracted text"));
+                + (material.originalName().toLowerCase(java.util.Locale.ROOT).endsWith(".pdf")
+                    ? "Original PDF preview" : "Original file")
+                + (material.textAvailable() ? " · Text available to AI" : " · No readable text for AI"));
         openFileButton.setEnabled(true);
-        String preview;
-        if (!material.textAvailable()) {
-            preview = material.extractionWarning().isBlank() ? "The original file is stored and can be opened."
-                    : material.extractionWarning() + "\n\nThe original file is stored and can be opened.";
-        } else {
+        Component opened = openDocuments.get(material.id());
+        if (opened == null) {
             try {
-                List<String> pages = controller.materialPages(material.id());
-                StringBuilder text = new StringBuilder();
-                for (int i = 0; i < pages.size() && text.length() < 8000; i++) {
-                    text.append("Page ").append(i + 1).append("\n").append(pages.get(i)).append("\n\n");
+                if (material.originalName().toLowerCase(java.util.Locale.ROOT).endsWith(".pdf")) {
+                    opened = new PdfPreviewPanel(controller.materialPath(material.id()));
+                } else {
+                    JTextArea details = new JTextArea("Original file: " + material.originalName()
+                            + "\n\nUse Open original to view this file in its normal application."
+                            + (material.extractionWarning().isBlank() ? ""
+                                    : "\n\n" + material.extractionWarning()));
+                    details.setEditable(false);
+                    details.setLineWrap(true);
+                    details.setWrapStyleWord(true);
+                    details.setBorder(AppTheme.padding(24, 24, 24, 24));
+                    opened = new JScrollPane(details);
                 }
-                preview = text.length() > 8000 ? text.substring(0, 8000) + "\n… Preview shortened."
-                        : text.toString();
-            } catch (java.io.IOException ex) {
-                preview = "Unable to read extracted text: " + ex.getMessage();
-            }
+            } catch (java.io.IOException ex) { throw new IllegalStateException("Unable to open PDF: " + ex.getMessage(), ex); }
+            documentTabs.addTab(material.originalName(), opened);
+            openDocuments.put(material.id(), opened);
+            int tabIndex = documentTabs.indexOfComponent(opened);
+            JPanel tab = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+            tab.setOpaque(false);
+            tab.add(new JLabel(material.originalName()));
+            JButton close = new JButton("×");
+            close.setToolTipText("Close " + material.originalName());
+            close.setBorder(AppTheme.padding(2, 4, 2, 4));
+            close.addActionListener(e -> {
+                documentTabs.remove(openDocuments.remove(material.id()));
+            });
+            tab.add(close);
+            documentTabs.setTabComponentAt(tabIndex, tab);
         }
-        filePreview.setText(preview);
-        filePreview.setCaretPosition(0);
+        documentTabs.setSelectedComponent(opened);
         contentTabs.setSelectedIndex(2);
-        status.setText(material.originalName() + " stored locally · "
-                + (material.textAvailable() ? "Text preview ready without AI" : "No extractable text"));
+        status.setText(material.originalName() + " · Original file preview");
     }
 
     private void selectMaterial(UUID id) {
@@ -1263,7 +1384,7 @@ public final class MainWindow extends JFrame {
         Object selected = selectedTreeValue();
         if (selected instanceof WorkspaceLeaf leaf) {
             status.setText(leaf.file().originalName() + " stored locally · "
-                    + (leaf.file().textAvailable() ? "Text preview ready without AI" : "No extractable text"));
+                    + (leaf.file().textAvailable() ? "Text available to AI" : "No readable text for AI"));
         } else if (selectedCourseId == null) {
             status.setText(deadlines.isEmpty() ? "No deadlines yet. Use New deadline to add one."
                     : "All courses | " + deadlines.size() + " deadlines | " + undated.size()

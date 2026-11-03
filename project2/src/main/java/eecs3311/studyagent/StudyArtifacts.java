@@ -18,8 +18,9 @@ public final class StudyArtifacts {
             if (topic == null || topic.isBlank() || text == null || text.isBlank()
                     || explanation == null || explanation.isBlank()
                     || choices.size() != 4 || choices.stream().anyMatch(String::isBlank)
+                    || choices.stream().map(s -> s.strip().toLowerCase(java.util.Locale.ROOT)).distinct().count() != 4
                     || answerIndex < 0 || answerIndex > 3)
-                throw new IllegalArgumentException("Quiz questions need four choices and a valid answer");
+                throw new IllegalArgumentException("Quiz questions need four distinct choices and a valid answer");
         }
     }
     public record Quiz(UUID id, UUID courseId, UUID materialId, List<Question> questions) {

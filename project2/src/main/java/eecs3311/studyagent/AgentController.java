@@ -131,6 +131,25 @@ public final class AgentController {
         MaterialFile file = store.material(materialId);
         if (file.category() != Category.SYLLABUS || !file.textAvailable())
             throw new IllegalArgumentException("Select a syllabus with extractable text.");
+        return suggestDocumentDeadlines(file);
+    }
+
+    public record CalendarSuggestions(int filesAnalyzed, List<CommandInvoker.Proposal> proposals) { }
+
+    /** Runs only on demand, after files are uploaded; every suggested change still needs approval. */
+    public CalendarSuggestions suggestCalendarFromFiles() throws IOException {
+        List<MaterialFile> files = store.materials().stream().filter(m -> m.textAvailable()
+                && (m.category() == Category.SYLLABUS
+                    || m.category() == Category.ASSIGNMENT_SPECIFICATIONS)).toList();
+        if (files.isEmpty()) throw new IllegalStateException(
+                "Upload a readable syllabus or assignment specification first.");
+        List<CommandInvoker.Proposal> all = new java.util.ArrayList<>();
+        for (MaterialFile file : files) all.addAll(suggestDocumentDeadlines(file));
+        return new CalendarSuggestions(files.size(), List.copyOf(all));
+    }
+
+    private List<CommandInvoker.Proposal> suggestDocumentDeadlines(MaterialFile file) throws IOException {
+        UUID materialId = file.id();
         Course course = store.course(file.courseId());
         Semester semester = store.semester(course.semesterId());
         String sourceText = String.join("\n", store.materialPages(materialId));
@@ -156,6 +175,10 @@ public final class AgentController {
                     && d.title().equalsIgnoreCase(draft.title())
                     && java.util.Objects.equals(d.dueDate(), draft.dueDate())))
                 warnings.add("A deadline with the same title and date already exists; review before approval.");
+            if (syllabusCandidates.values().stream().anyMatch(c -> c.courseId().equals(course.id())
+                    && c.draft().title().equalsIgnoreCase(draft.title())
+                    && java.util.Objects.equals(c.draft().dueDate(), draft.dueDate())))
+                warnings.add("Another pending proposal has the same title and date; apply only one.");
             SyllabusCandidate candidate = new SyllabusCandidate(materialId, course.id(), draft, warnings);
             CommandInvoker.Proposal proposal = invoker.propose(syllabusDescription(course, candidate),
                     new AddDeadlineCommand(store, course.id(), draft));
@@ -436,6 +459,10 @@ public final class AgentController {
                         prompts.user(PromptBuilder.Task.QUIZ, context,
                                 "Create exactly " + count + " multiple-choice study questions from the source. "
                                         + "Difficulty: " + difficulty + ". "
+                                        + "Each question must have one unambiguous answer stated in the supplied "
+                                        + "source. Avoid near-synonymous choices and overlapping design levels. "
+                                        + "Explain why the chosen answer follows from specific source wording; "
+                                        + "do not invent a taxonomy or use general knowledge to override the source. "
                                         + ExplanationStrategy.forDifficulty(difficulty).instruction())));
                 List<StudyArtifacts.Question> parsed = new java.util.ArrayList<>();
                 for (Object raw : Json.array(response.get("questions"))) {

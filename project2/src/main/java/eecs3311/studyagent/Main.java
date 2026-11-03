@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 public final class Main {
     private Main() { }
@@ -34,8 +34,8 @@ public final class Main {
             if (GraphicsEnvironment.isHeadless()) {
                 throw new IllegalStateException("No desktop display is available. Run with --cli.");
             }
-            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-            catch (Exception ignored) { /* Keep the standard Swing theme when unavailable. */ }
+            FlatDarkLaf.setup();
+            AppTheme.install();
             SwingUtilities.invokeLater(() -> new MainWindow(controller).setVisible(true));
         }
     }

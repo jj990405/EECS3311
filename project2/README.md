@@ -31,7 +31,7 @@ To use AI features, copy `.env.example` to `../.env` and supply `LLM_API_KEY` lo
 5. Use `ai references`, `ask`, `summary create`, `quiz create`, `quiz take`, `weak topics`, and `weekly brief` for material-based study assistance.
 6. Use `ai schedule` for a natural-language schedule edit; review the before-and-after change before approval. `essay create` generates a question; `essay take` proposes a grade and saves it only after approval. In the GUI, the proposed score can be corrected before approval. `self assess` and `weak advice` add confidence-based review guidance. `history` displays saved AI interactions; `history delete` removes a selected record.
 
-Type `help` in the CLI for all commands. Selecting a course opens its page with deadlines, materials, progress, and study actions. The GUI also offers the calendar, source Q&A, summaries, configurable quiz scope and types, editable essay grading, notifications, weekly briefing, and history.
+On a fresh CLI workspace, type `setup` for guided semester, course, and optional syllabus setup. Course colors are assigned automatically in the CLI. Dates accept `20261231` or `2026-12-31`; invalid dates can be corrected without restarting a command. Type `help` for commands. In the GUI, choose a course color from seven swatches when adding a course, or right-click the course to change its color later. Selecting a course opens its page with deadlines, materials, progress, and study actions. The GUI also offers the calendar, source Q&A, summaries, configurable quiz scope and types, editable essay grading, notifications, weekly briefing, and history.
 
 ## Design traceability
 

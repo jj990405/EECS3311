@@ -127,6 +127,18 @@ public final class DataStore {
         return item;
     }
 
+    public synchronized Course changeCourseColor(UUID courseId, String colorHex) throws IOException {
+        Course previous = course(courseId);
+        Course updated = new Course(previous.id(), previous.semesterId(), previous.name(), colorHex,
+                previous.difficulty());
+        save("courses", updated.id(), props("semester", updated.semesterId().toString(),
+                "name", updated.name(), "color", updated.colorHex(),
+                "difficulty", updated.difficulty().name()));
+        courses.put(updated.id(), updated);
+        changed();
+        return updated;
+    }
+
     public synchronized Deadline createDeadline(UUID courseId, String title, String type,
                                                  LocalDate dueDate, String scope) throws IOException {
         return createDeadline(courseId, title, type, dueDate, scope, null, "");

@@ -1,6 +1,7 @@
 package eecs3311.studyagent;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -10,7 +11,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +20,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import javax.swing.JButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +30,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -222,6 +224,7 @@ public final class MainWindow extends JFrame {
                 Course course = controller.course(branch.id());
                 popupItem(menu, "Upload files...", () -> uploadFiles(course, chooseCategory()));
                 popupItem(menu, "New deadline...", () -> addDeadline(course));
+                popupItem(menu, "Change course color...", () -> changeCourseColor(course));
                 popupItem(menu, "View calendar", this::showCalendar);
             } else {
                 Course course = controller.course(branch.id());
@@ -345,13 +348,63 @@ public final class MainWindow extends JFrame {
     }
 
     private LocalDate date(String label, String initial, boolean optional) {
-        String value = ask(label + " (YYYY-MM-DD" + (optional ? ", blank for TBD" : "") + ")", initial);
-        if (optional && value.isBlank()) return null;
-        try {
-            return LocalDate.parse(value);
-        } catch (DateTimeParseException ex) {
-            throw new IllegalArgumentException("Use a valid date such as 2026-11-10.");
+        String current = initial;
+        while (true) {
+            String value = ask(label + " (YYYYMMDD or YYYY-MM-DD"
+                    + (optional ? ", blank for TBD" : "") + ")", current);
+            if (optional && value.isBlank()) return null;
+            try { return FlexibleDate.parse(value); }
+            catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Check date", JOptionPane.WARNING_MESSAGE);
+                current = value;
+            }
         }
+    }
+
+    private String chooseCourseColor(String current) {
+        List<CourseColors.Choice> choices = new ArrayList<>(List.of(CourseColors.PALETTE));
+        if (choices.stream().noneMatch(choice -> choice.hex().equalsIgnoreCase(current)))
+            choices.add(new CourseColors.Choice("Current", current));
+        JPanel palette = new JPanel(new GridLayout(0, 4, 10, 10));
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton[] options = new JRadioButton[choices.size()];
+        for (int i = 0; i < choices.size(); i++) {
+            CourseColors.Choice choice = choices.get(i);
+            JRadioButton option = new JRadioButton(choice.name());
+            Color swatch = Color.decode(choice.hex());
+            option.setIcon(swatchIcon(swatch, false));
+            option.setSelectedIcon(swatchIcon(swatch, true));
+            option.setIconTextGap(6);
+            group.add(option);
+            palette.add(option);
+            options[i] = option;
+            if (choice.hex().equalsIgnoreCase(current)) option.setSelected(true);
+        }
+        int result = JOptionPane.showConfirmDialog(this, palette, "Course color",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result != JOptionPane.OK_OPTION) throw new CancellationException();
+        for (int i = 0; i < options.length; i++)
+            if (options[i].isSelected()) return choices.get(i).hex();
+        throw new IllegalStateException("Choose a color.");
+    }
+
+    private javax.swing.Icon swatchIcon(Color color, boolean selected) {
+        return new javax.swing.Icon() {
+            @Override public int getIconWidth() { return 22; }
+            @Override public int getIconHeight() { return 22; }
+            @Override public void paintIcon(java.awt.Component component, java.awt.Graphics graphics,
+                                            int x, int y) {
+                graphics.setColor(color);
+                graphics.fillRoundRect(x + 2, y + 2, 18, 18, 5, 5);
+                graphics.setColor(Color.DARK_GRAY);
+                graphics.drawRoundRect(x + 2, y + 2, 18, 18, 5, 5);
+                if (selected) {
+                    graphics.setColor(Color.WHITE);
+                    graphics.drawLine(x + 6, y + 11, x + 10, y + 15);
+                    graphics.drawLine(x + 10, y + 15, x + 17, y + 7);
+                }
+            }
+        };
     }
 
     private <T> T choose(String label, List<T> choices) {
@@ -381,8 +434,15 @@ public final class MainWindow extends JFrame {
         return String.valueOf(value);
     }
 
-    private Semester chooseSemester() { return choose("Choose semester", controller.semesters()); }
-    private Course chooseCourse() { return choose("Choose course", controller.courses()); }
+    private Semester chooseSemester() {
+        List<Semester> semesters = controller.semesters();
+        return semesters.size() == 1 ? semesters.get(0) : choose("Choose semester", semesters);
+    }
+
+    private Course chooseCourse() {
+        List<Course> courses = controller.courses();
+        return courses.size() == 1 ? courses.get(0) : choose("Choose course", courses);
+    }
 
     private void addSemester() {
         try {
@@ -397,11 +457,25 @@ public final class MainWindow extends JFrame {
 
     private void addCourse(Semester semester) {
         String name = ask("Course name", "");
-        String color = ask("Color (#RRGGBB)", "#3366CC");
-        Difficulty difficulty = choose("Course difficulty", List.of(Difficulty.values()));
+        String color = chooseCourseColor(CourseColors.suggested(controller.courses().size()).hex());
+        String level = (String) JOptionPane.showInputDialog(this, "Course difficulty",
+                "Course difficulty", JOptionPane.QUESTION_MESSAGE, null,
+                new String[] {"Easy", "Medium", "Hard"}, "Medium");
+        if (level == null) throw new CancellationException();
+        Difficulty difficulty = switch (level) {
+            case "Easy" -> Difficulty.LOW;
+            case "Hard" -> Difficulty.HIGH;
+            default -> Difficulty.MEDIUM;
+        };
         try {
             controller.createCourse(semester.id(), name, color, difficulty);
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void changeCourseColor(Course course) {
+        String color = chooseCourseColor(course.colorHex());
+        try { controller.changeCourseColor(course.id(), color); }
+        catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 
     private Category chooseCategory() { return choose("Choose file category", List.of(Category.values())); }

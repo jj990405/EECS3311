@@ -3,7 +3,7 @@ package eecs3311.studyagent;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -18,7 +18,10 @@ public final class CommandLineInterface {
     }
 
     public void run() {
-        System.out.println("EECS3311 Study Agent - type help for commands.");
+        System.out.println("EECS3311 Study Agent");
+        System.out.println(controller.semesters().isEmpty()
+                ? "First time? Type setup to add a semester and course step by step."
+                : "Type help for commands, or setup to add a course step by step.");
         printDueNotifications();
         while (true) {
             System.out.print("study> ");
@@ -26,6 +29,7 @@ public final class CommandLineInterface {
             String command = input.nextLine().trim().toLowerCase();
             try {
                 switch (command) {
+                    case "setup" -> setup();
                     case "help" -> help();
                     case "semester add" -> addSemester();
                     case "course add" -> addCourse();
@@ -75,17 +79,13 @@ public final class CommandLineInterface {
     }
 
     private void help() {
-        System.out.println("semester add | course add | material add | deadline add | deadline edit");
-        System.out.println("deadline delete | deadline notify | timeline | calendar | reminders | notifications");
-        System.out.println("complete | progress | tree | exit");
-        System.out.println("ai syllabus | ai week | proposals | approve | reject");
-        System.out.println("study week (the timer runs in the GUI)");
-        System.out.println("ai references | ask");
-        System.out.println("summary create | summary list | quiz create | quiz take");
-        System.out.println("ai schedule | weak topics | weekly brief");
-        System.out.println("essay create | essay take | essay grade | essay list | history");
-        System.out.println("self assess | weak advice | history delete");
-        System.out.println("Dates use YYYY-MM-DD. Leave a deadline date blank for TBD.");
+        System.out.println("Get started: setup, material add, tree");
+        System.out.println("Plan: deadline add/edit/delete, timeline, calendar, reminders, complete, progress");
+        System.out.println("Study: study week, ask, summary create/list, quiz create/take, weak topics");
+        System.out.println("AI: ai syllabus, ai week, ai references, ai schedule, weekly brief, proposals, approve, reject");
+        System.out.println("More: semester add, course add, deadline notify, notifications, self assess,");
+        System.out.println("      weak advice, essay create/take/grade/list, history, history delete, exit");
+        System.out.println("Dates: 20261231 or 2026-12-31. A blank deadline date means TBD.");
     }
 
     private String ask(String label) {
@@ -94,29 +94,56 @@ public final class CommandLineInterface {
     }
 
     private LocalDate date(String label, boolean optional) {
-        String value = ask(label + " (YYYY-MM-DD" + (optional ? ", blank for TBD" : "") + ")");
-        if (optional && value.isBlank()) return null;
-        try {
-            return LocalDate.parse(value);
-        } catch (DateTimeParseException ex) {
-            throw new IllegalArgumentException("Use a valid ISO date, e.g. 2026-11-10.");
+        while (true) {
+            String value = ask(label + " (YYYYMMDD or YYYY-MM-DD"
+                    + (optional ? ", blank for TBD" : "") + ")");
+            if (optional && value.isBlank()) return null;
+            try { return FlexibleDate.parse(value); }
+            catch (IllegalArgumentException ex) { System.out.println(ex.getMessage()); }
+        }
+    }
+
+    private String askDefault(String label, String suggested) {
+        String value = ask(label + " [" + suggested + "]");
+        return value.isBlank() ? suggested : value;
+    }
+
+    private LocalDate dateDefault(String label, LocalDate suggested) {
+        while (true) {
+            String value = askDefault(label + " (YYYYMMDD or YYYY-MM-DD)", suggested.toString());
+            try { return FlexibleDate.parse(value); }
+            catch (IllegalArgumentException ex) { System.out.println(ex.getMessage()); }
+        }
+    }
+
+    private Difficulty chooseDifficulty() {
+        while (true) {
+            String value = askDefault("Difficulty: 1 Easy, 2 Medium, 3 Hard", "2");
+            switch (value.toLowerCase()) {
+                case "1", "easy", "low" -> { return Difficulty.LOW; }
+                case "2", "medium" -> { return Difficulty.MEDIUM; }
+                case "3", "hard", "high" -> { return Difficulty.HIGH; }
+                default -> System.out.println("Choose 1, 2, or 3.");
+            }
         }
     }
 
     private int number(String label, int max) {
-        int value;
-        try {
-            value = Integer.parseInt(ask(label));
-        } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("Enter a number from 1 to " + max + ".");
+        while (true) {
+            try {
+                int value = Integer.parseInt(ask(label));
+                if (value >= 1 && value <= max) return value - 1;
+            } catch (NumberFormatException ignored) {
+                // Keep this choice open so an incorrect number does not restart the task.
+            }
+            System.out.println("Choose a number from 1 to " + max + ".");
         }
-        if (value < 1 || value > max) throw new IllegalArgumentException("Choose 1 to " + max + ".");
-        return value - 1;
     }
 
     private Semester chooseSemester() {
         List<Semester> items = controller.semesters();
         if (items.isEmpty()) throw new IllegalStateException("Create a semester first.");
+        if (items.size() == 1) return items.get(0);
         for (int i = 0; i < items.size(); i++) {
             Semester s = items.get(i);
             System.out.printf("%d. %s (%s to %s)%n", i + 1, s.name(), s.startDate(), s.endDate());
@@ -127,6 +154,7 @@ public final class CommandLineInterface {
     private Course chooseCourse() {
         List<Course> items = controller.courses();
         if (items.isEmpty()) throw new IllegalStateException("Create a course first.");
+        if (items.size() == 1) return items.get(0);
         for (int i = 0; i < items.size(); i++) {
             Course c = items.get(i);
             System.out.printf("%d. %s - %s%n", i + 1, controller.semester(c.semesterId()).name(), c);
@@ -188,10 +216,44 @@ public final class CommandLineInterface {
     private void addCourse() throws IOException {
         Semester semester = chooseSemester();
         String name = ask("Course name");
-        String color = ask("Course color (#RRGGBB)");
-        Difficulty difficulty = Difficulty.valueOf(ask("Difficulty (HIGH/MEDIUM/LOW)").toUpperCase());
-        Course course = controller.createCourse(semester.id(), name, color, difficulty);
-        System.out.println("Created course: " + course.name());
+        Course course = controller.createCourse(semester.id(), name,
+                CourseColors.suggested(controller.courses().size()).hex(), chooseDifficulty());
+        System.out.println("Created course: " + course.name() + ". Color assigned automatically.");
+    }
+
+    private void setup() throws IOException {
+        System.out.println("Quick setup. Press Enter to accept a value in brackets.");
+        Semester semester;
+        if (controller.semesters().isEmpty()) {
+            LocalDate today = LocalDate.now();
+            int year = today.getYear();
+            String term = today.getMonthValue() <= 4 ? "Winter" : today.getMonthValue() <= 8 ? "Summer" : "Fall";
+            LocalDate start = LocalDate.of(year, term.equals("Winter") ? 1 : term.equals("Summer") ? 5 : 9, 1);
+            LocalDate end = YearMonth.of(year, term.equals("Winter") ? 4 : term.equals("Summer") ? 8 : 12)
+                    .atEndOfMonth();
+            String name = askDefault("Semester name", term + " " + year);
+            semester = controller.createSemester(name, dateDefault("Start date", start),
+                    dateDefault("End date", end));
+            System.out.println("Semester created: " + semester.name());
+        } else {
+            semester = chooseSemester();
+            System.out.println("Using semester: " + semester.name());
+        }
+        do {
+            String name;
+            do { name = ask("Course name (e.g. EECS3311)"); }
+            while (name.isBlank());
+            Course course = controller.createCourse(semester.id(), name,
+                    CourseColors.suggested(controller.courses().size()).hex(), chooseDifficulty());
+            System.out.println("Added " + course.name() + ". Color assigned automatically.");
+        } while (ask("Add another course? (y/N)").equalsIgnoreCase("y"));
+        if (ask("Upload a syllabus now? (y/N)").equalsIgnoreCase("y")) {
+            Course course = chooseCourse();
+            Path source = Path.of(ask("Syllabus file path"));
+            MaterialFile file = controller.uploadMaterial(course.id(), Category.SYLLABUS, source);
+            System.out.println("Uploaded " + file.originalName() + ". Type ai syllabus to review deadline suggestions.");
+        }
+        System.out.println("Setup complete. Type material add for more files, or help for commands.");
     }
 
     private void addMaterial() throws IOException {

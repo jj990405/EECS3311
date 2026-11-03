@@ -198,6 +198,10 @@ public final class AgentController {
         return store.createCourse(semesterId, name, colorHex, difficulty);
     }
 
+    public Course changeCourseColor(UUID courseId, String colorHex) throws IOException {
+        return store.changeCourseColor(courseId, colorHex);
+    }
+
     public MaterialFile uploadMaterial(UUID courseId, Category category, Path path) throws IOException {
         return store.uploadMaterial(courseId, category, path);
     }

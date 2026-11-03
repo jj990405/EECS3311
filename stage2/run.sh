@@ -30,7 +30,7 @@ mapfile -d '' sources < <(find "$root/src/main/java" -name '*.java' -print0)
 "$javac_command" --release 17 -encoding UTF-8 -cp "$pdfbox_jar" -d "$build_directory" "${sources[@]}"
 
 if [[ "$mode" == test ]]; then
-  mapfile -d '' tests < <(find "$root/src/test/java" -name '*.java' -print0)
+  tests=("$root/src/test/java/eecs3311/studyagent/AgentControllerTest.java")
   "$javac_command" --release 17 -encoding UTF-8 -cp "$classpath" -d "$build_directory" "${tests[@]}"
   "$java_command" -Dproject2.root="$root" -cp "$classpath" eecs3311.studyagent.AgentControllerTest
 elif [[ "$mode" == cli ]]; then

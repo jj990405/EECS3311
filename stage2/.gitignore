@@ -1,5 +1,7 @@
 # Generated files and private local data
 build/
+target/
+dist/
 data/
 .env
 .env.*

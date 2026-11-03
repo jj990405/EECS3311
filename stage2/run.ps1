@@ -34,7 +34,7 @@ $sources = @(Get-ChildItem (Join-Path $PSScriptRoot 'src\main\java') -Filter '*.
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 if ($Mode -eq 'test') {
-    $tests = @(Get-ChildItem (Join-Path $PSScriptRoot 'src\test\java') -Filter '*.java' -Recurse | ForEach-Object FullName)
+    $tests = @(Join-Path $PSScriptRoot 'src\test\java\eecs3311\studyagent\AgentControllerTest.java')
     & (Join-Path $javaBin 'javac.exe') --release 17 -encoding UTF-8 -cp $classpath -d $buildDir @tests
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & (Join-Path $javaBin 'java.exe') "-Dproject2.root=$PSScriptRoot" -cp $classpath eecs3311.studyagent.AgentControllerTest

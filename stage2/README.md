@@ -4,21 +4,39 @@ Java 17 Swing and CLI implementation of the Stage 1 design for EECS3311. The app
 
 ## Run
 
-From `stage2/` in PowerShell:
+On Windows, download `dist/Study-Agent-Windows-x64.zip`, extract it, then open `Study Agent.exe` for the GUI or `Study Agent CLI.exe` for the terminal interface. Keep the entire `Study Agent` folder together: it includes the Java runtime, so the computer running it does not need a separate Java installation.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 -Mode test
-powershell -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 -Mode cli
-powershell -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 -Mode gui
+The standard Maven commands from `stage2/` are:
+
+```text
+Windows:  .\mvnw.cmd test
+Windows:  .\mvnw.cmd package
+Windows:  java -jar target\study-agent.jar --cli
+macOS/Linux: ./mvnw test
+macOS/Linux: ./mvnw package
+macOS/Linux: java -jar target/study-agent.jar --cli
 ```
 
-Java 17+ is required. `run.ps1` finds `JAVA_HOME`, `javac` on `PATH`, or an installed Eclipse JustJ JDK. On macOS/Linux use `./run.sh test`, `./run.sh cli`, or `./run.sh gui`. Both scripts use the bundled Apache PDFBox 3.0.8 JAR in `lib/` for PDF text extraction. Its SHA-512 verification file is adjacent to the JAR. The application stores personal data under `data/`, which Git ignores.
+Run the JAR without `--cli` to open the GUI. Building from source requires JDK 17+ and an internet connection on the first Maven run. The Maven Wrapper downloads Maven if needed, and Maven fetches Apache PDFBox and JUnit. To rebuild the Windows EXE, use PowerShell with a JDK that includes `jpackage`:
 
-To use AI features, copy `.env.example` to `.env` and supply your own `LLM_API_KEY`. The example key is intentionally empty. The default is an OpenAI-compatible DeepSeek chat-completions endpoint; `LLM_BASE_URL` and `LLM_MODEL` are configurable. No live LLM call was tested without a key. All non-AI features and injected fake-client AI integration tests run without a key. Do not commit `.env`.
+```powershell
+.\mvnw.cmd clean package
+$packageOutput = 'build\app-image-' + [guid]::NewGuid().ToString('N')
+New-Item -ItemType Directory -Force build\package-input, $packageOutput, dist | Out-Null
+Copy-Item target\study-agent.jar build\package-input\study-agent.jar
+jpackage --type app-image --name 'Study Agent' --input build\package-input --main-jar study-agent.jar --main-class eecs3311.studyagent.Main --dest $packageOutput --java-options '"-Dproject2.root=$ROOTDIR"' --add-launcher 'Study Agent CLI=packaging\cli-launcher.properties'
+Copy-Item .env.example (Join-Path $packageOutput 'Study Agent\.env.example')
+Compress-Archive -LiteralPath (Join-Path $packageOutput 'Study Agent') -DestinationPath dist\Study-Agent-Windows-x64.zip -Force
+```
+
+The packaged EXE stores data in its own `data/` directory. Git ignores generated build and data directories.
+
+To use AI features in the JAR, copy `.env.example` to `.env` next to `pom.xml`. For the packaged EXE, copy `.env.example` into `dist/Study Agent/` and rename that copy to `.env`. Supply your own `LLM_API_KEY` locally. The example key is intentionally empty. The default is an OpenAI-compatible DeepSeek chat-completions endpoint; `LLM_BASE_URL` and `LLM_MODEL` are configurable. No live LLM call was tested without a key. All non-AI features and injected fake-client AI integration tests run without a key. Do not commit `.env`.
 
 ## Workflow
 
 1. Create a semester, course, and upload a syllabus or study file (PDF, PPTX, DOCX, or TXT). Scanned PDFs without selectable text are stored but cannot feed AI features.
+   Right-click a course or category in the workspace to upload several files at once. Selecting a file opens the Files tab with its locally extracted text; this preview does not need an AI key.
 2. Add/edit/delete deadlines, view the timeline or month calendar, configure due time and notification lead time, and inspect due-soon reminders. Course difficulty breaks same-date priority ties.
 3. Use `ai syllabus` to propose deadlines and `ai week` to propose lecture-week assignment. Review with `proposals`, then `approve` or `reject`. AI never directly changes these records.
 4. Use `study start`, `study pause`, `study resume`, `study stop`, and `study week` to record study time. The GUI countdown sounds an alarm and saves the session when the set duration ends.
@@ -33,7 +51,7 @@ Type `help` in the CLI for all commands. The GUI exposes the workspace, timeline
 | --- | --- | --- |
 | F01 / SD01 | `AgentController` → `DataStore` → `DocumentReaderFactory`/reader → `PromptBuilder`/`LlmClient`/`ResponseParser` → `AssignWeekCommand` → approval. Composite workspace tree and local extraction. | One AI week candidate per file; no OCR for scanned PDFs. |
 | F02 / SD02 | Syllabus extraction → deadline drafts → `DeadlineValidator` → `AddDeadlineCommand` → approval and persistence. | Model dates need selectable source text; duplicates are not merged automatically. |
-| F03 / SD03 | Filtered timeline, editable deadlines, graphical month grid with current-week strip, and CLI calendar. | Calendar cells are read-only; edit through the deadline table. |
+| F03 / SD03 | Filtered timeline, graphical month grid with course colours, expandable weeks, clickable deadline details and edits, and CLI calendar. | Dragging deadlines between dates is not supported. |
 | F04 / SD03, SD08 | `PriorityStrategy`/`PriorityRecommender` orders due date, then course difficulty. | No other strategy is exposed to users. |
 | F05 / SD04 | Pause/resume countdown timer, GUI alarm, persisted sessions and weekly totals. | One running timer at a time; CLI countdown is not animated. |
 | F06 / SD05 | `ReferenceSelector` uses deadline scope and uploaded-file snippets, then checks model-selected names against readable files. | Selection is AI dependent. |

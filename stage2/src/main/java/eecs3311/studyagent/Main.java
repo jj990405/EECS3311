@@ -4,13 +4,15 @@ import java.awt.GraphicsEnvironment;
 import java.nio.file.Path;
 import java.util.Arrays;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public final class Main {
     private Main() { }
 
     public static void main(String[] args) throws Exception {
         boolean cli = Arrays.asList(args).contains("--cli");
-        Path data = Path.of("data");
+        Path projectRoot = Path.of(System.getProperty("project2.root", "."));
+        Path data = projectRoot.resolve("data");
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--data")) {
                 if (i + 1 >= args.length) throw new IllegalArgumentException("--data needs a directory path.");
@@ -26,6 +28,8 @@ public final class Main {
             if (GraphicsEnvironment.isHeadless()) {
                 throw new IllegalStateException("No desktop display is available. Run with --cli.");
             }
+            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+            catch (Exception ignored) { /* Keep the standard Swing theme when unavailable. */ }
             SwingUtilities.invokeLater(() -> new MainWindow(controller).setVisible(true));
         }
     }

@@ -30,8 +30,8 @@ public final class HttpLlmClient implements LlmClient {
             }
         }
         key = setting(configuration, "LLM_API_KEY", "");
-        endpoint = URI.create(setting(configuration, "LLM_BASE_URL", "https://api.deepseek.com/chat/completions"));
-        model = setting(configuration, "LLM_MODEL", "deepseek-flash");
+        endpoint = URI.create(setting(configuration, "LLM_BASE_URL", "https://api.openai.com/v1/chat/completions"));
+        model = setting(configuration, "LLM_MODEL", "gpt-6-luna");
         if (!"https".equalsIgnoreCase(endpoint.getScheme())) throw new IllegalArgumentException("LLM endpoint must use HTTPS");
     }
 
@@ -42,7 +42,7 @@ public final class HttpLlmClient implements LlmClient {
 
     @Override public String complete(String systemPrompt, String userPrompt) throws IOException {
         if (key.isBlank()) throw new IllegalStateException("LLM_API_KEY is blank. Copy .env.example to .env and add your key.");
-        String body = Json.write(Map.of("model", model, "temperature", 0,
+        String body = Json.write(Map.of("model", model,
                 "reasoning_effort", "none", "response_format", Map.of("type", "json_object"),
                 "messages", List.of(Map.of("role", "system", "content", systemPrompt),
                         Map.of("role", "user", "content", userPrompt))));
@@ -55,7 +55,11 @@ public final class HttpLlmClient implements LlmClient {
             if (response.statusCode() / 100 != 2) throw new IOException("LLM request failed (HTTP " + response.statusCode() + ")");
             Map<String, Object> root = Json.object(Json.parse(response.body()));
             Map<String, Object> choice = Json.object(Json.array(root.get("choices")).get(0));
-            return Json.string(Json.object(choice.get("message")), "content");
+            if ("length".equals(choice.get("finish_reason")))
+                throw new IOException("LLM response was truncated; retry with less source text.");
+            String content = Json.string(Json.object(choice.get("message")), "content");
+            if (content.isBlank()) throw new IOException("LLM returned an empty JSON response.");
+            return content;
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
             throw new IOException("LLM request interrupted", ex);

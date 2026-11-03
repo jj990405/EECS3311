@@ -38,10 +38,6 @@ public final class CommandLineInterface {
                     case "reminders" -> reminders();
                     case "notifications" -> printDueNotifications();
                     case "deadline notify" -> configureNotification();
-                    case "study start" -> studyStart();
-                    case "study pause" -> controller.pauseStudy();
-                    case "study resume" -> controller.resumeStudy();
-                    case "study stop" -> studyStop();
                     case "study week" -> studyWeek();
                     case "ai references" -> references();
                     case "ask" -> askQuestion();
@@ -83,7 +79,7 @@ public final class CommandLineInterface {
         System.out.println("deadline delete | deadline notify | timeline | calendar | reminders | notifications");
         System.out.println("complete | progress | tree | exit");
         System.out.println("ai syllabus | ai week | proposals | approve | reject");
-        System.out.println("study start | study pause | study resume | study stop | study week");
+        System.out.println("study week (the timer runs in the GUI)");
         System.out.println("ai references | ask");
         System.out.println("summary create | summary list | quiz create | quiz take");
         System.out.println("ai schedule | weak topics | weekly brief");
@@ -203,9 +199,34 @@ public final class CommandLineInterface {
         Category[] categories = Category.values();
         for (int i = 0; i < categories.length; i++) System.out.printf("%d. %s%n", i + 1, categories[i]);
         Category category = categories[number("Category number", categories.length)];
-        MaterialFile material = controller.uploadMaterial(course.id(), category, Path.of(ask("File path")));
-        System.out.println("Stored: " + material.originalName());
-        if (!material.extractionWarning().isBlank()) System.out.println(material.extractionWarning());
+        System.out.println("Enter one file path per line; leave the next line blank when finished.");
+        int added = 0;
+        while (true) {
+            String path = ask("File path");
+            if (path.isBlank()) break;
+            Path source = Path.of(path);
+            boolean duplicate = controller.materials().stream().anyMatch(m -> m.courseId().equals(course.id())
+                    && m.category() == category && m.originalName().equalsIgnoreCase(source.getFileName().toString()));
+            boolean replace = duplicate && ask("File already exists. Replace it? (y/N)").equalsIgnoreCase("y");
+            if (duplicate && !replace) continue;
+            MaterialFile material = controller.uploadMaterial(course.id(), category, source, replace);
+            added++;
+            System.out.println("Stored: " + material.originalName());
+            if (!material.extractionWarning().isBlank()) System.out.println(material.extractionWarning());
+            if (category == Category.LECTURE_MATERIALS && material.textAvailable()) {
+                try {
+                    var proposal = controller.suggestLectureWeek(material.id());
+                    System.out.println(proposal.description());
+                    if (ask("Approve this week? (y/N)").equalsIgnoreCase("y"))
+                        controller.approveProposal(proposal.id());
+                    else controller.rejectProposal(proposal.id());
+                } catch (IOException | RuntimeException ex) {
+                    System.out.println("Week suggestion unavailable: " + ex.getMessage()
+                            + ". Use 'ai week' later or assign the week in the GUI.");
+                }
+            }
+        }
+        System.out.println(added + " file(s) stored.");
     }
 
     private void addDeadline() throws IOException {
@@ -262,7 +283,9 @@ public final class CommandLineInterface {
         for (Deadline d : results) {
             String date = d.dueDate() == null ? "TBD" : d.dueDate().toString();
             if (!date.equals(previousDate)) System.out.println("\n" + date);
-            System.out.printf("  %s | %s | %s%s%n", controller.course(d.courseId()).name(), d.type(),
+            System.out.printf("  %s | %s | %s | %s%s%n",
+                    d.dueDate() == null ? "TBD" : d.dueTime(),
+                    controller.course(d.courseId()).name(), d.type(),
                     d.title(), d.completed() ? " [done]" : "");
             previousDate = date;
         }
@@ -291,25 +314,26 @@ public final class CommandLineInterface {
     }
 
     private void printDueNotifications() {
-        for (Deadline deadline : controller.checkNotifications(java.time.LocalDateTime.now()))
-            System.out.println("DUE SOON: " + controller.course(deadline.courseId()).name() + " "
-                    + deadline.title() + " at " + deadline.dueDate() + " " + deadline.dueTime());
+        try {
+            for (Deadline deadline : controller.unseenNotifications(java.time.LocalDateTime.now())) {
+                System.out.println("DEADLINE NOTICE: " + controller.course(deadline.courseId()).name() + " "
+                        + deadline.title() + " at " + deadline.dueDate() + " " + deadline.dueTime());
+                controller.markNotificationShown(deadline);
+            }
+        } catch (IOException ex) { throw new IllegalStateException(ex); }
     }
 
-    private void studyStart() {
-        Course course = chooseCourse();
-        String topic = ask("Study topic");
-        controller.startStudy(course.id(), topic, Integer.parseInt(ask("Duration in minutes (1-240)")));
-        System.out.println("Timer started.");
-    }
-    private void studyStop() throws IOException {
-        StudySession session = controller.stopStudy();
-        System.out.println("Saved " + session.seconds() + " seconds for " + session.topic());
-    }
     private void studyWeek() {
-        Course course = chooseCourse();
-        System.out.println(course.name() + ": " + controller.weeklyStudySeconds(course.id(), LocalDate.now())
-                + " seconds this week.");
+        LocalDate day = date("A date in the week", false);
+        LocalDate monday = day.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        long total = 0;
+        for (StudySession session : controller.studySessions()) {
+            LocalDate sessionDay = session.startedAt().toLocalDate();
+            if (sessionDay.isBefore(monday) || !sessionDay.isBefore(monday.plusDays(7))) continue;
+            System.out.println(sessionDay + " " + session.seconds() / 60 + " min");
+            total += session.seconds();
+        }
+        System.out.println("Week of " + monday + ": " + total / 60 + " min total.");
     }
 
     private void references() throws IOException {
@@ -333,7 +357,10 @@ public final class CommandLineInterface {
         for (var item : controller.summaries(chooseReadableMaterial().id())) System.out.println(item.text() + "\n");
     }
     private void createQuiz() throws IOException {
-        var quiz = controller.generateQuiz(chooseReadableMaterial().id());
+        MaterialFile material = chooseReadableMaterial();
+        int count = Integer.parseInt(ask("Question count (1-10)"));
+        Difficulty difficulty = Difficulty.valueOf(ask("Difficulty (HIGH/MEDIUM/LOW)").toUpperCase());
+        var quiz = controller.generateQuiz(material.id(), count, difficulty);
         System.out.println("Saved quiz " + quiz.id() + " with " + quiz.questions().size() + " questions.");
     }
     private void takeQuiz() throws IOException {
@@ -395,9 +422,15 @@ public final class CommandLineInterface {
                 + " — " + entry.detail());
     }
     private void deleteHistory() throws IOException {
-        if (ask("Delete all saved interaction history? (y/N)").equalsIgnoreCase("y")) {
-            controller.deleteHistory();
-            System.out.println("History deleted.");
+        var entries = controller.history();
+        if (entries.isEmpty()) { System.out.println("No history records."); return; }
+        for (int i = 0; i < entries.size(); i++)
+            System.out.printf("%d. %s %s — %s%n", i + 1, entries.get(i).time(),
+                    entries.get(i).event(), entries.get(i).detail());
+        var selected = entries.get(number("Record number", entries.size()));
+        if (ask("Delete this record? (y/N)").equalsIgnoreCase("y")) {
+            controller.deleteHistory(selected);
+            System.out.println("Record deleted.");
         }
     }
     private void selfAssess() throws IOException {

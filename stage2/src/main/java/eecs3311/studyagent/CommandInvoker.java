@@ -22,6 +22,14 @@ public final class CommandInvoker {
 
     public synchronized List<Proposal> pending() { return new ArrayList<>(descriptions.values()); }
 
+    public synchronized Proposal replace(UUID id, String description, AgentCommand command) {
+        if (!commands.containsKey(id)) throw new IllegalArgumentException("Unknown proposal: " + id);
+        Proposal revised = new Proposal(id, description);
+        commands.put(id, command);
+        descriptions.put(id, revised);
+        return revised;
+    }
+
     public synchronized void approve(UUID id) throws IOException {
         AgentCommand command = commands.get(id);
         if (command == null) throw new IllegalArgumentException("Unknown proposal: " + id);

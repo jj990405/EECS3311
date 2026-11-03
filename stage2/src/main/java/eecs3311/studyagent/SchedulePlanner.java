@@ -25,7 +25,7 @@ public final class SchedulePlanner {
                 throw new IllegalArgumentException("AI selected a deadline outside this course.");
         }
         if (action.equals("delete"))
-            return invoker.propose("Delete " + store.deadline(deadlineId).title(),
+            return invoker.propose("Before: " + describe(store.deadline(deadlineId)) + "\nAfter: deleted",
                     new DeleteDeadlineCommand(store, deadlineId));
         if (!action.equals("add") && !action.equals("edit")) throw new IllegalArgumentException("Unsupported schedule action.");
         Object rawDate = plan.get("dueDate");
@@ -36,6 +36,13 @@ public final class SchedulePlanner {
         new DeadlineValidator().validate(draft, store.semester(course.semesterId()));
         AgentCommand command = action.equals("add") ? new AddDeadlineCommand(store, courseId, draft)
                 : new EditDeadlineCommand(store, deadlineId, draft);
-        return invoker.propose(action + " " + draft.title() + " / " + (date == null ? "TBD" : date), command);
+        String before = action.equals("add") ? "none" : describe(store.deadline(deadlineId));
+        return invoker.propose("Before: " + before + "\nAfter: " + draft.title() + " / "
+                + (date == null ? "TBD" : date) + " / " + draft.scope(), command);
+    }
+
+    private String describe(Deadline deadline) {
+        return deadline.title() + " / " + (deadline.dueDate() == null ? "TBD" : deadline.dueDate())
+                + " / " + deadline.scope();
     }
 }

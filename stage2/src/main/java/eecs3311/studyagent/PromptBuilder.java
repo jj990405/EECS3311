@@ -15,7 +15,7 @@ public final class PromptBuilder {
     public String user(Task task, String context, String request) {
         String schema = switch (task) {
             case WEEK_MATCH -> "{\"week\": integer or null, \"reason\": string}";
-            case DEADLINE_EXTRACTION -> "{\"deadlines\": [{\"title\": string, \"type\": string, \"dueDate\": YYYY-MM-DD or null, \"scope\": string, \"evidence\": string}]}";
+            case DEADLINE_EXTRACTION -> "{\"deadlines\": [{\"title\": string, \"type\": string, \"dueDate\": YYYY-MM-DD or null, \"weight\": number or null, \"scope\": string, \"evidence\": exact short quote from source}]}";
             case REFERENCE_SELECTION -> "{\"fileNames\": [exact supplied file names]}";
             case QA -> "{\"answer\": string, \"citations\": [{\"fileName\": string, \"page\": integer}]}";
             case SUMMARY -> "{\"summary\": string, \"citations\": [{\"fileName\": string, \"page\": integer}]}";

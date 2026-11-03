@@ -15,7 +15,10 @@ public final class StudyArtifacts {
     public record Question(String topic, String text, List<String> choices, int answerIndex, String explanation) {
         public Question {
             choices = List.copyOf(choices);
-            if (choices.size() != 4 || answerIndex < 0 || answerIndex > 3)
+            if (topic == null || topic.isBlank() || text == null || text.isBlank()
+                    || explanation == null || explanation.isBlank()
+                    || choices.size() != 4 || choices.stream().anyMatch(String::isBlank)
+                    || answerIndex < 0 || answerIndex > 3)
                 throw new IllegalArgumentException("Quiz questions need four choices and a valid answer");
         }
     }
@@ -28,7 +31,13 @@ public final class StudyArtifacts {
     public record EssayGrade(UUID id, UUID materialId, String question, String answer,
                              int score, String feedback, Instant createdAt) { }
     public record SelfAssessment(UUID id, UUID courseId, String topic, int confidence, Instant createdAt) { }
-    public record EssayPrompt(UUID id, UUID courseId, UUID materialId, String topic, String question) { }
+    public record EssayPrompt(UUID id, UUID courseId, UUID materialId, String topic, String question,
+                              List<UUID> materialIds) {
+        public EssayPrompt { materialIds = List.copyOf(materialIds); }
+        public EssayPrompt(UUID id, UUID courseId, UUID materialId, String topic, String question) {
+            this(id, courseId, materialId, topic, question, List.of(materialId));
+        }
+    }
 
     private final Path root;
     public StudyArtifacts(Path dataRoot) throws IOException {
@@ -140,10 +149,17 @@ public final class StudyArtifacts {
         return result;
     }
     public EssayPrompt saveEssayPrompt(UUID courseId, UUID materialId, String topic, String question) throws IOException {
+        return saveEssayPrompt(courseId, List.of(materialId), topic, question);
+    }
+    public EssayPrompt saveEssayPrompt(UUID courseId, List<UUID> materialIds, String topic,
+                                      String question) throws IOException {
         if (topic.isBlank() || question.isBlank()) throw new IllegalArgumentException("Essay prompt must have a topic and question.");
-        EssayPrompt item = new EssayPrompt(UUID.randomUUID(), courseId, materialId, topic, question);
+        if (materialIds.isEmpty()) throw new IllegalArgumentException("Essay prompt needs source files.");
+        UUID materialId = materialIds.get(0);
+        EssayPrompt item = new EssayPrompt(UUID.randomUUID(), courseId, materialId, topic, question, materialIds);
         save("essay-prompts", item.id(), Map.of("id", item.id().toString(), "course", courseId.toString(),
-                "material", materialId.toString(), "topic", topic, "question", question));
+                "material", materialId.toString(), "materials", materialIds.stream().map(UUID::toString).toList(),
+                "topic", topic, "question", question));
         return item;
     }
     public List<EssayPrompt> essayPrompts(UUID courseId) throws IOException {
@@ -151,7 +167,9 @@ public final class StudyArtifacts {
         for (var value : load("essay-prompts")) if (value.get("course").equals(courseId.toString()))
             result.add(new EssayPrompt(UUID.fromString(Json.string(value, "id")), courseId,
                     UUID.fromString(Json.string(value, "material")), Json.string(value, "topic"),
-                    Json.string(value, "question")));
+                    Json.string(value, "question"), value.containsKey("materials")
+                            ? Json.array(value.get("materials")).stream().map(v -> UUID.fromString(v.toString())).toList()
+                            : List.of(UUID.fromString(Json.string(value, "material")))));
         return result;
     }
 }

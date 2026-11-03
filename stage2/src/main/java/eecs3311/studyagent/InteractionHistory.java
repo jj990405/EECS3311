@@ -36,5 +36,14 @@ public final class InteractionHistory {
         List<Entry> all = list();
         return all.subList(Math.max(0, all.size() - count), all.size());
     }
+    public synchronized void delete(Entry entry) throws IOException {
+        List<Entry> entries = new ArrayList<>(list());
+        if (!entries.remove(entry)) throw new IllegalArgumentException("History record no longer exists.");
+        List<String> lines = new ArrayList<>();
+        for (Entry remaining : entries) lines.add(Json.write(Map.of(
+                "time", remaining.time().toString(), "event", remaining.event(),
+                "detail", remaining.detail())));
+        Files.write(file, lines);
+    }
     public synchronized void deleteAll() throws IOException { Files.deleteIfExists(file); }
 }

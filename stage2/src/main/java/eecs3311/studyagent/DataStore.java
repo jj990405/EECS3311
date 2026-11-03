@@ -62,14 +62,15 @@ public final class DataStore {
     }
 
     public synchronized List<StudySession> studySessions(UUID courseId) {
-        course(courseId);
-        return sessions.values().stream().filter(s -> s.courseId().equals(courseId))
+        if (courseId != null) course(courseId);
+        return sessions.values().stream().filter(s -> courseId == null || courseId.equals(s.courseId()))
                 .sorted(Comparator.comparing(StudySession::startedAt)).toList();
     }
 
     public synchronized StudySession recordStudySession(StudySession session) throws IOException {
-        course(session.courseId());
-        save("sessions", session.id(), props("course", session.courseId().toString(), "topic", session.topic(),
+        if (session.courseId() != null) course(session.courseId());
+        save("sessions", session.id(), props("course", session.courseId() == null ? "" : session.courseId().toString(),
+                "topic", session.topic(),
                 "started", session.startedAt().toString(), "seconds", Long.toString(session.seconds())));
         sessions.put(session.id(), session);
         changed();
@@ -128,9 +129,16 @@ public final class DataStore {
 
     public synchronized Deadline createDeadline(UUID courseId, String title, String type,
                                                  LocalDate dueDate, String scope) throws IOException {
+        return createDeadline(courseId, title, type, dueDate, scope, null, "");
+    }
+
+    public synchronized Deadline createDeadline(UUID courseId, String title, String type,
+                                                 LocalDate dueDate, String scope, Double weight,
+                                                 String sourceText) throws IOException {
         Course course = course(courseId);
         validateDate(course, dueDate);
-        Deadline item = new Deadline(UUID.randomUUID(), courseId, title, type, dueDate, scope, false);
+        Deadline item = new Deadline(UUID.randomUUID(), courseId, title, type, dueDate, scope,
+                false, java.time.LocalTime.of(23, 59), 1440, weight, sourceText);
         saveDeadline(item);
         deadlines.put(item.id(), item);
         changed();
@@ -140,9 +148,17 @@ public final class DataStore {
     public synchronized Deadline editDeadline(UUID id, String title, String type,
                                                LocalDate dueDate, String scope) throws IOException {
         Deadline existing = deadline(id);
+        return editDeadline(id, title, type, dueDate, scope, existing.weight(), existing.sourceText());
+    }
+
+    public synchronized Deadline editDeadline(UUID id, String title, String type,
+                                               LocalDate dueDate, String scope, Double weight,
+                                               String sourceText) throws IOException {
+        Deadline existing = deadline(id);
         validateDate(course(existing.courseId()), dueDate);
         Deadline updated = new Deadline(id, existing.courseId(), title, type, dueDate, scope,
-                existing.completed(), existing.dueTime(), existing.notifyBeforeMinutes());
+                existing.completed(), existing.dueTime(), existing.notifyBeforeMinutes(),
+                weight, sourceText);
         saveDeadline(updated);
         deadlines.put(id, updated);
         changed();
@@ -175,11 +191,18 @@ public final class DataStore {
 
     public synchronized MaterialFile uploadMaterial(UUID courseId, Category category, Path source)
             throws IOException {
+        return uploadMaterial(courseId, category, source, false);
+    }
+
+    public synchronized MaterialFile uploadMaterial(UUID courseId, Category category, Path source,
+                                                    boolean replace) throws IOException {
         course(courseId);
         if (!Files.isRegularFile(source)) throw new IllegalArgumentException("File does not exist: " + source);
         String originalName = source.getFileName().toString();
-        if (materials.values().stream().anyMatch(m -> m.courseId().equals(courseId)
-                && m.category() == category && m.originalName().equalsIgnoreCase(originalName))) {
+        MaterialFile previous = materials.values().stream().filter(m -> m.courseId().equals(courseId)
+                && m.category() == category && m.originalName().equalsIgnoreCase(originalName))
+                .findFirst().orElse(null);
+        if (previous != null && !replace) {
             throw new IllegalArgumentException("This category already contains a file named " + originalName);
         }
         UUID id = UUID.randomUUID();
@@ -213,6 +236,12 @@ public final class DataStore {
             Files.deleteIfExists(extractedPath);
             throw ex;
         }
+        if (previous != null) {
+            Files.delete(root.resolve("materials").resolve(previous.id() + ".properties"));
+            materials.remove(previous.id());
+            Files.deleteIfExists(materialPathFor(previous));
+            Files.deleteIfExists(root.resolve("extracted").resolve(previous.id() + ".txt"));
+        }
         materials.put(id, item);
         changed();
         return item;
@@ -245,7 +274,11 @@ public final class DataStore {
     }
 
     public synchronized Path materialPath(UUID id) {
-        Path path = root.resolve("files").resolve(material(id).storedName()).normalize();
+        return materialPathFor(material(id));
+    }
+
+    private Path materialPathFor(MaterialFile file) {
+        Path path = root.resolve("files").resolve(file.storedName()).normalize();
         if (!path.startsWith(root.resolve("files"))) {
             throw new IllegalStateException("Stored material path is invalid.");
         }
@@ -262,7 +295,9 @@ public final class DataStore {
         save("deadlines", item.id(), props("course", item.courseId().toString(), "title", item.title(),
                 "type", item.type(), "due", item.dueDate() == null ? "" : item.dueDate().toString(),
                 "scope", item.scope(), "completed", Boolean.toString(item.completed()),
-                "dueTime", item.dueTime().toString(), "notifyBefore", Integer.toString(item.notifyBeforeMinutes())));
+                "dueTime", item.dueTime().toString(), "notifyBefore", Integer.toString(item.notifyBeforeMinutes()),
+                "weight", item.weight() == null ? "" : item.weight().toString(),
+                "sourceText", item.sourceText()));
     }
 
     private void save(String directory, UUID id, Properties values) throws IOException {
@@ -313,7 +348,9 @@ public final class DataStore {
                     date.isBlank() ? null : LocalDate.parse(date), required(p, "scope"),
                     Boolean.parseBoolean(required(p, "completed")),
                     java.time.LocalTime.parse(p.getProperty("dueTime", "23:59")),
-                    Integer.parseInt(p.getProperty("notifyBefore", "1440")));
+                    Integer.parseInt(p.getProperty("notifyBefore", "1440")),
+                    p.getProperty("weight", "").isBlank() ? null : Double.parseDouble(p.getProperty("weight")),
+                    p.getProperty("sourceText", ""));
             validateDate(course(courseId), item.dueDate());
             deadlines.put(id, item);
         }
@@ -331,10 +368,11 @@ public final class DataStore {
         for (Path file : propertyFiles("sessions")) {
             Properties p = read(file);
             UUID id = id(file);
-            StudySession item = new StudySession(id, UUID.fromString(required(p, "course")),
+            String courseValue = required(p, "course");
+            StudySession item = new StudySession(id, courseValue.isBlank() ? null : UUID.fromString(courseValue),
                     required(p, "topic"), java.time.LocalDateTime.parse(required(p, "started")),
                     Long.parseLong(required(p, "seconds")));
-            course(item.courseId());
+            if (item.courseId() != null) course(item.courseId());
             sessions.put(id, item);
         }
     }

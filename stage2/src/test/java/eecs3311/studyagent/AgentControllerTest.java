@@ -115,7 +115,7 @@ public final class AgentControllerTest {
                     + "\"explanation\":\"Facade is correct\"}]}");
             studyAi.generateSummary(material.id());
             check(studyAi.summaries(material.id()).size() == 1, "Saved summary is retrievable");
-            StudyArtifacts.Quiz quiz = studyAi.generateQuiz(material.id());
+            StudyArtifacts.Quiz quiz = studyAi.generateQuiz(material.id(), 1, Difficulty.HIGH);
             check(studyAi.gradeQuiz(quiz, List.of(1)).correct() == 0, "Wrong MCQ answer is graded locally");
             check(studyAi.quizAttempts(quiz.id()).size() == 1, "Quiz attempt persists");
             check(studyAi.weakTopics(harder.id()).get(0).getKey().equals("patterns"),

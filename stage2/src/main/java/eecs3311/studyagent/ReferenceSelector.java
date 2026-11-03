@@ -9,6 +9,12 @@ import java.util.Map;
 public final class ReferenceSelector {
     public List<MaterialFile> select(LlmClient llm, PromptBuilder prompts, ResponseParser parser,
                                      String request, List<MaterialFile> candidates) throws IOException {
+        return select(llm, prompts, parser, request, candidates, false);
+    }
+
+    public List<MaterialFile> select(LlmClient llm, PromptBuilder prompts, ResponseParser parser,
+                                     String request, List<MaterialFile> candidates,
+                                     boolean ignoreUnavailable) throws IOException {
         if (candidates.isEmpty()) return List.of();
         String names = candidates.stream().map(MaterialFile::originalName).toList().toString();
         Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.REFERENCE_SELECTION),
@@ -17,7 +23,9 @@ public final class ReferenceSelector {
         for (Object item : Json.array(response.get("fileNames"))) {
             if (!(item instanceof String name)) throw new IllegalArgumentException("Reference name must be a string");
             MaterialFile match = candidates.stream().filter(f -> f.originalName().equals(name)).findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("AI referenced an unavailable file: " + name));
+                    .orElse(null);
+            if (match == null && ignoreUnavailable) continue;
+            if (match == null) throw new IllegalArgumentException("AI referenced an unavailable file: " + name);
             if (!selected.contains(match)) selected.add(match);
         }
         return selected;

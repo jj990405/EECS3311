@@ -163,4 +163,41 @@ public final class AgentController {
                 && !s.startedAt().toLocalDate().isAfter(monday.plusDays(6)))
                 .mapToLong(StudySession::seconds).sum();
     }
+
+    public List<MaterialFile> suggestReferences(UUID deadlineId) throws IOException {
+        Deadline deadline = store.deadline(deadlineId);
+        List<MaterialFile> candidates = store.materials().stream().filter(m -> m.courseId().equals(deadline.courseId())
+                && m.textAvailable()).toList();
+        return new ReferenceSelector().select(llm, prompts, parser,
+                "Select files relevant to " + deadline.title() + " / " + deadline.scope(), candidates);
+    }
+
+    public GroundedAnswer answerQuestion(UUID courseId, String question) throws IOException {
+        store.course(courseId);
+        if (question == null || question.isBlank()) throw new IllegalArgumentException("Enter a question.");
+        List<MaterialFile> candidates = store.materials().stream().filter(m -> m.courseId().equals(courseId)
+                && m.textAvailable()).toList();
+        List<MaterialFile> selected = new ReferenceSelector().select(llm, prompts, parser, question, candidates);
+        if (selected.isEmpty()) throw new IllegalArgumentException("No uploaded source supports this question.");
+        StringBuilder context = new StringBuilder();
+        for (MaterialFile file : selected) {
+            context.append("\n[File: ").append(file.originalName()).append("]\n")
+                    .append(prompts.pages(store.materialPages(file.id()), 8000));
+        }
+        Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.QA),
+                prompts.user(PromptBuilder.Task.QA, context.toString(), question)));
+        List<GroundedAnswer.Citation> citations = new java.util.ArrayList<>();
+        for (Object raw : Json.array(response.get("citations"))) {
+            Map<String, Object> citation = Json.object(raw);
+            String name = Json.string(citation, "fileName");
+            int page = ((Number) citation.get("page")).intValue();
+            MaterialFile source = selected.stream().filter(m -> m.originalName().equals(name)).findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Answer cites an unselected file: " + name));
+            if (page < 1 || page > store.materialPages(source.id()).size())
+                throw new IllegalArgumentException("Answer cites an invalid page: " + page);
+            citations.add(new GroundedAnswer.Citation(name, page));
+        }
+        if (citations.isEmpty()) throw new IllegalArgumentException("AI answer has no verifiable source citation.");
+        return new GroundedAnswer(Json.string(response, "answer"), citations);
+    }
 }

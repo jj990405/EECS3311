@@ -60,6 +60,7 @@ public final class MainWindow extends JFrame {
         button(actions, "Pause", controller::pauseStudy);
         button(actions, "Resume", controller::resumeStudy);
         button(actions, "Stop study", this::stopStudy);
+        button(actions, "Ask sources", this::askSources);
         button(actions, "Edit deadline", this::editDeadline);
         button(actions, "Toggle done", this::toggleDone);
         button(actions, "Delete deadline", this::deleteDeadline);
@@ -194,6 +195,18 @@ public final class MainWindow extends JFrame {
         try {
             StudySession session = controller.stopStudy();
             JOptionPane.showMessageDialog(this, "Saved " + session.seconds() + " seconds for " + session.topic());
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void askSources() {
+        Course course = chooseCourse();
+        String question = ask("Question about uploaded materials", "");
+        try {
+            GroundedAnswer answer = controller.answerQuestion(course.id(), question);
+            String citations = answer.citations().stream().map(c -> c.fileName() + " p." + c.page())
+                    .collect(java.util.stream.Collectors.joining("\n"));
+            JOptionPane.showMessageDialog(this, answer.answer() + "\n\nSources:\n" + citations,
+                    "Material answer", JOptionPane.INFORMATION_MESSAGE);
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 

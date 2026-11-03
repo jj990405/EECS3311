@@ -40,6 +40,8 @@ public final class CommandLineInterface {
                     case "study resume" -> controller.resumeStudy();
                     case "study stop" -> studyStop();
                     case "study week" -> studyWeek();
+                    case "ai references" -> references();
+                    case "ask" -> askQuestion();
                     case "complete" -> complete();
                     case "progress" -> progress();
                     case "tree" -> showTree();
@@ -63,6 +65,7 @@ public final class CommandLineInterface {
         System.out.println("deadline delete | timeline | calendar | reminders | complete | progress | tree | exit");
         System.out.println("ai syllabus | ai week | proposals | approve | reject");
         System.out.println("study start | study pause | study resume | study stop | study week");
+        System.out.println("ai references | ask");
         System.out.println("Dates use YYYY-MM-DD. Leave a deadline date blank for TBD.");
     }
 
@@ -258,6 +261,20 @@ public final class CommandLineInterface {
         Course course = chooseCourse();
         System.out.println(course.name() + ": " + controller.weeklyStudySeconds(course.id(), LocalDate.now())
                 + " seconds this week.");
+    }
+
+    private void references() throws IOException {
+        List<MaterialFile> files = controller.suggestReferences(chooseDeadline().id());
+        if (files.isEmpty()) System.out.println("No matching uploaded references.");
+        for (MaterialFile file : files) System.out.println(file.originalName());
+    }
+
+    private void askQuestion() throws IOException {
+        Course course = chooseCourse();
+        GroundedAnswer answer = controller.answerQuestion(course.id(), ask("Question"));
+        System.out.println(answer.answer());
+        for (GroundedAnswer.Citation citation : answer.citations())
+            System.out.println("Source: " + citation.fileName() + " p." + citation.page());
     }
 
     private void showTree() {

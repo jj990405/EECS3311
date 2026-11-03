@@ -90,6 +90,12 @@ public final class AgentControllerTest {
             aiAgent.resumeStudy();
             aiAgent.stopStudy();
             check(aiAgent.studySessions(harder.id()).size() == 1, "Timer records a study session");
+            AgentController qaAgent = new AgentController(temporary.resolve("data"), (system, user) ->
+                    system.contains("REFERENCE_SELECTION") ? "{\"fileNames\":[\"notes.txt\"]}"
+                            : "{\"answer\":\"Study notes are available.\",\"citations\":[{\"fileName\":\"notes.txt\",\"page\":1}]}");
+            check(qaAgent.suggestReferences(sameDayHard.id()).size() == 1, "AI selects an uploaded file");
+            check(qaAgent.answerQuestion(harder.id(), "What is in the notes?").citations().size() == 1,
+                    "Question answer validates a page citation");
 
             agent.setCompleted(sameDayHard.id(), true);
             AgentController.Progress progress = agent.progress(harder.id(), LocalDate.of(2026, 11, 11));

@@ -1,0 +1,17 @@
+# Local application data and credentials
+.env
+.env.*
+!.env.example
+data/
+app/
+runtime/
+
+# Local builds, test runs, and the preserved previous checkout
+codex/
+EECS3311-git/
+project2/build/
+project2/target/
+project2/data/
+project2/dist/
+project2/commit-bundles/
+*.class

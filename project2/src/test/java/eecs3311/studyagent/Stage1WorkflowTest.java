@@ -215,5 +215,14 @@ class Stage1WorkflowTest {
                 LocalDate.of(2026, 10, 7), "Patterns", "Lab Test 1 Oct. 7th", 7.0);
         assertTrue(new DeadlineValidator().warnings(draft, semester,
                 "Lab Test 1 Oct. 7th – 7%; Lab Test 2 Nov. 18th – 8%").isEmpty());
+        var quiz = new ResponseParser.DeadlineDraft("Quiz 1", "Quiz",
+                LocalDate.of(2026, 9, 18), "24-hour window", "Quiz 1 Sept. 18th in 24 hours 2.5%", 2.5);
+        DeadlineValidator validator = new DeadlineValidator();
+        var corrected = validator.resolveRelativeDate(quiz, semester);
+        assertEquals(LocalDate.of(2026, 9, 19), corrected.dueDate());
+        var warnings = validator.warnings(corrected, semester, "Quiz 1 Sept. 18th in 24 hours 2.5%");
+        assertEquals(List.of("Due 24 hours after release; confirm the exact cutoff time."), warnings);
+        assertEquals(corrected, validator.resolveRelativeDate(corrected, semester),
+                "A model that already chose the following day must not be shifted twice");
     }
 }

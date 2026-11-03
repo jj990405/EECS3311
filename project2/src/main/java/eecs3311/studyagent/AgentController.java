@@ -141,7 +141,9 @@ public final class AgentController {
         for (int attempt = 0; attempt < 2; attempt++) {
             String response = llm.complete(prompts.system(PromptBuilder.Task.DEADLINE_EXTRACTION),
                     prompts.user(PromptBuilder.Task.DEADLINE_EXTRACTION, context,
-                            "Extract assessment deadlines; cite exact source wording and include weights."));
+                            "Extract assessment deadlines; cite exact source wording and include weights. "
+                            + "If an item is released on a date and due in 24 hours, use the following calendar day "
+                            + "as dueDate, not the release date."));
             try { drafts = parser.deadlines(response); break; }
             catch (RuntimeException ex) { if (attempt == 1) throw ex; }
         }

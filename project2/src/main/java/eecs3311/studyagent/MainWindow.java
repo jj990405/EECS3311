@@ -2,6 +2,7 @@ package eecs3311.studyagent;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -34,6 +35,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
@@ -44,6 +46,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -101,6 +104,18 @@ public final class MainWindow extends JFrame {
         button(actions, "Calendar", this::showCalendar);
         add(actions, BorderLayout.NORTH);
 
+        tree.setCellRenderer(new DefaultTreeCellRenderer() {
+            @Override public Component getTreeCellRendererComponent(JTree target, Object value,
+                    boolean selected, boolean expanded, boolean leaf, int row, boolean focused) {
+                super.getTreeCellRendererComponent(target, value, selected, expanded, leaf, row, focused);
+                if (value instanceof DefaultMutableTreeNode node
+                        && node.getUserObject() instanceof WorkspaceBranch branch
+                        && branch.kind() == WorkspaceBranch.Kind.COURSE) {
+                    setIcon(courseIcon(getIcon(), Color.decode(controller.course(branch.id()).colorHex())));
+                }
+                return this;
+            }
+        });
         tree.addTreeSelectionListener(this::selectionChanged);
         tree.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override public void mousePressed(java.awt.event.MouseEvent event) { showTreeMenu(event); }
@@ -348,17 +363,21 @@ public final class MainWindow extends JFrame {
     }
 
     private LocalDate date(String label, String initial, boolean optional) {
-        String current = initial;
-        while (true) {
-            String value = ask(label + " (YYYYMMDD or YYYY-MM-DD"
-                    + (optional ? ", blank for TBD" : "") + ")", current);
-            if (optional && value.isBlank()) return null;
-            try { return FlexibleDate.parse(value); }
-            catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Check date", JOptionPane.WARNING_MESSAGE);
-                current = value;
+        return DatePickerDialog.show(this, label, initial, optional);
+    }
+
+    private Icon courseIcon(Icon folder, Color color) {
+        return new Icon() {
+            @Override public int getIconWidth() { return 12 + (folder == null ? 0 : folder.getIconWidth()); }
+            @Override public int getIconHeight() { return Math.max(12, folder == null ? 0 : folder.getIconHeight()); }
+            @Override public void paintIcon(Component component, java.awt.Graphics graphics, int x, int y) {
+                graphics.setColor(color);
+                graphics.fillOval(x + 1, y + (getIconHeight() - 9) / 2, 9, 9);
+                graphics.setColor(Color.DARK_GRAY);
+                graphics.drawOval(x + 1, y + (getIconHeight() - 9) / 2, 9, 9);
+                if (folder != null) folder.paintIcon(component, graphics, x + 12, y);
             }
-        }
+        };
     }
 
     private String chooseCourseColor(String current) {
@@ -458,10 +477,13 @@ public final class MainWindow extends JFrame {
     private void addCourse(Semester semester) {
         String name = ask("Course name", "");
         String color = chooseCourseColor(CourseColors.suggested(controller.courses().size()).hex());
-        String level = (String) JOptionPane.showInputDialog(this, "Course difficulty",
-                "Course difficulty", JOptionPane.QUESTION_MESSAGE, null,
-                new String[] {"Easy", "Medium", "Hard"}, "Medium");
-        if (level == null) throw new CancellationException();
+        JComboBox<String> difficultyBox = new JComboBox<>(new String[] {"Easy", "Medium", "Hard"});
+        difficultyBox.setSelectedItem("Medium");
+        difficultyBox.setPreferredSize(new Dimension(160, 28));
+        int answer = JOptionPane.showConfirmDialog(this, difficultyBox, "Course difficulty",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (answer != JOptionPane.OK_OPTION) throw new CancellationException();
+        String level = (String) difficultyBox.getSelectedItem();
         Difficulty difficulty = switch (level) {
             case "Easy" -> Difficulty.LOW;
             case "Hard" -> Difficulty.HIGH;

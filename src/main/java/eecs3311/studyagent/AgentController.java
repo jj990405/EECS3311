@@ -34,7 +34,7 @@ public final class AgentController {
     private final Map<UUID, SyllabusCandidate> syllabusCandidates = new java.util.HashMap<>();
 
     public AgentController(Path dataDirectory) throws IOException {
-        this(dataDirectory, new HttpLlmClient(Path.of(System.getProperty("project2.root", "."))));
+        this(dataDirectory, new HttpLlmClient(Path.of(System.getProperty("studyagent.root", "."))));
     }
 
     public AgentController(Path dataDirectory, LlmClient llm) throws IOException {

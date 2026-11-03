@@ -56,8 +56,8 @@ public final class AgentControllerTest {
             MaterialFile material = agent.uploadMaterial(harder.id(), Category.LECTURE_MATERIALS, source);
             check(Files.readString(agent.materialPath(material.id())).equals("Study notes"), "Uploaded file bytes");
             check(agent.materialPages(material.id()).equals(List.of("Study notes")), "TXT extraction persists");
-            Path projectRoot = Path.of(System.getProperty("project2.root", "."));
-            Path stage2Pdf = projectRoot.resolve("Project-Stage2-Instruction.pdf");
+            Path projectRoot = Path.of(System.getProperty("studyagent.root", "."));
+            Path stage2Pdf = projectRoot.resolve("docs/assignment/Project-Stage2-Instruction.pdf");
             if (Files.exists(stage2Pdf)) {
                 List<String> pdfPages = new PdfReader().extractText(stage2Pdf);
                 check(pdfPages.size() == 5, "Stage 2 instructions should have five PDF pages");

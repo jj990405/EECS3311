@@ -1,17 +1,23 @@
-# Local application data and credentials
+# Credentials and local user data
 .env
 .env.*
 !.env.example
 data/
+config.local.json
+
+# Generated application and test files
+codex/
 app/
 runtime/
-
-# Local builds, test runs, and the preserved previous checkout
-codex/
-EECS3311-git/
-project2/build/
-project2/target/
-project2/data/
-project2/dist/
-project2/commit-bundles/
+build/
+target/
+dist/
+lib/
 *.class
+*.log
+Study Agent.exe
+Study Agent CLI.exe
+Study-Agent-Windows-x64.zip
+
+# Older local checkout
+EECS3311-git/

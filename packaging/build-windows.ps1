@@ -1,11 +1,8 @@
 $ErrorActionPreference = 'Stop'
 
-$projectRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..\..')).Path
-$stageRoot = (Resolve-Path -LiteralPath (Join-Path $projectRoot 'project2')).Path
+$projectRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
 $codexRoot = Join-Path $projectRoot 'codex'
-if (-not $stageRoot.StartsWith(($projectRoot + [IO.Path]::DirectorySeparatorChar),
-        [StringComparison]::OrdinalIgnoreCase) -or
-    -not $codexRoot.StartsWith(($projectRoot + [IO.Path]::DirectorySeparatorChar),
+if (-not $codexRoot.StartsWith(($projectRoot + [IO.Path]::DirectorySeparatorChar),
         [StringComparison]::OrdinalIgnoreCase)) {
     throw 'Unexpected project layout.'
 }
@@ -14,9 +11,9 @@ $jpackage = Join-Path $env:JAVA_HOME 'bin\jpackage.exe'
 if (-not (Test-Path -LiteralPath $jpackage)) { throw 'JAVA_HOME does not contain jpackage.exe.' }
 
 New-Item -ItemType Directory -Force -Path (Join-Path $codexRoot 'build') | Out-Null
-Push-Location $stageRoot
+Push-Location $projectRoot
 try {
-    & (Join-Path $stageRoot 'mvnw.cmd') -B -ntp clean package
+    & (Join-Path $projectRoot 'mvnw.cmd') -B -ntp clean package
     if ($LASTEXITCODE -ne 0) { throw 'Maven build or tests failed.' }
 } finally { Pop-Location }
 
@@ -29,11 +26,11 @@ Copy-Item -LiteralPath (Join-Path $codexRoot 'build\target\study-agent.jar') `
     -Destination (Join-Path $inputDir 'study-agent.jar') -Force
 & $jpackage --type app-image --name 'Study Agent' --input $inputDir `
     --main-jar study-agent.jar --main-class eecs3311.studyagent.Main `
-    --dest $imageDir --java-options '"-Dproject2.root=$ROOTDIR"' `
-    --add-launcher ('Study Agent CLI=' + (Join-Path $stageRoot 'packaging\cli-launcher.properties'))
+    --dest $imageDir --java-options '"-Dstudyagent.root=$ROOTDIR"' `
+    --add-launcher ('Study Agent CLI=' + (Join-Path $projectRoot 'packaging\cli-launcher.properties'))
 if ($LASTEXITCODE -ne 0) { throw 'jpackage failed.' }
 $imageApp = Join-Path $imageDir 'Study Agent'
-Copy-Item -LiteralPath (Join-Path $stageRoot '.env.example') `
+Copy-Item -LiteralPath (Join-Path $projectRoot '.env.example') `
     -Destination (Join-Path $imageApp '.env.example') -Force
 
 # This ZIP contains only the runnable image. Credentials and user data stay local.

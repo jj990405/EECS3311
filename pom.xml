@@ -29,7 +29,7 @@
         </dependency>
     </dependencies>
     <build>
-        <directory>${project.basedir}/../codex/build/target</directory>
+        <directory>${project.basedir}/codex/build/target</directory>
         <finalName>study-agent</finalName>
         <plugins>
             <plugin>

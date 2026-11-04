@@ -18,7 +18,7 @@ public final class PromptBuilder {
             case DEADLINE_EXTRACTION -> "{\"deadlines\": [{\"title\": string, \"type\": string, \"dueDate\": YYYY-MM-DD or null, \"weight\": number or null, \"scope\": string, \"evidence\": exact short quote from source}]}";
             case REFERENCE_SELECTION -> "{\"fileNames\": [exact supplied file names]}";
             case QA -> "{\"answer\": string, \"citations\": [{\"fileName\": string, \"page\": integer}]}";
-            case SUMMARY -> "{\"summary\": string, \"citations\": [{\"fileName\": string, \"page\": integer}]}";
+            case SUMMARY -> "{\"summary\": string}";
             case QUIZ -> "{\"questions\": [{\"topic\": string, \"question\": string, \"choices\": [four strings], \"answerIndex\": integer 0-3, \"explanation\": string}]}";
             case ESSAY_QUESTION -> "{\"topic\": string, \"question\": string}";
             case ESSAY_GRADE -> "{\"score\": integer 0-100, \"feedback\": string}";

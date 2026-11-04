@@ -24,7 +24,12 @@ class Stage1WorkflowTest {
         AtomicInteger calls = new AtomicInteger();
         AgentController agent = controller((system, user) -> {
             calls.incrementAndGet();
-            return "{\"summary\":\"Section " + calls.get() + "\",\"citations\":[{\"fileName\":\"long.txt\",\"page\":1}]}";
+            if (user.contains("Create one concise study guide")) {
+                assertTrue(user.contains("Section 1"));
+                return "{\"summary\":\"## Key ideas\\n- Section 1 and Section "
+                        + (calls.get() - 1) + " [p. 1]\"}";
+            }
+            return "{\"summary\":\"Section " + calls.get() + "\"}";
         });
         Semester semester = agent.createSemester("Fall", LocalDate.of(2026, 9, 1), LocalDate.of(2026, 12, 31));
         Course course = agent.createCourse(semester.id(), "EECS3311", "#3366CC", Difficulty.HIGH);
@@ -32,9 +37,10 @@ class Stage1WorkflowTest {
         Files.writeString(source, "Design patterns. ".repeat(1800));
         MaterialFile file = agent.uploadMaterial(course.id(), Category.LECTURE_MATERIALS, source);
         String summary = agent.generateSummary(file.id()).text();
-        assertTrue(calls.get() >= 2, "A long source must reach the model in multiple sections");
+        assertTrue(calls.get() >= 3, "A long source needs section notes and one combined guide");
         assertTrue(summary.contains("Section 1"));
-        assertTrue(summary.contains("Section " + calls.get()));
+        assertTrue(summary.contains("Section " + (calls.get() - 1)));
+        assertTrue(summary.contains("## Key ideas"));
         assertEquals(1, agent.summaries(file.id()).size());
     }
 

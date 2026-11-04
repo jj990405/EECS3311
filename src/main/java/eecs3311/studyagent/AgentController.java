@@ -141,7 +141,7 @@ public final class AgentController {
         if (candidate == null) return false;
         var draft = candidate.draft();
         return store.deadlines().stream().anyMatch(d -> d.courseId().equals(candidate.courseId())
-                && d.title().equalsIgnoreCase(draft.title())
+                && DeadlineTitleMatcher.same(d.title(), draft.title())
                 && java.util.Objects.equals(d.dueDate(), draft.dueDate()));
     }
 
@@ -363,6 +363,23 @@ public final class AgentController {
         Files.writeString(notificationMarker, notificationKey(deadline) + System.lineSeparator(),
                 java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
     }
+    /** Undated assessments are shown once per local calendar day while the app is running. */
+    public List<Deadline> unseenUndatedReminders(LocalDate today) throws IOException {
+        java.util.Set<String> shown = Files.exists(notificationMarker)
+                ? new java.util.HashSet<>(Files.readAllLines(notificationMarker)) : java.util.Set.of();
+        return store.deadlines().stream().filter(d -> !d.completed() && d.dueDate() == null
+                && !shown.contains(undatedNotificationKey(d, today))).toList();
+    }
+    public void markUndatedRemindersShown(List<Deadline> deadlines, LocalDate today) throws IOException {
+        if (deadlines.isEmpty()) return;
+        String lines = deadlines.stream().map(d -> undatedNotificationKey(d, today))
+                .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+        Files.writeString(notificationMarker, lines, java.nio.file.StandardOpenOption.CREATE,
+                java.nio.file.StandardOpenOption.APPEND);
+    }
+    private String undatedNotificationKey(Deadline deadline, LocalDate today) {
+        return "TBD/" + today + "/" + deadline.id();
+    }
     private String notificationKey(Deadline deadline) {
         return deadline.id() + "/" + deadline.dueDate() + "/" + deadline.dueTime()
                 + "/" + deadline.notifyBeforeMinutes();
@@ -467,26 +484,40 @@ public final class AgentController {
                 Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.SUMMARY),
                         prompts.user(PromptBuilder.Task.SUMMARY,
                                 "File: " + file.originalName() + "\n[Page " + pageNumber + "]\n" + section,
-                                "Summarize this section of the study material. "
+                                "Write concise study notes for this page section, not a report about the document. "
+                                        + "Put each key idea on its own line starting with '- '. "
+                                        + "For each idea explain what it means and, only when the source supports it, "
+                                        + "give a short example or application. Keep at most three useful points. "
+                                        + "Avoid phrases such as 'this section provides' and do not repeat facts. "
+                                        + "For administrative pages, list only actionable course facts and dates. "
                                         + ExplanationStrategy.forDifficulty(
                                                 store.course(file.courseId()).difficulty()).instruction())));
-                List<?> citations = Json.array(response.get("citations"));
-                if (citations.isEmpty()) throw new IllegalArgumentException("Summary requires a source citation.");
-                for (Object raw : citations) {
-                    var citation = Json.object(raw);
-                    if (!file.originalName().equals(Json.string(citation, "fileName"))
-                            || !(citation.get("page") instanceof Number number)
-                            || number.intValue() != pageNumber)
-                        throw new IllegalArgumentException("Summary contains a citation outside its source section.");
-                }
-                parts.add(Json.string(response, "summary"));
+                parts.add("Page " + pageNumber + "\n" + Json.string(response, "summary").strip());
                 String source = file.originalName() + " p." + pageNumber;
                 if (!sources.contains(source)) sources.add(source);
             }
         }
         if (parts.isEmpty()) throw new IllegalArgumentException("This file has no nonblank text to summarize.");
+        String notes;
+        if (parts.size() == 1) {
+            notes = "## Key ideas\n" + parts.get(0).replaceFirst("^Page \\d+\\R", "");
+        } else {
+            Map<String, Object> synthesis = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.SUMMARY),
+                    prompts.user(PromptBuilder.Task.SUMMARY,
+                            "File: " + file.originalName() + "\nSource-linked page notes:\n"
+                                    + String.join("\n\n", parts),
+                            "Create one concise study guide from these page notes. Use 2 to 4 short headings "
+                                    + "starting with '## ' and at most 16 bullet points total, each starting with '- '. "
+                                    + "Group related concepts, explain them in plain language, and include only "
+                                    + "examples supported by the supplied notes. End each bullet with its source "
+                                    + "page in the form [p. N]. For administrative material, focus on actionable "
+                                    + "course facts, dates and policies. Omit repetitions, contact details without "
+                                    + "study value, and commentary about what the document does not contain. "
+                                    + "Do not write a report about the document. Return the guide in summary.")));
+            notes = Json.string(synthesis, "summary").strip();
+        }
         StudyArtifacts.Summary summary = artifacts.saveSummary(materialId,
-                String.join("\n\n", parts) + "\nSources: " + String.join(", ", sources));
+                notes + "\n\nSources: " + String.join(", ", sources));
         history.add("summary saved", file.originalName());
         return summary;
     }

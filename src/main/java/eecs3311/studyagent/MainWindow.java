@@ -62,7 +62,7 @@ public final class MainWindow extends JFrame {
     };
     private final JTable table = new JTable(tableModel);
     private final JLabel status = new JLabel(" ");
-    private final JTabbedPane contentTabs = new JTabbedPane();
+    private final JTabbedPane contentTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
     private final JTabbedPane viewerTabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
     private final JSplitPane centerRightSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
     private final JPanel mainArea = new JPanel(new BorderLayout());
@@ -80,6 +80,7 @@ public final class MainWindow extends JFrame {
     private final JLabel fileMeta = new JLabel("Uploaded files are stored locally.");
     private final JTextArea filePreview = new JTextArea();
     private final Map<UUID, Component> openDocuments = new java.util.HashMap<>();
+    private final Map<UUID, Component> openNotes = new java.util.HashMap<>();
     private final JButton openFileButton = new JButton("Open original");
     private YearMonth visibleMonth = YearMonth.now();
     private String lastUploadDirectory = System.getProperty("user.home");
@@ -122,8 +123,8 @@ public final class MainWindow extends JFrame {
         button(actions, "New semester", this::addSemester);
         button(actions, "New course", this::addCourse);
         button(actions, "Add files", this::uploadFiles);
-        button(actions, "AI sort files", this::classifyFilesWithAi);
         button(actions, "New deadline", this::addDeadline);
+        button(actions, "Calendar", this::showCalendar);
         JButton sync = AppTheme.button("Analyze files for calendar", true);
         sync.addActionListener(e -> perform(this::analyzeCalendarFiles));
         actions.add(sync);
@@ -213,16 +214,20 @@ public final class MainWindow extends JFrame {
         workspace.add(danger, BorderLayout.SOUTH);
         contentTabs.setBackground(AppTheme.SURFACE);
         contentTabs.setForeground(AppTheme.TEXT);
+        contentTabs.setMinimumSize(new Dimension(300, 0));
         viewerTabs.setBackground(AppTheme.SURFACE);
         viewerTabs.setForeground(AppTheme.TEXT);
+        viewerTabs.setMinimumSize(new Dimension(320, 0));
         centerRightSplit.setRightComponent(viewerTabs);
         centerRightSplit.setBorder(null);
-        centerRightSplit.setDividerSize(6);
+        centerRightSplit.setDividerSize(12);
+        centerRightSplit.setContinuousLayout(true);
         centerRightSplit.setResizeWeight(0.38);
         mainArea.add(contentTabs, BorderLayout.CENTER);
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, workspace, mainArea);
         split.setBorder(null);
-        split.setDividerSize(6);
+        split.setDividerSize(10);
+        split.setContinuousLayout(true);
         split.setDividerLocation(245);
         add(split, BorderLayout.CENTER);
         status.setForeground(AppTheme.MUTED);
@@ -239,9 +244,15 @@ public final class MainWindow extends JFrame {
 
         controller.addChangeListener(() -> SwingUtilities.invokeLater(this::refresh));
         refresh();
-        javax.swing.Timer notificationTimer = new javax.swing.Timer(60_000, event -> showDueNotifications());
+        javax.swing.Timer notificationTimer = new javax.swing.Timer(60_000, event -> {
+            showDueNotifications();
+            perform(this::showUndatedReminders);
+        });
         notificationTimer.start();
-        SwingUtilities.invokeLater(this::showDueNotifications);
+        SwingUtilities.invokeLater(() -> {
+            showDueNotifications();
+            perform(this::showUndatedReminders);
+        });
         SwingUtilities.invokeLater(this::showWeeklyBriefIfNeeded);
     }
 
@@ -284,8 +295,8 @@ public final class MainWindow extends JFrame {
         menuItem(ai, "Suggest reference files", this::showReferences);
         menuItem(ai, "Request schedule change", this::requestScheduleChange);
         menuItem(ai, "Weekly brief", this::weeklyBrief);
-        menuItem(ai, "Summarize file", this::summarizeFile);
-        menuItem(ai, "Saved summaries", this::showSummaries);
+        menuItem(ai, "Create study notes", this::summarizeFile);
+        menuItem(ai, "Saved study notes", this::showSummaries);
         menuItem(ai, "Generate quiz", this::generateQuiz);
         menuItem(ai, "Take saved quiz", this::takeQuiz);
         menuItem(ai, "Generate essay question", this::generateEssayQuestion);
@@ -396,9 +407,12 @@ public final class MainWindow extends JFrame {
             int index = viewerTabs.indexOfComponent(component);
             JPanel tab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
             tab.setOpaque(false);
-            JLabel label = new JLabel(title.length() > 30 ? title.substring(0, 27) + "…" : title);
-            label.setToolTipText(title);
-            tab.add(label);
+            JButton select = new JButton(title.length() > 30 ? title.substring(0, 27) + "…" : title);
+            select.setToolTipText("Show " + title);
+            select.setContentAreaFilled(false);
+            select.setBorder(AppTheme.padding(2, 4, 2, 4));
+            select.addActionListener(e -> viewerTabs.setSelectedComponent(component));
+            tab.add(select);
             JButton close = new JButton("×");
             close.setToolTipText("Close " + title);
             close.setBorder(AppTheme.padding(2, 4, 2, 4));
@@ -453,8 +467,8 @@ public final class MainWindow extends JFrame {
                 .collect(java.util.stream.Collectors.toMap(Course::id, c -> c));
         calendarHost.removeAll();
         calendarHost.add(new CalendarPanel(visibleMonth, LocalDate.now(),
-                controller.schedule(AgentController.Period.ALL, selectedCourseId, "", LocalDate.now()), courses,
-                this::showDeadlineDetails),
+                controller.schedule(AgentController.Period.ALL, null, "", LocalDate.now()), courses,
+                this::showDeadlineDetails, date -> perform(() -> showCalendarDay(date))),
                 BorderLayout.CENTER);
         calendarHost.revalidate();
         calendarHost.repaint();
@@ -854,6 +868,7 @@ public final class MainWindow extends JFrame {
             chatPanel.clear();
             viewerTabs.removeAll();
             openDocuments.clear();
+            openNotes.clear();
             hideViewer();
             fileHeading.setText("Select a file in the workspace");
             fileMeta.setText("Uploaded files are stored locally.");
@@ -891,6 +906,42 @@ public final class MainWindow extends JFrame {
         showViewerTab("Calendar", calendarTab, () -> { });
     }
 
+    private void showCalendarDay(LocalDate day) {
+        List<Deadline> items = controller.schedule(AgentController.Period.ALL, null, "",
+                LocalDate.now()).stream().filter(d -> day.equals(d.dueDate())).toList();
+        JPanel panel = new JPanel(new BorderLayout(0, 10));
+        panel.add(new JLabel(items.isEmpty() ? "No deadlines on " + day : "Deadlines on " + day),
+                BorderLayout.NORTH);
+        javax.swing.JList<Deadline> list = new javax.swing.JList<>(items.toArray(Deadline[]::new));
+        list.setCellRenderer(new DefaultListCellRenderer() {
+            @Override public Component getListCellRendererComponent(javax.swing.JList<?> target, Object value,
+                    int index, boolean selected, boolean focused) {
+                super.getListCellRendererComponent(target, value, index, selected, focused);
+                if (value instanceof Deadline deadline) setText("[" + controller.course(deadline.courseId()).name()
+                        + "] " + deadline.title());
+                return this;
+            }
+        });
+        list.setVisibleRowCount(Math.min(8, Math.max(1, items.size())));
+        if (!items.isEmpty()) list.setSelectedIndex(0);
+        if (!items.isEmpty()) panel.add(new JScrollPane(list), BorderLayout.CENTER);
+        Object[] choices = items.isEmpty() ? new Object[] {"Add deadline", "Close"}
+                : new Object[] {"Add deadline", "Edit selected", "Close"};
+        int action = JOptionPane.showOptionDialog(this, panel, day.toString(), JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
+        if (action == 0) {
+            Course course = chooseCourse();
+            try {
+                controller.addDeadline(course.id(), ask("Deadline title", ""),
+                        ask("Type (e.g. Assignment)", ""), day, ask("Covered topics / scope", ""));
+            } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+            refreshCalendar();
+        } else if (action == 1 && !items.isEmpty()) {
+            Deadline selected = list.getSelectedValue();
+            if (selected != null) editDeadline(selected);
+        }
+    }
+
     private void showReminders() {
         var items = controller.reminders(LocalDate.now(), 7);
         String message = items.isEmpty() ? "No deadlines due in the next seven days."
@@ -917,6 +968,43 @@ public final class MainWindow extends JFrame {
             status.setText("Deadline notification: " + newlyDue.size() + " item(s)");
             JOptionPane.showMessageDialog(this, message, "Deadline notifications", JOptionPane.INFORMATION_MESSAGE);
             for (Deadline deadline : newlyDue) controller.markNotificationShown(deadline);
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void showUndatedReminders() {
+        try {
+            LocalDate today = LocalDate.now();
+            List<Deadline> remaining = new ArrayList<>(controller.unseenUndatedReminders(today));
+            if (remaining.isEmpty()) return;
+            controller.markUndatedRemindersShown(remaining, today);
+            while (!remaining.isEmpty()) {
+                javax.swing.JList<Deadline> list = new javax.swing.JList<>(remaining.toArray(Deadline[]::new));
+                list.setCellRenderer(new DefaultListCellRenderer() {
+                    @Override public Component getListCellRendererComponent(javax.swing.JList<?> target,
+                            Object value, int index, boolean selected, boolean focused) {
+                        super.getListCellRendererComponent(target, value, index, selected, focused);
+                        if (value instanceof Deadline deadline)
+                            setText("[" + controller.course(deadline.courseId()).name() + "] " + deadline.title());
+                        return this;
+                    }
+                });
+                list.setVisibleRowCount(Math.min(8, remaining.size()));
+                list.setSelectedIndex(0);
+                JPanel panel = new JPanel(new BorderLayout(0, 10));
+                panel.add(new JLabel("These assessments have no due date. You will be reminded tomorrow."),
+                        BorderLayout.NORTH);
+                panel.add(new JScrollPane(list), BorderLayout.CENTER);
+                int action = JOptionPane.showOptionDialog(this, panel, "Dates still needed",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+                        new Object[] {"Set selected date", "Remind tomorrow"}, "Remind tomorrow");
+                if (action != 0) return;
+                Deadline selected = list.getSelectedValue();
+                if (selected == null) return;
+                LocalDate due = date("Due date for " + selected.title(), "", false);
+                controller.editDeadline(selected.id(), selected.title(), selected.type(), due, selected.scope());
+                remaining.remove(selected);
+                refresh();
+            }
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 
@@ -1017,17 +1105,40 @@ public final class MainWindow extends JFrame {
     private void summarizeFile() {
         MaterialFile material = chooseReadableMaterial();
         runAi("Summarizing " + material.originalName(), () -> controller.generateSummary(material.id()),
-                summary -> showText("Summary · " + material.originalName(), summary.text()));
+                summary -> showStudyNotes(material, summary));
     }
 
     private void showSummaries() {
         MaterialFile material = chooseReadableMaterial();
         try {
             List<StudyArtifacts.Summary> saved = controller.summaries(material.id());
-            if (saved.isEmpty()) { showText("Saved summaries", "No saved summary for this file yet."); return; }
-            StudyArtifacts.Summary selected = choose("Choose summary", saved);
-            showText("Summary · " + material.originalName(), selected.text());
+            if (saved.isEmpty()) { showText("Saved study notes", "No saved study notes for this file yet."); return; }
+            StudyArtifacts.Summary selected;
+            if (saved.size() == 1) selected = saved.get(0);
+            else {
+                List<String> labels = new ArrayList<>();
+                for (int index = 0; index < saved.size(); index++)
+                    labels.add("Study notes " + (index + 1) + " · "
+                            + java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy · h:mm a")
+                            .withZone(java.time.ZoneId.systemDefault()).format(saved.get(index).createdAt()));
+                selected = saved.get(labels.indexOf(choose("Choose study notes", labels)));
+            }
+            showStudyNotes(material, selected);
         } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void showStudyNotes(MaterialFile material, StudyArtifacts.Summary summary) {
+        Component previous = openNotes.remove(material.id());
+        if (previous != null) viewerTabs.remove(previous);
+        Runnable openSource = material.originalName().toLowerCase(java.util.Locale.ROOT).endsWith(".pdf")
+                ? () -> showMaterial(material) : () -> openOriginal(material);
+        Component notes = new StudyNotesPanel(material.originalName(), summary.text(), openSource,
+                () -> runAi("Creating study guide from " + material.originalName(),
+                        () -> controller.generateSummary(material.id()),
+                        refreshed -> showStudyNotes(material, refreshed)));
+        openNotes.put(material.id(), notes);
+        showViewerTab("Notes · " + material.originalName(), notes,
+                () -> openNotes.remove(material.id()));
     }
 
     private void generateQuiz() {
@@ -1217,7 +1328,14 @@ public final class MainWindow extends JFrame {
     }
 
     private void reviewCalendarSuggestions(AgentController.CalendarSuggestions result) {
-        List<CommandInvoker.Proposal> proposals = result.proposals();
+        Map<UUID, CommandInvoker.Proposal> pending = controller.pendingProposals().stream()
+                .collect(java.util.stream.Collectors.toMap(CommandInvoker.Proposal::id, p -> p));
+        List<CommandInvoker.Proposal> proposals = result.proposals().stream()
+                .map(p -> pending.get(p.id())).filter(java.util.Objects::nonNull).toList();
+        if (proposals.isEmpty()) {
+            status.setText("All calendar suggestions have been reviewed.");
+            return;
+        }
         DefaultTableModel model = new DefaultTableModel(
                 new Object[] {"Add", "Course", "Due", "Deadline", "Source", "Review"}, 0) {
             @Override public Class<?> getColumnClass(int column) {
@@ -1243,6 +1361,7 @@ public final class MainWindow extends JFrame {
         JTable suggestions = new JTable(model);
         suggestions.setRowHeight(31);
         suggestions.setAutoCreateRowSorter(true);
+        suggestions.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         suggestions.getColumnModel().getColumn(0).setMaxWidth(50);
         suggestions.getColumnModel().getColumn(2).setPreferredWidth(105);
         suggestions.getColumnModel().getColumn(3).setPreferredWidth(260);
@@ -1259,6 +1378,7 @@ public final class MainWindow extends JFrame {
             details.setText(proposal.description());
             details.setCaretPosition(0);
         });
+        suggestions.setRowSelectionInterval(0, 0);
         JPanel view = new JPanel(new BorderLayout(0, 12));
         view.setBorder(AppTheme.padding(18, 18, 18, 18));
         JLabel introduction = new JLabel(result.filesAnalyzed() + " files analyzed · " + proposals.size()
@@ -1273,36 +1393,114 @@ public final class MainWindow extends JFrame {
         view.add(source, BorderLayout.SOUTH);
         int decision = JOptionPane.showOptionDialog(this, view, "Review calendar suggestions",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
-                new Object[] {"Add checked to calendar", "Review one", "Later"}, "Later");
-        if (decision == 1) {
+                new Object[] {"Add all", "Add checked", "Review selected", "Later"}, "Later");
+        if (decision == 2) {
             int row = suggestions.getSelectedRow();
-            if (row >= 0) reviewProposal(proposals.get(suggestions.convertRowIndexToModel(row)));
-            else status.setText("Select a suggestion to review.");
+            if (row >= 0) {
+                reviewProposal(proposals.get(suggestions.convertRowIndexToModel(row)));
+                reviewCalendarSuggestions(result);
+            }
             return;
         }
-        if (decision != 0) return;
+        if (decision == 3 || decision < 0) return;
+        List<CommandInvoker.Proposal> selected = new ArrayList<>();
+        for (int row = 0; row < model.getRowCount(); row++)
+            if (decision == 0 || Boolean.TRUE.equals(model.getValueAt(row, 0))) selected.add(proposals.get(row));
+        addCalendarSuggestions(selected);
+    }
+
+    private void addCalendarSuggestions(List<CommandInvoker.Proposal> selected) {
+        if (selected.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select at least one suggestion to add.",
+                    "Calendar suggestions", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        List<CommandInvoker.Proposal> ready = new ArrayList<>();
+        List<AgentController.SyllabusCandidate> prepared = new ArrayList<>();
+        int skippedDuplicates = 0;
+        int skippedByUser = 0;
+        for (CommandInvoker.Proposal proposal : selected) {
+            var candidate = controller.syllabusCandidate(proposal.id());
+            var draft = candidate.draft();
+            if (draft.dueDate() == null) {
+                int choice = JOptionPane.showOptionDialog(this,
+                        "[" + controller.course(candidate.courseId()).name() + "] " + draft.title()
+                                + " has no confirmed due date.", "Date needed",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                        new Object[] {"Enter date", "Keep TBD · remind daily", "Skip this item"}, "Enter date");
+                if (choice < 0) return;
+                if (choice == 2) { skippedByUser++; continue; }
+                if (choice == 0) {
+                    LocalDate due = date("Due date for " + draft.title(), "", false);
+                    Semester semester = controller.semester(controller.course(candidate.courseId()).semesterId());
+                    if (!semester.contains(due)) throw new IllegalArgumentException(
+                            "Date must be within " + semester.startDate() + " to " + semester.endDate() + ".");
+                    try { controller.reviseSyllabusCandidate(proposal.id(), new ResponseParser.DeadlineDraft(
+                            draft.title(), draft.type(), due, draft.scope(), draft.evidence(), draft.weight())); }
+                    catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+                }
+            }
+            candidate = controller.syllabusCandidate(proposal.id());
+            draft = candidate.draft();
+            AgentController.SyllabusCandidate current = candidate;
+            boolean repeatedInBatch = prepared.stream().anyMatch(previous ->
+                    previous.courseId().equals(current.courseId())
+                            && java.util.Objects.equals(previous.draft().dueDate(), current.draft().dueDate())
+                            && DeadlineTitleMatcher.same(previous.draft().title(), current.draft().title()));
+            if (controller.hasSyllabusDuplicate(proposal.id()) || repeatedInBatch) {
+                skippedDuplicates++;
+                continue;
+            }
+            prepared.add(candidate);
+            ready.add(proposal);
+        }
+        if (ready.isEmpty()) {
+            status.setText("No new calendar entries to add. " + skippedDuplicates + " duplicates skipped.");
+            return;
+        }
         List<String> selectedWarnings = new ArrayList<>();
-        for (int row = 0; row < model.getRowCount(); row++) {
-            if (!Boolean.TRUE.equals(model.getValueAt(row, 0))) continue;
-            var candidate = controller.syllabusCandidate(proposals.get(row).id());
-            if (!candidate.warnings().isEmpty())
+        for (CommandInvoker.Proposal proposal : ready) {
+            var candidate = controller.syllabusCandidate(proposal.id());
+            List<String> warnings = candidate.warnings().stream()
+                    .filter(w -> !w.startsWith("No specific date:"))
+                    .filter(w -> !w.startsWith("Another pending proposal has the same title and date;"))
+                    .toList();
+            if (!warnings.isEmpty())
                 selectedWarnings.add(candidate.draft().title() + ": "
-                        + String.join("; ", candidate.warnings()));
+                        + String.join("; ", warnings));
         }
-        if (!selectedWarnings.isEmpty() && JOptionPane.showConfirmDialog(this,
-                "Review these details before adding the selected dates:\n\n"
-                        + String.join("\n", selectedWarnings), "Confirm calendar details",
-                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+        if (!selectedWarnings.isEmpty()) {
+            JTextArea warnings = new JTextArea("Check these source details before adding:\n\n"
+                    + String.join("\n\n", selectedWarnings), 12, 68);
+            warnings.setEditable(false);
+            warnings.setLineWrap(true);
+            warnings.setWrapStyleWord(true);
+            warnings.setCaretPosition(0);
+            if (JOptionPane.showConfirmDialog(this, new JScrollPane(warnings),
+                    "Confirm calendar details", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+        }
+        java.util.Set<UUID> before = controller.schedule(AgentController.Period.ALL, null, "",
+                LocalDate.now()).stream().map(Deadline::id).collect(java.util.stream.Collectors.toSet());
         int applied = 0;
-        for (int row = 0; row < model.getRowCount(); row++) {
-            if (!Boolean.TRUE.equals(model.getValueAt(row, 0))) continue;
-            CommandInvoker.Proposal proposal = proposals.get(row);
+        List<String> errors = new ArrayList<>();
+        for (CommandInvoker.Proposal proposal : ready) {
             try { controller.approveProposal(proposal.id()); applied++; }
-            catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+            catch (java.io.IOException | RuntimeException ex) {
+                errors.add(controller.syllabusCandidate(proposal.id()).draft().title() + ": " + ex.getMessage());
+            }
         }
+        List<Deadline> newlyUndated = controller.schedule(AgentController.Period.ALL, null, "",
+                LocalDate.now()).stream().filter(d -> !before.contains(d.id()) && d.dueDate() == null).toList();
+        try { controller.markUndatedRemindersShown(newlyUndated, LocalDate.now()); }
+        catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
         refresh();
         showViewerTab("Calendar", calendarTab, () -> { });
-        status.setText(applied + " deadline" + (applied == 1 ? "" : "s") + " added to the calendar.");
+        status.setText(applied + " deadline" + (applied == 1 ? "" : "s") + " added to the calendar"
+                + (skippedDuplicates == 0 ? "" : " · " + skippedDuplicates + " duplicates skipped")
+                + (skippedByUser == 0 ? "" : " · " + skippedByUser + " skipped")
+                + (errors.isEmpty() ? "" : " · " + errors.size() + " failed"));
+        if (!errors.isEmpty()) JOptionPane.showMessageDialog(this, String.join("\n", errors),
+                "Some deadlines were not added", JOptionPane.WARNING_MESSAGE);
     }
 
     private void aiWeek() {

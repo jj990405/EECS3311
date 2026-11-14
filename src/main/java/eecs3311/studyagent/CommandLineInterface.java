@@ -12,6 +12,7 @@ import java.util.UUID;
 public final class CommandLineInterface {
     private final AgentController controller;
     private final Scanner input = new Scanner(System.in);
+    private List<Integer> quizPages = List.of();
 
     public CommandLineInterface(AgentController controller) {
         this.controller = controller;
@@ -427,11 +428,15 @@ public final class CommandLineInterface {
         int count = number("Question count (1-10)", 10) + 1;
         Difficulty difficulty = chooseDifficulty();
         String type = askDefault("Question type (mcq/essay/both)", "mcq").toLowerCase();
+        if (!quizPages.isEmpty() && !type.equals("mcq"))
+            throw new IllegalArgumentException("Selected-slide quizzes support mcq. Choose file/week/all for essays.");
         if (!List.of("mcq", "essay", "both").contains(type))
             throw new IllegalArgumentException("Choose mcq, essay, or both.");
         if (type.equals("both") && count < 2) throw new IllegalArgumentException("Choose at least two questions for both types.");
         if (!type.equals("essay")) {
-            var quiz = controller.generateQuiz(materials, type.equals("both") ? count - 1 : count, difficulty);
+            var quiz = quizPages.isEmpty()
+                    ? controller.generateQuiz(materials, type.equals("both") ? count - 1 : count, difficulty)
+                    : controller.generateSlideQuiz(materials.get(0), quizPages, count, difficulty);
             System.out.println("Saved quiz " + quiz.id() + " with " + quiz.questions().size() + " multiple-choice questions.");
         }
         int essays = type.equals("essay") ? count : type.equals("both") ? 1 : 0;
@@ -441,9 +446,17 @@ public final class CommandLineInterface {
         }
     }
     private List<UUID> chooseQuizMaterials() {
-        String scope = askDefault("Quiz scope (file/week/all)", "file").toLowerCase();
+        quizPages = List.of();
+        String scope = askDefault("Quiz scope (file/pages/week/all)", "file").toLowerCase();
+        if (scope.equals("pages")) {
+            MaterialFile file = chooseReadableMaterial();
+            try {
+                quizPages = StudyPages.parse(ask("Pages / slides (e.g. 3 or 2-5,8)"), controller.materialPages(file.id()).size());
+            } catch (IOException ex) { throw new IllegalStateException(ex); }
+            return List.of(file.id());
+        }
         if (scope.equals("file")) return List.of(chooseReadableMaterial().id());
-        if (!scope.equals("week") && !scope.equals("all")) throw new IllegalArgumentException("Choose file, week, or all.");
+        if (!scope.equals("week") && !scope.equals("all")) throw new IllegalArgumentException("Choose file, pages, week, or all.");
         Course course = chooseCourse();
         List<MaterialFile> materials = controller.materials().stream().filter(file ->
                 file.courseId().equals(course.id()) && file.category() == Category.LECTURE_MATERIALS && file.textAvailable()).toList();

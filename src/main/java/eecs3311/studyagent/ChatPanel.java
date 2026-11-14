@@ -13,10 +13,13 @@ import javax.swing.JTextField;
 public final class ChatPanel extends JPanel {
     private final JTextArea conversation = new JTextArea();
     private final JTextField input = new JTextField();
+    private final java.util.List<JButton> buttons = new java.util.ArrayList<>();
+    private final javax.swing.JLabel context = new javax.swing.JLabel("Select a course or lecture for source questions.");
 
     public ChatPanel(Consumer<String> question, Consumer<String> scheduleChange) {
         super(new BorderLayout(0, 12));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(14, 14, 14, 14));
+        context.setForeground(AppTheme.MUTED); add(context, BorderLayout.NORTH);
         conversation.setEditable(false);
         conversation.setLineWrap(true);
         conversation.setWrapStyleWord(true);
@@ -36,6 +39,7 @@ public final class ChatPanel extends JPanel {
 
     private void button(JPanel parent, String label, Consumer<String> action) {
         JButton button = new JButton(label);
+        buttons.add(button);
         button.addActionListener(event -> submit(action));
         parent.add(button);
     }
@@ -51,6 +55,11 @@ public final class ChatPanel extends JPanel {
     public void append(String message) {
         conversation.append("\n\n" + message);
         conversation.setCaretPosition(conversation.getDocument().getLength());
+    }
+
+    void setContext(String text) { context.setText(text); context.setToolTipText(text); }
+    void setBusy(boolean busy) {
+        input.setEnabled(!busy); buttons.forEach(button -> button.setEnabled(!busy));
     }
 
     public void clear() {

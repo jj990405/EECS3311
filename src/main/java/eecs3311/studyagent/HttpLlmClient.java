@@ -52,7 +52,11 @@ public final class HttpLlmClient implements LlmClient {
         try {
             HttpResponse<String> response = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(15))
                     .build().send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() / 100 != 2) throw new IOException("LLM request failed (HTTP " + response.statusCode() + ")");
+            if (response.statusCode() / 100 != 2) throw new IOException(switch (response.statusCode()) {
+                case 401, 403 -> "OpenAI rejected the API credentials (HTTP " + response.statusCode() + "). Check the local .env key and model access.";
+                case 429 -> "OpenAI quota or rate limit reached (HTTP 429). Check API billing/credits, or wait and retry.";
+                default -> "AI service request failed (HTTP " + response.statusCode() + "). Retry when the service is available.";
+            });
             Map<String, Object> root = Json.object(Json.parse(response.body()));
             Map<String, Object> choice = Json.object(Json.array(root.get("choices")).get(0));
             if ("length".equals(choice.get("finish_reason")))

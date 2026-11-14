@@ -2,6 +2,8 @@
 
 Supporting records for the Stage 2 implementation report. The verified implementation fixes, tests and diagrams were committed and pushed in [fdcfcd7](https://github.com/jj990405/EECS3311/commit/fdcfcd7) on Nov14 after owner approval. A subsequent documentation clarification separates the development subscription fee from the application's API usage. The Nov14 follow-up adds full-document classification, neutral gray row shades, a new quiz workspace, timer-status navigation and expanded CLI quiz settings; the owner approved committing and pushing this follow-up on Nov14.
 
+Later approved timeline/report work is in [a001883](https://github.com/jj990405/EECS3311/commit/a001883). The current local follow-up groups AI actions, makes file lists selectable/contextual, adds selected-slide quizzes and chat tool commands, provides landscape result windows with native maximize controls, and batches complete source documents for notes. Its 45-test build, actual API/CLI/native checks and updated full Korean-action/English-narration script are recorded below. These latest changes await separate commit approval.
+
 - [Feature inventory and verification](feature-matrix.md): every Stage 1 feature F01–F15, additions, entry points, collaboration, and practical limits.
 - [Patterns and design changes](patterns-and-changes.md): six distinct GoF patterns, Simple Factory, and explicit Stage 1 differences.
 - [Verification record](verification.md): automated checks, actual API tests, native GUI checks and corrected defects.

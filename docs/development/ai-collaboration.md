@@ -55,4 +55,10 @@ The application client currently discards the provider's usage metadata and reta
 
 This documentation includes no API keys, local `.env` contents, private billing details or raw uploaded course documents.
 
+### Later Nov14 AI interaction correction
+
+The owner supplied screenshots of failed/silent study actions, unselectable material rows and an overflowing answer after typing hi then quiz. Codex added shared AI menus, exact chat tool commands, captured file context, bounded full-source note batches and selected-page MCQ generation in the GUI/CLI. Long text results now use resizable landscape frames with native maximize controls. A restarted pre-fix JAR recovered its quiz dialog; stale loaded code after runtime replacement is a possible cause, without a captured linkage exception. Packaging now prevents replacement while the app runs.
+
+The latest deterministic build passes 45 tests. Live checks used actual lecture PDFs for cited Q&A, complete notes and selected-slide quizzes; native hi -> quiz -> submission/1-of-1 review, Q&A window maximize/restore and cancellation were exercised. A real CLI page-quiz run generated, answered and saved results. These calls occur after the earlier billing snapshot, whose USD0.02 amount is not a current total. Raw responses and fixtures remain local under ignored codex paths. The latest changes require a new owner approval before commit.
+
 The Codex native **Settings → Usage → Overview** displayed the ChatGPT Pro200 plan at $200/month, recorded above as the development tool's **subscription fee**. **Analytics →30d** selected Oct16–Nov14,2026; expanding this chat, “Explain Project2 requirements,” showed GPT-6.1Sol / High / Standard. Its row used allowance/credit metrics rather than raw project tokens or an invoice. Other work also used this subscription, so no account-wide weekly graph or percentage-to-dollar allocation is presented as this repository's measured consumption. No subscription, payment, plan limit or account setting was changed during this read-only inspection.

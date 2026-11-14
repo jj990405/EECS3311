@@ -17,7 +17,7 @@ class NarrowPanelTest {
                 panel.setSize(310,600);layout(panel);
                 java.util.List<JButton> buttons=new java.util.ArrayList<>();collect(panel,buttons);
                 buttons.removeIf(button->button.getText()==null||button.getText().isBlank());
-                assertEquals(panel==course?5:7,buttons.size());
+                assertEquals(panel==course?2:7,buttons.size());
                 for(JButton button:buttons) {
                     Rectangle bounds=SwingUtilities.convertRectangle(button.getParent(),button.getBounds(),panel);
                     assertTrue(bounds.width>0&&bounds.height>0,button.getText());

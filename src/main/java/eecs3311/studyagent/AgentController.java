@@ -415,11 +415,22 @@ public final class AgentController {
     }
 
     public GroundedAnswer answerQuestion(UUID courseId, String question) throws IOException {
-        store.course(courseId);
-        if (question == null || question.isBlank()) throw new IllegalArgumentException("Enter a question.");
         List<MaterialFile> candidates = store.materials().stream().filter(m -> m.courseId().equals(courseId)
                 && m.textAvailable()).toList();
-        List<MaterialFile> selected = new ReferenceSelector().select(llm, prompts, parser,
+        return answerQuestion(courseId, question, candidates);
+    }
+
+    public GroundedAnswer answerFromMaterial(UUID materialId, String question) throws IOException {
+        MaterialFile file = store.material(materialId);
+        if (!file.textAvailable()) throw new IllegalArgumentException("This file has no readable text for source questions.");
+        return answerQuestion(file.courseId(), question, List.of(file));
+    }
+
+    private GroundedAnswer answerQuestion(UUID courseId, String question, List<MaterialFile> candidates) throws IOException {
+        store.course(courseId);
+        if (question == null || question.isBlank()) throw new IllegalArgumentException("Enter a question.");
+        if (candidates.isEmpty()) throw new IllegalArgumentException("Upload a readable lecture or syllabus to this course first.");
+        List<MaterialFile> selected = candidates.size() == 1 ? candidates : new ReferenceSelector().select(llm, prompts, parser,
                 question + "\n" + candidateSnippets(candidates), candidates);
         if (selected.isEmpty()) throw new IllegalArgumentException("No uploaded source supports this question.");
         StringBuilder context = new StringBuilder();
@@ -450,38 +461,42 @@ public final class AgentController {
     }
 
     public StudyArtifacts.Summary generateSummary(UUID materialId) throws IOException {
+        return generateSummary(materialId, message -> { });
+    }
+
+    public StudyArtifacts.Summary generateSummary(UUID materialId, java.util.function.Consumer<String> progress) throws IOException {
         MaterialFile file = store.material(materialId);
         if (!file.textAvailable()) throw new IllegalArgumentException("This file has no extractable text.");
         List<String> pages = store.materialPages(materialId);
         List<String> parts = new java.util.ArrayList<>();
         List<String> sources = new java.util.ArrayList<>();
-        for (int pageIndex = 0; pageIndex < pages.size(); pageIndex++) {
-            String page = pages.get(pageIndex);
-            if (page.isBlank()) continue;
-            int pageNumber = pageIndex + 1;
-            for (int offset = 0; offset < page.length(); offset += 12000) {
-                String section = page.substring(offset, Math.min(offset + 12000, page.length()));
+        List<String> batches = StudyPages.batches(pages, 12000);
+        for (int pageIndex = 0; pageIndex < pages.size(); pageIndex++)
+            if (!pages.get(pageIndex).isBlank()) sources.add(file.originalName() + " p." + (pageIndex + 1));
+        for (int index = 0; index < batches.size(); index++) {
+                progress.accept("Reading source batch " + (index + 1) + " of " + batches.size());
                 Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.SUMMARY),
                         prompts.user(PromptBuilder.Task.SUMMARY,
-                                "File: " + file.originalName() + "\n[Page " + pageNumber + "]\n" + section,
-                                "Write concise study notes for this page section, not a report about the document. "
+                                "File: " + file.originalName() + "\n" + batches.get(index),
+                                "Write concise study notes for these source pages, not a report about the document. "
                                         + "Put each key idea on its own line starting with '- '. "
                                         + "For each idea explain what it means and, only when the source supports it, "
-                                        + "give a short example or application. Keep at most three useful points. "
+                                        + "give a short example or application. Keep at most eight useful points. "
+                                        + "End each point with its original source page in the form [p. N]. "
                                         + "Avoid phrases such as 'this section provides' and do not repeat facts. "
                                         + "For administrative pages, list only actionable course facts and dates. "
                                         + ExplanationStrategy.forDifficulty(
                                                 store.course(file.courseId()).difficulty()).instruction())));
-                parts.add("Page " + pageNumber + "\n" + Json.string(response, "summary").strip());
-                String source = file.originalName() + " p." + pageNumber;
-                if (!sources.contains(source)) sources.add(source);
-            }
+                String notes = Json.string(response, "summary").strip();
+                if (notes.isBlank()) throw new IllegalArgumentException("AI returned empty study notes. Retry this file.");
+                parts.add(notes);
         }
         if (parts.isEmpty()) throw new IllegalArgumentException("This file has no nonblank text to summarize.");
         String notes;
         if (parts.size() == 1) {
-            notes = "## Key ideas\n" + parts.get(0).replaceFirst("^Page \\d+\\R", "");
+            notes = "## Key ideas\n" + parts.get(0);
         } else {
+            progress.accept("Combining " + parts.size() + " source batches into study notes");
             Map<String, Object> synthesis = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.SUMMARY),
                     prompts.user(PromptBuilder.Task.SUMMARY,
                             "File: " + file.originalName() + "\nSource-linked page notes:\n"
@@ -517,6 +532,20 @@ public final class AgentController {
             throws IOException {
         String context = quizContext(materialIds);
         MaterialFile file = store.material(materialIds.get(0));
+        return generateQuizFromContext(file, context, count, difficulty);
+    }
+
+    public StudyArtifacts.Quiz generateSlideQuiz(UUID materialId, List<Integer> pages, int count, Difficulty difficulty)
+            throws IOException {
+        MaterialFile file = store.material(materialId);
+        if (!file.textAvailable()) throw new IllegalArgumentException("This file has no extractable slide text.");
+        String context = "File: " + file.originalName() + "\nUse ONLY these selected slides:\n"
+                + StudyPages.selected(store.materialPages(materialId), pages);
+        return generateQuizFromContext(file, context, count, difficulty);
+    }
+
+    private StudyArtifacts.Quiz generateQuizFromContext(MaterialFile file, String context, int count, Difficulty difficulty)
+            throws IOException {
         if (count < 1 || count > 10 || difficulty == null)
             throw new IllegalArgumentException("Choose 1-10 questions and a difficulty.");
         List<StudyArtifacts.Question> questions = null;
@@ -528,10 +557,15 @@ public final class AgentController {
                                         + "Difficulty: " + difficulty + ". "
                                         + "Each question must have one unambiguous answer stated in the supplied "
                                         + "source. Avoid near-synonymous choices and overlapping design levels. "
+                                        + "Test understanding of concepts or applications, not the order of topics in an outline "
+                                        + "or administrative details. If only a cover, outline or otherwise insufficient content "
+                                        + "is supplied, return an empty questions array instead of inventing subject knowledge. "
                                         + "Explain why the chosen answer follows from specific source wording; "
                                         + "do not invent a taxonomy or use general knowledge to override the source. "
                                         + ExplanationStrategy.forDifficulty(store.course(file.courseId()).difficulty()).instruction())));
                 List<StudyArtifacts.Question> parsed = new java.util.ArrayList<>();
+                if (Json.array(response.get("questions")).isEmpty())
+                    throw new IllegalArgumentException("These slides do not contain enough study concepts for a quiz. Choose concept slides or a wider page range.");
                 for (Object raw : Json.array(response.get("questions"))) {
                     var q = Json.object(raw);
                     parsed.add(new StudyArtifacts.Question(Json.string(q, "topic"), Json.string(q, "question"),

@@ -128,7 +128,7 @@
     },
     {
       "feature": "F12",
-      "name": "Summaries/study notes  -  implemented, reading UI changed",
+      "name": "Summaries/study notes  -  implemented, batched reading UI",
       "planned_segments": [
         "V2.03",
         "V3.04"
@@ -139,7 +139,7 @@
     },
     {
       "feature": "F13",
-      "name": "Quiz/essay  -  implemented, storage split",
+      "name": "Quiz/essay  -  implemented, slide scope added",
       "planned_segments": [
         "V2.04",
         "V2.05",

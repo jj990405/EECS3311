@@ -9,6 +9,9 @@ if (-not $codexRoot.StartsWith(($projectRoot + [IO.Path]::DirectorySeparatorChar
 if (-not $env:JAVA_HOME) { throw 'Set JAVA_HOME to a JDK with jpackage first.' }
 $jpackage = Join-Path $env:JAVA_HOME 'bin\jpackage.exe'
 if (-not (Test-Path -LiteralPath $jpackage)) { throw 'JAVA_HOME does not contain jpackage.exe.' }
+if (@(Get-Process -Name 'Study Agent','Study Agent CLI' -ErrorAction SilentlyContinue).Count -gt 0) {
+    throw 'Close Study Agent and its CLI before updating. Replacing a JAR used by a running app can break lazy class loading.'
+}
 
 New-Item -ItemType Directory -Force -Path (Join-Path $codexRoot 'build') | Out-Null
 Push-Location $projectRoot

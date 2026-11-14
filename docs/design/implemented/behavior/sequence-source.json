@@ -829,7 +829,7 @@
       [
         1,
         2,
-        "answerQuestion(courseId, question)"
+        "answerQuestion(courseId, question) / answerFromMaterial(fileId, question)"
       ],
       [
         2,
@@ -839,7 +839,7 @@
       [
         2,
         3,
-        "select(llm, prompts, parser, question + snippets, candidates)"
+        "select(...) for course scope; selected-file scope uses only that file"
       ],
       [
         3,
@@ -934,19 +934,24 @@
       ],
       [
         2,
+        2,
+        "StudyPages.batches(all nonblank pages, 12000); preserve text and page labels"
+      ],
+      [
+        2,
         4,
-        "SUMMARY request for each nonblank page section (<= 12,000 chars)"
+        "SUMMARY request for each source batch; GUI reports progress/cancel"
       ],
       [
         4,
         2,
-        "Concise page-section notes; app records source page",
+        "Concise source-batch notes; app records original pages",
         true
       ],
       [
         2,
         4,
-        "SUMMARY synthesis [if multiple sections]"
+        "SUMMARY synthesis [if multiple batches]"
       ],
       [
         4,
@@ -1017,17 +1022,22 @@
       [
         0,
         1,
-        "Choose material / lecture week / all lectures; count and difficulty"
+        "Choose file / selected slides / lecture week / all; count and difficulty"
       ],
       [
         1,
         2,
-        "generateQuiz(materialIds, count, difficulty)"
+        "generateQuiz(...) / generateSlideQuiz(fileId, pages, count, difficulty)"
       ],
       [
         2,
         3,
         "Validate one-course readable scope; materialPages()"
+      ],
+      [
+        2,
+        2,
+        "StudyPages.selected: valid physical pages only; outside-page text excluded"
       ],
       [
         2,
@@ -1089,7 +1099,7 @@
         true
       ]
     ],
-    "note": "GUI uses a navigator, wrapping choices, progress and read-only explanation review; cancel saves no attempt. CLI uses question prompts. Grading compares stored answer indices, not pedagogical truth. Multi-file MCQ metadata records the first material ID; essay count/type is separate (SD10b)."
+    "note": "GUI uses a navigator, wrapping choices, progress and read-only review; cancel saves no attempt. Selected-slide MCQs are available from PDF/file menus and CLI pages scope. Cover/outline-only input may be rejected for insufficient concepts. Grading compares stored keys, not pedagogical truth. Multi-file metadata records the first material; essay scope remains file/week/all (SD10b)."
   },
   {
     "id": "SD10b",

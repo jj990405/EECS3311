@@ -1,12 +1,12 @@
 # Verification record — 14 November 2026
 
-Source baseline: `1ab1b5a` (after the approved Nov13 audit and cost clarification). The owner approved committing and pushing this follow-up on 14 November 2026. It records bounded evidence for the later Stage 2 report; it is not the final report or a video submission.
+Earlier approved changes are in `7d55e8e` and `a001883`. The latest AI/file-interaction follow-up below is locally implemented and verified; a new owner approval is required before its commit/push. This record distinguishes new checks from earlier acceptance evidence. It is not a final video submission.
 
 ## Results
 
 | Layer | Observed result | Scope and practical limit |
 | --- | --- | --- |
-| Maven package and deterministic checks | **36 tests, 0 failures, 0 errors** | Persistence/readers, date/source validation, approvals, priority, calendar/TBD markers, layout, timer totals, full-document segmentation, complete classification responses, sorted muted row markers and selection snapshots, quiz answer retention/submission gate/read-only review, CLI essay scope/count, chosen question difficulty versus course explanation depth, and malformed essay regeneration. Test methods are not a count of all scenarios. |
+| Maven package and deterministic checks | **45 tests, 0 failures, 0 errors** | Earlier persistence/calendar/timer/quiz/classification checks plus selected-file targeting, complete summary batches, physical-page quiz ranges, page-only context, CLI page scope, chat tool commands, screen-bounded landscape results and error feedback. Test methods are not a count of all scenarios. |
 | Actual API core acceptance | **16 checks passed**, 0 failures; **17 calls** in the successful run | F01–F15 plus classification: real 9-page EECS3311 syllabus, explicitly synthetic 2-page SOLID lecture and schedule. Sources, approval, persistence, timer controls, reminders, references, schedule edits, Q&A, notes, MCQ, essay, weak topics, briefing and history. |
 | Actual mixed PDF classification | **25 of 25 correct** against a manual document-purpose check | 1 official syllabus, 22 teaching/reference PDFs, 2 assignment/project instruction PDFs. Separate API classification and actual native pre-upload AI sorting both checked. An ambiguous renamed 20-page Admin deck received full-document review. This sample result does not imply universal accuracy. |
 | Actual CLI acceptance | **23 groups passed; all 41 recognized commands exercised** | Real `CommandLineInterface.run`, scripted input and configured API. Basic 12 groups plus 11 supplemental groups. File/week/all quiz scope, MCQ/essay/both, two requested essays, duplicate upload skip, compact-date retry, multi-semester choice, approval/rejection, history deletion, schedule CRUD, filtering, reminders and all study commands. |
@@ -23,7 +23,7 @@ Build from source with JDK17+: `mvnw.cmd package`. The audit used cached depende
 
 Raw evidence stays below ignored `codex/`; these paths are relative to the repository:
 
-- `build/target/surefire-reports/` — 36-test XML/text results.
+- `build/target/surefire-reports/` — current 45-test XML/text results.
 - `feature-audit-20261114/run-dcc9540d-fbe5-421d-a3c3-a198332e6b3d/results.tsv` — 16 passed actual API checks and generated study artifacts.
 - `bulk-upload-20261114/classification-results.tsv` — 25 real PDFs, expected and returned categories. The input directory contains local copies of course PDFs, including the renamed ambiguous file.
 - `cli-acceptance-20261114/run-2119c2cf-b9d3-434c-8806-5b235620eaa4/cli-transcript.txt` — 12 basic CLI groups.
@@ -65,3 +65,21 @@ After the verified gray-background version, the owner requested a quieter table.
 N06 now supports drag/range selection, a right-click or Shift+F10 menu, single-item details/edit, bulk completion/incompletion, tab-separated copy and explicit confirmed deletion. Native two-row selection retained its group on right-click, both completion states were exercised and restored, and deletion confirmation was canceled with all 12 deadlines retained. The final deletion dialog defaults to Cancel. The new sorted-selection snapshot regression brings the deterministic suite to 36 passing tests. No AI path changed, so the previously successful actual API/CLI acceptance evidence remains applicable.
 
 The English stage2-report PDF and detailed Korean filming guide were generated and rendered for inspection. The report includes seven required sections, F01-F15 and N01-N06, six GoF patterns, the cost snapshot and weekly commit limitations, and 10 large-format diagram appendix sheets. All 21 video entries remain explicitly unrecorded. SD15/UC21 expands the current diagram set to 28 sheets. Local recording files are isolated below codex/recording-app-20261114; original app data is retained.
+
+## AI/file interaction follow-up - 14 November 2026
+
+| Observed problem | Implemented correction | Newly observed evidence |
+| --- | --- | --- |
+| Practice quiz appeared silent in a long-running app | Packaging refuses to replace a running app's JAR; uncaught linkage failures show a restart instruction | Original idle thread dump; reopening the same pre-fix JAR restored its scope dialog. A stale-code mismatch is possible, not a proven captured exception |
+| Scattered AI buttons and nonselectable file text | AI actions dropdowns, MaterialList selection, course-row highlight and shared file menus with captured identifiers | Native file-list/course-row selection and right-click; deterministic selected-file targeting regression |
+| Chat quiz request became a long plain-text answer | Exact quiz, slide quiz and notes commands dispatch to actual tools before source Q&A | Native hi -> quiz -> actual lecture MCQ -> answer -> submit -> 1/1 review; normal concept questions remain source Q&A |
+| Long source answers overflowed the screen | Resizable nonmodal landscape ResultWindow with screen/work-area bounds, native maximize/restore and scrollable wrapped content | Native actual Adapter answer; maximize, restore and close checked; four monitor geometries regression-tested |
+| Chat greeting/failure/busy states were unclear | Local greeting help, selected-file Q&A, elapsed progress/Cancel AI, disabled composer during work and errors copied to chat | Native greeting, cited Factory/Adapter answers and cancellation restoring controls; source-scope and secret-redaction checks |
+| Large study-note requests failed without useful progress | Preserve every nonblank source page in bounded 12,000-character batches, synthesize notes and show batch progress | Actual 66-page Creational Patterns PDF: 3 source batches plus synthesis, 6,548-character saved notes in 22 seconds. Latest native notes command also completed an actual 82-page Structural Patterns PDF in 4 source batches plus synthesis |
+| No quiz for a clicked slide/range | File/PDF context actions and CLI pages scope validate physical pages and send only chosen pages | Final live concept-page-21 quiz; native invalid-range handling and one-question quiz review; actual CLI pages -> generation -> answer -> score -> history |
+
+The first native page-3 quiz checked scope/interface but asked about an outline. The final prompt requests concepts/applications and declines insufficient content; the page-21 check used that final prompt. Selected page scope is not yet persisted as separate quiz metadata. Generated answer keys still require source review.
+
+Evidence is under `codex/gui-failure-20261114/`: `live-results.txt`, `final-slide-check.txt`, `cli-create-transcript.txt`, `cli-take-transcript.txt`, `thread-dump.txt` and `root-data-check.json`. These are bounded follow-up checks, not a fresh replay of the earlier 16-check/41-command inventory. API and GUI generation used an isolated data copy. At the pre-update comparison, 99 other current user-data files were byte-identical to that session copy; the original 3,886-byte history was preserved exactly as its prefix. Later owner interactions are not overwritten to match an old baseline. The older 82-file backup remains preserved.
+
+The final build has 45 passing tests. Local app, recording app and ZIP use the same shaded JAR, updated only while the apps were closed. SD09a/SD09b/SD10a and the filming script describe the updated source-study workflows. These latest changes await separate owner commit approval.

@@ -37,9 +37,20 @@ final class PdfPreviewPanel extends JPanel {
     private boolean fitWidth = true;
     private int renderedViewportWidth;
     private int request;
+    private final Runnable studyNotes;
+    private final Runnable wholeFileQuiz;
 
     PdfPreviewPanel(Path path) throws java.io.IOException {
+        this(path, null);
+    }
+
+    PdfPreviewPanel(Path path, java.util.function.IntConsumer quizSlides) throws java.io.IOException {
+        this(path, quizSlides, null, null);
+    }
+
+    PdfPreviewPanel(Path path, java.util.function.IntConsumer quizSlides, Runnable notes, Runnable quizFile) throws java.io.IOException {
         super(new BorderLayout());
+        studyNotes = notes; wholeFileQuiz = quizFile;
         this.path = path;
         try (var pdf = Loader.loadPDF(path.toFile())) {
             pages = pdf.getNumberOfPages();
@@ -62,6 +73,19 @@ final class PdfPreviewPanel extends JPanel {
         navigation.add(previous);
         navigation.add(pageLabel);
         navigation.add(next);
+        if (quizSlides != null) {
+            JButton ai = AppTheme.dropdown("AI", false);
+            ai.addActionListener(e -> slideMenu(quizSlides).show(ai, 0, ai.getHeight()));
+            navigation.add(ai);
+            java.awt.event.MouseAdapter popup = new java.awt.event.MouseAdapter() {
+                private void show(java.awt.event.MouseEvent e) {
+                    if (e.isPopupTrigger()) slideMenu(quizSlides).show(e.getComponent(), e.getX(), e.getY());
+                }
+                @Override public void mousePressed(java.awt.event.MouseEvent e) { show(e); }
+                @Override public void mouseReleased(java.awt.event.MouseEvent e) { show(e); }
+            };
+            imageLabel.addMouseListener(popup); canvas.addMouseListener(popup);
+        }
         toolbar.add(navigation, BorderLayout.WEST);
         JPanel scaling = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 0));
         scaling.setOpaque(false);
@@ -97,6 +121,25 @@ final class PdfPreviewPanel extends JPanel {
             }
         });
         showPage(1);
+    }
+
+    private javax.swing.JPopupMenu slideMenu(java.util.function.IntConsumer action) {
+        int selectedPage = page;
+        javax.swing.JPopupMenu menu = new javax.swing.JPopupMenu();
+        javax.swing.JMenuItem current = new javax.swing.JMenuItem("Quiz this slide (page " + selectedPage + ")...");
+        current.addActionListener(e -> action.accept(selectedPage)); menu.add(current);
+        javax.swing.JMenuItem range = new javax.swing.JMenuItem("Quiz pages / slides...");
+        range.addActionListener(e -> action.accept(0)); menu.add(range);
+        if (studyNotes != null) {
+            menu.addSeparator();
+            javax.swing.JMenuItem notes = new javax.swing.JMenuItem("Study notes for this file");
+            notes.addActionListener(e -> studyNotes.run()); menu.add(notes);
+        }
+        if (wholeFileQuiz != null) {
+            javax.swing.JMenuItem quiz = new javax.swing.JMenuItem("Quiz whole file...");
+            quiz.addActionListener(e -> wholeFileQuiz.run()); menu.add(quiz);
+        }
+        return menu;
     }
 
     private void setZoom(double value) {

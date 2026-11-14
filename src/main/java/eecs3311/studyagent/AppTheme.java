@@ -27,6 +27,21 @@ final class AppTheme {
 
     private AppTheme() { }
 
+    static JButton dropdown(String label, boolean primary) {
+        JButton button = button(label, primary);
+        button.setIcon(new javax.swing.Icon() {
+            @Override public int getIconWidth() { return 9; }
+            @Override public int getIconHeight() { return 6; }
+            @Override public void paintIcon(java.awt.Component c, java.awt.Graphics g, int x, int y) {
+                g.setColor(button.getForeground());
+                g.fillPolygon(new int[] {x, x + 8, x + 4}, new int[] {y, y, y + 5}, 3);
+            }
+        });
+        button.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        button.setIconTextGap(9);
+        return button;
+    }
+
     static void install() {
         for (String key : new String[] {"Label.font", "Button.font", "Tree.font", "Table.font",
                 "TableHeader.font", "TabbedPane.font", "Menu.font", "MenuItem.font",

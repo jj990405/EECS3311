@@ -206,45 +206,45 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Affected design trace:** UC12; SD09a. Diagram sources and code anchors are in docs/design/implemented/.
 
-**Entry and behavior:** Chat → Ask sources; AI → Ask sources. CLI `ask`
+**Entry and behavior:** Chat → Ask sources; AI actions → Ask sources; file context menu. CLI `ask`
 
-**Classes and collaboration:** `ReferenceSelector` selects files, `MaterialSearcher.search` supplies relevant pages; difficulty `ExplanationStrategy` and recent history shape prompt; `answerQuestion` validates returned citations against supplied file/page pairs.
+**Classes and collaboration:** `answerFromMaterial` pins a selected GUI file; otherwise `ReferenceSelector` selects course files. `MaterialSearcher.search` retrieves pages; `ExplanationStrategy` and recent history shape the prompt; citations are checked against supplied file/page pairs. `AiFeedback` routes exact tool commands before Q&A and handles greetings/failures; `ResultWindow` shows bounded landscape answers with maximize controls.
 
 **Mode and design patterns:** Hybrid; Adapter, Strategy, Facade
 
-**Evidence and limit:** Real Open/Closed answer cites uploaded lecture p.1; CLI source question exercised. Valid citation provenance is not proof of factual correctness; misleading source text still needs judgment.
+**Evidence and limit:** Actual lecture Q&A returned cited Factory/Adapter answers in native GUI. Greetings, hi -> quiz dispatch and answer-window maximize/restore checked. Earlier CLI source acceptance remains applicable. Citation provenance is not proof of factual correctness.
 
 **Demonstration:** V2.02, V3.04. Pending recording.
 
-### F12 Summaries/study notes  -  implemented, reading UI changed
+### F12 Summaries/study notes  -  implemented, batched reading UI
 
 **Reference and status:** Stage 1 F12. Implemented, with relevant modifications disclosed in Section 4.
 
 **Affected design trace:** UC13; SD09b. Diagram sources and code anchors are in docs/design/implemented/.
 
-**Entry and behavior:** Study notes; AI → Create/Saved study notes; source button. CLI `summary create/list`
+**Entry and behavior:** AI actions → Create/Saved study notes; file/PDF context menu; Chat notes. CLI `summary create/list`
 
-**Classes and collaboration:** `generateSummary` processes page/sections and synthesizes a saved guide through `StudyArtifacts`; `StudyNotesPanel` styles headings/bullets/bold/source list in a closable tab.
+**Classes and collaboration:** `generateSummary` uses `StudyPages.batches` to read every nonblank source character in page-labelled batches of at most 12,000 characters, then combines notes and saves through `StudyArtifacts`; `StudyNotesPanel` renders the saved guide. GUI worker shows progress/cancel.
 
 **Mode and design patterns:** Hybrid; Adapter, Facade
 
-**Evidence and limit:** Actual API 2-page summary and synthesis persisted and reopened. Original PDF separately viewable. Long files can require several calls; no OCR.
+**Evidence and limit:** Actual 66-page Creational lecture: 3 input batches plus synthesis, about 22 seconds in controller audit. Latest native Chat notes completed an 82-page Structural Patterns lecture in 4 source batches plus synthesis. Regression preserves all source characters/page numbers. No OCR; model-written facts still require review.
 
 **Demonstration:** V2.03, V3.04. Pending recording.
 
-### F13 Quiz/essay  -  implemented, storage split
+### F13 Quiz/essay  -  implemented, slide scope added
 
 **Reference and status:** Stage 1 F13. Implemented, with relevant modifications disclosed in Section 4.
 
 **Affected design trace:** UC14, UC17; SD10a, SD10b. Diagram sources and code anchors are in docs/design/implemented/.
 
-**Entry and behavior:** AI → Generate/Take saved quiz, Generate/Answer essay; course Practice quiz. CLI `quiz create/take`, `essay create/take/grade/list`
+**Entry and behavior:** AI actions → Practice quiz; file/PDF right-click quiz; PDF AI menu. CLI `quiz create/take` with file/pages/week/all; essay commands retained
 
-**Classes and collaboration:** `quizContext` chooses file/week/all sources; count/difficulty/type inputs → AI questions. `StudyArtifacts.grade` locally compares MCQ indices and saves attempts. Essay AI score draft → optional GUI correction → `AgentCommand` approval saves grade.
+**Classes and collaboration:** `generateQuiz` chooses file/week/all; `generateSlideQuiz` uses `StudyPages.parse/selected` to validate and send only chosen physical pages (MCQ only). `StudyArtifacts.grade` compares saved answer indices. Essay AI grade remains a correctable, explicitly approved command.
 
 **Mode and design patterns:** Hybrid; Adapter, Command, Facade
 
-**Evidence and limit:** Real API MCQs generated; correct and wrong attempts saved. New native GUI navigator, answer retention, unanswered-submit gate and 3/3 review checked. Actual AI essay and corrected 85 score approved. CLI file/week/all and MCQ/essay/both checked; essay-only count and selected difficulty are honored in both interfaces, with course difficulty controlling explanation depth. Native two-essay generation and cancellation checked. AI answer-key correctness needs review. MCQ and essay artifacts/analytics are separate; multi-file MCQ artifact retains first material ID.
+**Evidence and limit:** Native selected-slide quiz generated, answered and graded 1/1; final prompt rejects content-only outlines and generated a concept question from actual lecture p.21. Regressions verify outside slides never enter the prompt, invalid ranges fail, CLI pages scope saves a real quiz, and prior essay count/difficulty checks pass. Earlier 3-question navigation and approved 85 essay evidence retained. AI answer keys need review; MCQ/essay analytics remain separate and multi-file metadata retains the first material ID.
 
 **Demonstration:** V2.04, V2.05, V3.05. Pending recording.
 
@@ -536,6 +536,30 @@ Stage 2 permits documented replacements while preserving minimum functionality. 
 
 **Impact:** N01/N05 additions; stored copies move, original external files and `.env` stay.
 
+### Scattered AI actions and display-only file rows  ->  grouped AI menus and selectable contextual file rows
+
+**Reason:** Owner found course buttons/file selection unclear and wanted file/slide-specific actions
+
+**Impact:** F01/F11-F13, N02; `MainWindow`, `CoursePage`, `MaterialList`, `ChatPanel`, `PdfPreviewPanel`. Selected-file capture keeps notes/quizzes/questions on the intended file. No new GoF pattern is claimed.
+
+### Short chat commands interpreted as questions and unbounded answer popups  ->  explicit tool routing and landscape result frames
+
+**Reason:** Typing quiz produced an ungraded text quiz; long answers exceeded the screen
+
+**Impact:** F11-F13/UC12-UC14; `AiFeedback.action` dispatches exact commands before Q&A. `ResultWindow` bounds content to the active monitor and supplies native maximize/restore, resizing and scrolling. Normal conceptual questions retain the grounded-answer flow.
+
+### One summary request per page section  ->  bounded page-labelled batches with visible progress/cancel
+
+**Reason:** A 66-slide deck should not require 66 individual calls or appear idle
+
+**Impact:** F12/UC13/SD09b; `StudyPages.batches`, `AgentController.generateSummary`, Swing worker feedback. All nonblank source characters are retained; grouping reduces calls rather than discarding later pages.
+
+### File/week/all MCQ only  ->  current slide and selected-page MCQ as an additional scope
+
+**Reason:** Owner requested quizzes directly from lecture files/slides
+
+**Impact:** F13/UC14/SD10a; `StudyPages.parse/selected`, `generateSlideQuiz`, PDF/file menus and CLI pages scope. Page indices are validated, outside-page text is excluded, and insufficient concept content is reported. Essays retain file/week/all scope.
+
 ### Timeline interaction refinement
 
 The first course-row presentation used filled backgrounds, then neutral gray shades. Owner feedback requested a quieter design, so the final local version uses a normal dark row surface and a 3-pixel muted blue/lavender/slate/sand marker beside the course name, with no red/green row marker. TimelineSelection resolves view rows to model UUIDs. N06 adds drag/range selection, context editing, completion, copy and confirmed deletion. These are deterministic GUI actions over existing store operations, not an additional AI or Command-pattern claim. Dragging does not reschedule dates.
@@ -565,6 +589,8 @@ The API snapshot was observed shortly after midnight Toronto time on 14 November
 
 - Full-document classification: the owner found bulk misclassification and authorized reading beyond the first page. The revised helper samples multiple positions and reviews every extracted page in segments for uncertain/conflicting cases. A real 25-PDF mixed batch and an ambiguous renamed 20-page file were checked against manually identified document purposes.
 
+- Source-study follow-up: the owner reported silent/failed study actions and an overflowing answer after typing hi then quiz. Shared file context menus, explicit chat tool commands, progress/cancellation and resizable landscape result frames were added. Notes preserve complete source text in batches; selected-slide MCQs send only requested physical pages. Live native/controller/CLI checks covered actual lectures, not fixed demonstration responses. Runtime replacement now requires the app closed; a stale-code mismatch was suspected but no original linkage exception was captured.
+
 - Diagrams and verification: two diagram agents were used on 13 November at the owner's explicit request, one for architecture/classes/patterns and one for behavior/use cases. The root agent checked rendered outputs against actual classes. Further local edits added SD15 for timeline context actions. Temporary generators, raw test data and API configuration stay below ignored local paths.
 
 The owner described an earlier lost AI-agent session, but its exact tool, model, token total and cost cannot be reconstructed from available records. This report does not assign invented contributions or amounts to that session. The student remains responsible for understanding and reviewing the submitted code; generated artifacts and passing sample tests do not transfer that responsibility to the development tool.
@@ -573,7 +599,7 @@ The owner described an earlier lost AI-agent session, but its exact tool, model,
 
 | Verification layer | Result and scope |
 | --- | --- |
-| Maven package | 36 tests; 0 failures/errors; shaded JAR built |
+| Maven package | 45 tests; 0 failures/errors; shaded JAR built |
 | Actual API/controller acceptance | 16 checks passed across F01-F15 plus classification; successful run made 17 actual API calls |
 | Actual CLI acceptance | 23 groups passed and all 41 recognized commands exercised, including aliases and scope/type choices |
 | Mixed actual-PDF upload | 25 of 25 expected categories; 1 syllabus, 22 lecture/reference PDFs, 2 assignment instructions |
@@ -581,6 +607,8 @@ The owner described an earlier lost AI-agent session, but its exact tool, model,
 | Data handling | Original 82 files backed up with matching SHA-256 hashes before the owner-requested fresh bulk test; .env and external originals preserved |
 
 These are complementary checks, not a claim that every GUI combination or arbitrary LLM response is defect-free. The full timer run naturally ended after 15 minutes and persisted 900 seconds; speaker output was not independently recorded as audio evidence. Timeline completion was temporarily exercised in the native app and restored; deletion confirmation was canceled, preserving the deadlines. Sorting/selection targeting is covered by a dedicated regression. Raw transcripts and temporary fixtures are local under codex/ and are not published wholesale.
+
+Later live follow-up: actual 66-page lecture notes completed in 3 source batches plus synthesis in 22 seconds; final native notes also completed an 82-page Structural Patterns PDF in 4 batches plus synthesis. Native hi -> quiz opened a real lecture MCQ and completed a 1/1 review. A cited Adapter answer used the new landscape frame; native maximize/restore/close and AI cancellation were checked. Final concept-page-21 quiz and an actual CLI selected-page generation/answer/history run passed. These bounded checks supplement the earlier acceptance inventory; they are not a fresh replay of every earlier command. Original user data was not the write target for these API/native tests.
 
 Important corrected defects included date-only schedule edits losing omitted fields, inconsistent typo-equivalent merge behavior, missing unlinked study time in briefing, split same-day records, narrow/clipped controls, raw Markdown summaries, wrong-purpose bulk classification, incomplete classifier responses, quiz navigation/submission and essay count/difficulty/cancel handling. For Stage 2 this is basic working-implementation verification; the later full deterministic and KUMA agent-validation requirements remain Stage 3 work under the project instructions.
 
@@ -628,11 +656,11 @@ Eight implementation/test candidates are listed. README-only commit 83ab8d8 is e
 
 Six implementation/test candidates are listed. Repository-layout move 7cdfd95 is excluded from the conservative count. Meaningfulness is based on behavior/test changes, not file counts or raw insertion totals.
 
-Subsequent approved work includes [fdcfcd7](https://github.com/jj990405/EECS3311/commit/fdcfcd7), [1ab1b5a](https://github.com/jj990405/EECS3311/commit/1ab1b5a) and [7d55e8e](https://github.com/jj990405/EECS3311/commit/7d55e8e) on Nov 14. The cost-only clarification is not counted as meaningful implementation progress. The owner approved the current timeline/report refinements for a further Nov 14 commit after a requirement audit. Work after a reporting window cannot compensate for a missed historical push window.
+Subsequent approved work includes [fdcfcd7](https://github.com/jj990405/EECS3311/commit/fdcfcd7), [1ab1b5a](https://github.com/jj990405/EECS3311/commit/1ab1b5a), [7d55e8e](https://github.com/jj990405/EECS3311/commit/7d55e8e) and [a001883](https://github.com/jj990405/EECS3311/commit/a001883) on Nov 14. The cost-only clarification is not counted as meaningful implementation progress. The latest AI/file/result-window changes and expanded filming script await new owner commit approval. Work after a reporting window cannot compensate for a missed historical push window.
 
 ### Submission readiness audit
 
-The five-page Stage 2 brief was checked against the current source and all seven report sections before the owner-approved commit. The fresh deterministic suite again passed 36 tests. The companion docs/development/stage2-requirements-check.md records evidence and unresolved items: actual videos and all 21 URL/start-time pairs, final video-linked report revision, public-file verification and LMS submission. Historical period-1 push timing is not certified, and project-specific historical development tokens remain unavailable. This report is a draft until the actual recordings and final submission steps are completed.
+The five-page Stage 2 brief was checked against the source and all seven report sections. The latest deterministic suite passed 45 tests. The companion docs/development/stage2-requirements-check.md records evidence and unresolved items: actual videos and all 21 URL/start-time pairs, final video-linked report revision, approval/push of the latest local follow-up, public-file verification and LMS submission. Historical period-1 push timing is not certified, and project-specific historical development tokens remain unavailable. This report is a draft until actual recordings and final submission steps are completed.
 
 ## 7 Demonstration index
 

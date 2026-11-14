@@ -20,6 +20,17 @@ public final class CoursePage extends JPanel {
     private final JLabel summary = new JLabel("Choose a course in the workspace to see its work and files.");
     private final JPanel content = new CourseContent();
     private final JScrollPane scroll = new JScrollPane(content);
+    private java.util.function.Consumer<MaterialFile> selectFile = file -> { };
+    private java.util.function.Consumer<MaterialFile> openFile = file -> { };
+    private java.util.function.Function<MaterialFile, javax.swing.JPopupMenu> fileMenu = file -> new javax.swing.JPopupMenu();
+    private java.util.UUID selectedFile;
+    private final java.util.Map<java.util.UUID, JPanel> fileRows = new java.util.HashMap<>();
+
+    void setFileActions(java.util.function.Consumer<MaterialFile> select,
+                        java.util.function.Consumer<MaterialFile> open,
+                        java.util.function.Function<MaterialFile, javax.swing.JPopupMenu> menu) {
+        selectFile = select; openFile = open; fileMenu = menu;
+    }
 
     public CoursePage(AgentController controller, Runnable calendar, Runnable references,
                       Runnable fileSummary, Runnable quiz, Runnable weakTopics) {
@@ -46,10 +57,18 @@ public final class CoursePage extends JPanel {
         actions.setBackground(AppTheme.SURFACE);
         actions.setBorder(AppTheme.padding(10, 14, 10, 14));
         action(actions, "Calendar", calendar);
-        action(actions, "Reference files", references);
-        action(actions, "Study notes", fileSummary);
-        action(actions, "Practice quiz", quiz);
-        action(actions, "Weak topics", weakTopics);
+        JButton ai = AppTheme.dropdown("AI actions", false);
+        ai.addActionListener(event -> {
+            javax.swing.JPopupMenu menu = new javax.swing.JPopupMenu();
+            for (var item : java.util.List.of(java.util.Map.entry("Reference files", references),
+                    java.util.Map.entry("Study notes", fileSummary), java.util.Map.entry("Practice quiz", quiz),
+                    java.util.Map.entry("Weak topics", weakTopics))) {
+                javax.swing.JMenuItem entry = new javax.swing.JMenuItem(item.getKey());
+                entry.addActionListener(e -> item.getValue().run()); menu.add(entry);
+            }
+            menu.show(ai, 0, ai.getHeight());
+        });
+        actions.add(ai);
         add(actions, BorderLayout.SOUTH);
     }
 
@@ -66,6 +85,7 @@ public final class CoursePage extends JPanel {
                 + progress.completed() + " of " + progress.total() + " deadlines complete"
                 + (progress.overdue() > 0 ? "   ·   " + progress.overdue() + " overdue" : ""));
         content.removeAll();
+        fileRows.clear();
         List<Deadline> deadlines = controller.schedule(AgentController.Period.ALL, course.id(), "", LocalDate.now());
         section("Deadlines", deadlines.size());
         if (deadlines.isEmpty()) empty("No deadlines yet. Add one or analyze your uploaded syllabus.");
@@ -78,15 +98,38 @@ public final class CoursePage extends JPanel {
         content.add(javax.swing.Box.createVerticalStrut(24));
         section("Files", materials.size());
         if (materials.isEmpty()) empty("No files yet. Add a syllabus or lecture material to this course.");
-        for (MaterialFile material : materials)
-            row(material.category().toString(), material.originalName(),
+        for (MaterialFile material : materials) {
+            JPanel fileRow = row(material.category().toString(), material.originalName(),
                     material.lectureWeek() == null ? "" : "Week " + material.lectureWeek());
+            fileRows.put(material.id(), fileRow);
+            java.awt.event.MouseAdapter listener = new java.awt.event.MouseAdapter() {
+                private void select() {
+                    selectedFile = material.id();
+                    fileRows.forEach((id, panel) -> paintFileRow(panel, id.equals(selectedFile)));
+                    selectFile.accept(material);
+                }
+                private void popup(java.awt.event.MouseEvent e) {
+                    if (!e.isPopupTrigger()) return;
+                    select(); fileMenu.apply(material).show(e.getComponent(), e.getX(), e.getY());
+                }
+                @Override public void mousePressed(java.awt.event.MouseEvent e) { select(); popup(e); }
+                @Override public void mouseReleased(java.awt.event.MouseEvent e) { popup(e); }
+                @Override public void mouseClicked(java.awt.event.MouseEvent e) {
+                    if (javax.swing.SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) openFile.accept(material);
+                }
+            };
+            fileRow.addMouseListener(listener);
+            for (var child : fileRow.getComponents()) child.addMouseListener(listener);
+            fileRow.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+            paintFileRow(fileRow, material.id().equals(selectedFile));
+        }
         content.revalidate();
         content.repaint();
         javax.swing.SwingUtilities.invokeLater(() -> scroll.getViewport().setViewPosition(new java.awt.Point(0, 0)));
     }
 
     public void clear() {
+        selectedFile = null; fileRows.clear();
         heading.setText("Select a course");
         summary.setText("Choose a course in the workspace to see its work and files.");
         content.removeAll();
@@ -111,7 +154,13 @@ public final class CoursePage extends JPanel {
         content.add(label);
     }
 
-    private void row(String leading, String title, String trailing) {
+    private static void paintFileRow(JPanel row, boolean selected) {
+        row.setBackground(selected ? AppTheme.BLUE_TINT : AppTheme.SURFACE);
+        for (var child : row.getComponents()) child.setBackground(row.getBackground());
+        row.repaint();
+    }
+
+    private JPanel row(String leading, String title, String trailing) {
         JPanel row = new JPanel(new BorderLayout(0, 5));
         row.setBackground(AppTheme.SURFACE);
         row.setBorder(BorderFactory.createCompoundBorder(
@@ -136,6 +185,7 @@ public final class CoursePage extends JPanel {
         row.add(middle, BorderLayout.CENTER);
         row.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, row.getPreferredSize().height));
         content.add(row);
+        return row;
     }
 
     private static final class CourseContent extends JPanel implements javax.swing.Scrollable {

@@ -38,6 +38,8 @@ Open [Stage2_Behavior_Diagrams.drawio](Stage2_Behavior_Diagrams.drawio) in diagr
 
 The original SD01, SD09 and SD10 have been split into sub-sheets because their distinct upload/week, Q&A/summary and MCQ/essay paths now contain enough steps to warrant separate views. This changes presentation, not their feature IDs.
 
+The latest SD09a adds the selected-file `answerFromMaterial` path. SD09b now shows complete page-labelled batching through `StudyPages`, and SD10a adds validated physical-page MCQ scope from file/PDF menus or CLI `pages`. These expand F11-F13 without adding or removing a Stage 1 feature ID.
+
 ## Use-case sheets
 
 | Sheet | Included behavior |

@@ -78,7 +78,7 @@ public final class MainWindow extends JFrame {
     private final JPanel calendarHost = new JPanel(new BorderLayout());
     private final JLabel fileHeading = new JLabel("Select a file in the workspace");
     private final JLabel fileMeta = new JLabel("Uploaded files are stored locally.");
-    private final JTextArea filePreview = new JTextArea();
+    private final MaterialList materialList;
     private final Map<UUID, Component> openDocuments = new java.util.HashMap<>();
     private final Map<UUID, Component> openNotes = new java.util.HashMap<>();
     private final JButton openFileButton = new JButton("Open original");
@@ -87,6 +87,12 @@ public final class MainWindow extends JFrame {
     private final List<UUID> rowIds = new ArrayList<>();
     private javax.swing.Timer studyDisplayTimer;
     private UUID selectedCourseId;
+    private UUID selectedFileId;
+    private SwingWorker<?, ?> activeAi;
+    private final JLabel aiActivity = new JLabel();
+    private final JButton cancelAi = AppTheme.button("Cancel AI", false);
+    private final JButton aiActions = AppTheme.dropdown("AI actions", true);
+    private javax.swing.Timer aiElapsed;
     private record CalendarCourseChoice(UUID id, String label) {
         @Override public String toString() { return label; }
     }
@@ -111,6 +117,10 @@ public final class MainWindow extends JFrame {
         this.timerRecords = new TimerRecordPanel(controller);
         this.chatPanel = new ChatPanel(question -> perform(() -> askSources(question)),
                 change -> perform(() -> requestScheduleChange(change)));
+        this.materialList = new MaterialList(this::rememberMaterial,
+                file -> perform(() -> showMaterial(file)), this::materialMenu);
+        this.coursePage.setFileActions(this::rememberMaterial,
+                file -> perform(() -> showMaterial(file)), this::materialMenu);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(1460, 900);
         setMinimumSize(new Dimension(900, 600));
@@ -127,7 +137,12 @@ public final class MainWindow extends JFrame {
         JLabel appName = new JLabel("Study Agent");
         appName.setFont(AppTheme.SECTION);
         appName.setForeground(AppTheme.TEXT);
-        header.add(appName, BorderLayout.WEST);
+        JPanel identity = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        identity.setOpaque(false); identity.add(appName);
+        aiActivity.setForeground(AppTheme.MUTED); identity.add(aiActivity);
+        cancelAi.setVisible(false);
+        cancelAi.addActionListener(e -> { if (activeAi != null) activeAi.cancel(true); });
+        identity.add(cancelAi); header.add(identity, BorderLayout.WEST);
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         actions.setOpaque(false);
         button(actions, "New semester", this::addSemester);
@@ -135,9 +150,8 @@ public final class MainWindow extends JFrame {
         button(actions, "Add files", this::uploadFiles);
         button(actions, "New deadline", this::addDeadline);
         button(actions, "Calendar", this::showCalendar);
-        JButton sync = AppTheme.button("Analyze files for calendar", true);
-        sync.addActionListener(e -> perform(this::analyzeCalendarFiles));
-        actions.add(sync);
+        aiActions.addActionListener(e -> showAiMenu(aiActions));
+        actions.add(aiActions);
         header.add(actions, BorderLayout.EAST);
         add(header, BorderLayout.NORTH);
 
@@ -145,6 +159,7 @@ public final class MainWindow extends JFrame {
             @Override public Component getTreeCellRendererComponent(JTree target, Object value,
                     boolean selected, boolean expanded, boolean leaf, int row, boolean focused) {
                 super.getTreeCellRendererComponent(target, value, selected, expanded, leaf, row, focused);
+                setBackgroundSelectionColor(AppTheme.BLUE_TINT); setTextSelectionColor(AppTheme.TEXT);
                 if (value instanceof DefaultMutableTreeNode node
                         && node.getUserObject() instanceof WorkspaceBranch branch
                         && branch.kind() == WorkspaceBranch.Kind.COURSE) {
@@ -349,6 +364,7 @@ public final class MainWindow extends JFrame {
         menuItem(ai, "Create study notes", this::summarizeFile);
         menuItem(ai, "Saved study notes", this::showSummaries);
         menuItem(ai, "Generate quiz", this::generateQuiz);
+        menuItem(ai, "Quiz pages / slides", () -> generateSlideQuiz(chooseReadableMaterial(), 0));
         menuItem(ai, "Take saved quiz", this::takeQuiz);
         menuItem(ai, "Generate essay question", this::generateEssayQuestion);
         menuItem(ai, "Answer essay question", this::answerEssayQuestion);
@@ -398,13 +414,7 @@ public final class MainWindow extends JFrame {
                 popupItem(menu, "Upload files to " + category + "...", () -> uploadFiles(course, category));
             }
         } else if (value instanceof WorkspaceLeaf leaf) {
-            popupItem(menu, "Show file details", () -> showMaterial(leaf.file()));
-            popupItem(menu, "Open original", this::openSelectedFile);
-            popupItem(menu, "Move to another folder...", () -> moveMaterial(leaf.file()));
-            if (leaf.file().category() == Category.LECTURE_MATERIALS)
-                popupItem(menu, "Assign lecture week...", () -> assignLectureWeek(leaf.file()));
-            popupItem(menu, "Upload more to " + leaf.file().category() + "...",
-                    () -> uploadFiles(controller.course(leaf.file().courseId()), leaf.file().category()));
+            menu = materialMenu(leaf.file());
         }
         if (menu.getComponentCount() > 0) menu.show(tree, event.getX(), event.getY());
     }
@@ -413,6 +423,56 @@ public final class MainWindow extends JFrame {
         Semester semester = controller.semesters().stream().filter(s -> s.id().equals(branch.id()))
                 .findFirst().orElseThrow();
         popupItem(menu, "New course...", () -> addCourse(semester));
+    }
+
+    private void showAiMenu(JButton anchor) {
+        JPopupMenu menu = new JPopupMenu();
+        popupItem(menu, "Analyze files for calendar", this::analyzeCalendarFiles);
+        popupItem(menu, "Classify uploaded files", this::classifyFilesWithAi);
+        menu.addSeparator();
+        popupItem(menu, "Ask sources", this::askSources);
+        popupItem(menu, "Create study notes", this::summarizeFile);
+        popupItem(menu, "Saved study notes", this::showSummaries);
+        popupItem(menu, "Practice quiz...", this::generateQuiz);
+        popupItem(menu, "Quiz pages / slides...", () -> generateSlideQuiz(chooseReadableMaterial(), 0));
+        popupItem(menu, "Take saved quiz", this::takeQuiz);
+        popupItem(menu, "Generate essay question", this::generateEssayQuestion);
+        popupItem(menu, "Answer essay question", this::answerEssayQuestion);
+        popupItem(menu, "Weak topics / review advice", this::showWeakTopics);
+        menu.addSeparator();
+        popupItem(menu, "Extract syllabus deadlines", this::aiSyllabus);
+        popupItem(menu, "Suggest lecture week", this::aiWeek);
+        popupItem(menu, "Request schedule change", this::requestScheduleChange);
+        popupItem(menu, "Weekly brief", this::weeklyBrief);
+        popupItem(menu, "Review proposals", this::reviewProposals);
+        menu.show(anchor, 0, anchor.getHeight());
+    }
+
+    private void rememberMaterial(MaterialFile file) {
+        selectedFileId = file.id(); selectedCourseId = file.courseId();
+        chatPanel.setContext(controller.course(file.courseId()).name() + " · " + file.originalName());
+        openFileButton.setEnabled(true);
+        fileMeta.setText("Selected: " + file.originalName() + " · right-click for file actions");
+    }
+
+    private JPopupMenu materialMenu(MaterialFile file) {
+        JPopupMenu menu = new JPopupMenu();
+        popupItem(menu, "Open PDF / file details", () -> { rememberMaterial(file); showMaterial(file); });
+        popupItem(menu, "Open original", () -> openOriginal(file));
+        if (file.textAvailable()) {
+            menu.addSeparator();
+            popupItem(menu, "AI: Study notes", () -> summarizeFile(file));
+            popupItem(menu, "AI: Quiz this file...", () -> generateQuiz(List.of(file.id())));
+            popupItem(menu, "AI: Quiz pages / slides...", () -> generateSlideQuiz(file, 0));
+            popupItem(menu, "AI: Ask about this file", () -> {
+                rememberMaterial(file); contentTabs.setSelectedComponent(chatPanel); askSources();
+            });
+        }
+        menu.addSeparator();
+        popupItem(menu, "Move to another folder...", () -> moveMaterial(file));
+        if (file.category() == Category.LECTURE_MATERIALS)
+            popupItem(menu, "Assign lecture week...", () -> assignLectureWeek(file));
+        return menu;
     }
 
     private Category categoryOf(WorkspaceBranch branch) {
@@ -431,24 +491,20 @@ public final class MainWindow extends JFrame {
         heading.add(fileMeta, BorderLayout.CENTER);
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         openFileButton.setEnabled(false);
-        openFileButton.addActionListener(e -> perform(this::openSelectedFile));
+        openFileButton.addActionListener(e -> perform(() -> {
+            if (selectedFileId == null) openSelectedFile();
+            else openOriginal(controller.materials().stream().filter(file -> file.id().equals(selectedFileId)).findFirst().orElseThrow());
+        }));
         controls.add(openFileButton);
         JButton addFiles = new JButton("Upload more files");
         addFiles.addActionListener(e -> perform(this::uploadFiles));
         controls.add(addFiles);
-        JButton classify = AppTheme.button("Classify files with AI", false);
-        classify.addActionListener(e -> perform(this::classifyFilesWithAi));
-        controls.add(classify);
+        JButton fileAi = AppTheme.dropdown("AI actions", false);
+        fileAi.addActionListener(e -> showAiMenu(fileAi)); controls.add(fileAi);
         button(controls, "Expand / restore", this::toggleViewer);
         heading.add(controls, BorderLayout.SOUTH);
         panel.add(heading, BorderLayout.NORTH);
-        filePreview.setEditable(false);
-        filePreview.setLineWrap(true);
-        filePreview.setWrapStyleWord(true);
-        filePreview.setText("Choose a file on the left. PDFs open here as original pages.\n\n"
-                + "Text is extracted separately for search and AI, without changing the stored original.");
-        filePreview.setBorder(AppTheme.padding(20, 20, 20, 20));
-        panel.add(new JScrollPane(filePreview), BorderLayout.CENTER);
+        panel.add(new JScrollPane(materialList), BorderLayout.CENTER);
         return panel;
     }
 
@@ -555,27 +611,38 @@ public final class MainWindow extends JFrame {
     private <T> void runAi(String activity, Callable<T> task, Consumer<T> success) {
         if (aiBusy) {
             status.setText("An AI request is already running.");
+            JOptionPane.showMessageDialog(this, "An AI request is running. Wait for it, or use Cancel AI first.",
+                    "AI request in progress", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         aiBusy = true;
+        chatPanel.setBusy(true); aiActions.setEnabled(false); cancelAi.setVisible(true);
+        long started = System.nanoTime();
+        aiActivity.setText("AI working · 0s");
+        aiElapsed = new javax.swing.Timer(1000, e -> aiActivity.setText("AI working · "
+                + java.util.concurrent.TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - started) + "s"));
+        aiElapsed.start();
         status.setText(activity + "...");
-        new SwingWorker<T, Void>() {
+        activeAi = new SwingWorker<T, Void>() {
             @Override protected T doInBackground() throws Exception { return task.call(); }
             @Override protected void done() {
                 aiBusy = false;
+                aiElapsed.stop(); aiActivity.setText(""); cancelAi.setVisible(false);
+                chatPanel.setBusy(false); aiActions.setEnabled(true);
                 try {
                     T result = get();
                     status.setText(activity + " complete.");
                     success.accept(result);
                 } catch (CancellationException ignored) {
-                    status.setText(activity + " complete. Review closed.");
+                    status.setText(activity + " canceled or review closed.");
+                    chatPanel.append("Agent: AI task canceled or review closed. You can start another task.");
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     status.setText(activity + " interrupted.");
                 } catch (ExecutionException ex) {
-                    Throwable cause = ex.getCause();
-                    String message = cause == null ? ex.getMessage() : cause.getMessage();
+                    String message = AiFeedback.failure(ex);
                     status.setText(activity + " failed.");
+                    chatPanel.append("Agent: " + activity + " failed. " + message);
                     JOptionPane.showMessageDialog(MainWindow.this, message, "AI request failed",
                             JOptionPane.ERROR_MESSAGE);
                 } catch (RuntimeException ex) {
@@ -584,7 +651,8 @@ public final class MainWindow extends JFrame {
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
-        }.execute();
+        };
+        activeAi.execute();
     }
 
     private String ask(String label, String initial) {
@@ -914,7 +982,7 @@ public final class MainWindow extends JFrame {
             hideViewer();
             fileHeading.setText("Select a file in the workspace");
             fileMeta.setText("Uploaded files are stored locally.");
-            filePreview.setText("Create a semester and course to start again.");
+            materialList.setListData(new MaterialFile[0]); selectedFileId = null;
             openFileButton.setEnabled(false);
             contentTabs.setSelectedIndex(0);
             refresh();
@@ -1139,6 +1207,12 @@ public final class MainWindow extends JFrame {
     }
 
     private MaterialFile chooseReadableMaterial() {
+        if (selectedFileId != null) {
+            MaterialFile remembered = controller.materials().stream().filter(file -> file.id().equals(selectedFileId)
+                    && file.textAvailable() && (selectedCourseId == null || file.courseId().equals(selectedCourseId)))
+                    .findFirst().orElse(null);
+            if (remembered != null) return remembered;
+        }
         Object selected = selectedTreeValue();
         if (selected instanceof WorkspaceLeaf leaf && leaf.file().textAvailable()) return leaf.file();
         List<MaterialFile> files = controller.materials().stream()
@@ -1149,8 +1223,12 @@ public final class MainWindow extends JFrame {
     }
 
     private void summarizeFile() {
-        MaterialFile material = chooseReadableMaterial();
-        runAi("Summarizing " + material.originalName(), () -> controller.generateSummary(material.id()),
+        summarizeFile(chooseReadableMaterial());
+    }
+
+    private void summarizeFile(MaterialFile material) {
+        runAi("Summarizing " + material.originalName(), () -> controller.generateSummary(material.id(),
+                progress -> SwingUtilities.invokeLater(() -> { if (aiBusy) status.setText(material.originalName() + " · " + progress); })),
                 summary -> showStudyNotes(material, summary));
     }
 
@@ -1188,7 +1266,22 @@ public final class MainWindow extends JFrame {
     }
 
     private void generateQuiz() {
-        List<UUID> materials = chooseQuizMaterials();
+        generateQuiz(chooseQuizMaterials());
+    }
+
+    private void generateSlideQuiz(MaterialFile material, int currentPage) {
+        try {
+            int total = controller.materialPages(material.id()).size();
+            List<Integer> pages = StudyPages.parse(ask("Pages / slides (1-" + total + ", e.g. 3 or 2-5,8)",
+                    currentPage > 0 ? Integer.toString(currentPage) : "1"), total);
+            int count = Integer.parseInt(ask("Number of multiple-choice questions (1-10)", "3"));
+            Difficulty difficulty = choose("Quiz difficulty", List.of(Difficulty.values()));
+            runAi("Quiz: " + material.originalName() + " · slides " + pages,
+                    () -> controller.generateSlideQuiz(material.id(), pages, count, difficulty), this::takeQuiz);
+        } catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
+    }
+
+    private void generateQuiz(List<UUID> materials) {
         int count = Integer.parseInt(ask("Number of questions (1-10)", "3"));
         if (count < 1 || count > 10) throw new IllegalArgumentException("Choose 1 to 10 questions.");
         Difficulty difficulty = choose("Quiz difficulty", List.of(Difficulty.values()));
@@ -1272,12 +1365,7 @@ public final class MainWindow extends JFrame {
     }
 
     private void showText(String title, String content) {
-        JTextArea area = new JTextArea(content, 18, 65);
-        area.setEditable(false);
-        area.setLineWrap(true);
-        area.setWrapStyleWord(true);
-        area.setCaretPosition(0);
-        JOptionPane.showMessageDialog(this, new JScrollPane(area), title, JOptionPane.INFORMATION_MESSAGE);
+        new ResultWindow(this, title, content, null).setVisible(true);
     }
 
     private void askSources() {
@@ -1286,22 +1374,32 @@ public final class MainWindow extends JFrame {
     }
 
     private void askSources(String question) {
+        String greeting = AiFeedback.greeting(question);
+        if (greeting != null) { chatPanel.append("Agent: " + greeting); status.setText("Ready for a source question."); return; }
+        switch (AiFeedback.action(question)) {
+            case QUIZ -> {
+                chatPanel.append("Agent: Opening the interactive quiz settings. Choose the source and question options.");
+                generateQuiz(); return;
+            }
+            case SLIDE_QUIZ -> { generateSlideQuiz(chooseReadableMaterial(), 0); return; }
+            case NOTES -> { summarizeFile(); return; }
+            case QUESTION -> { }
+        }
         Course course = selectedCourseId == null ? chooseCourse() : controller.course(selectedCourseId);
-        runAi("Searching course materials", () -> controller.answerQuestion(course.id(), question), answer -> {
+        UUID fileScope = selectedFileId;
+        runAi("Searching course materials", () -> fileScope == null ? controller.answerQuestion(course.id(), question)
+                : controller.answerFromMaterial(fileScope, question), answer -> {
             String citations = answer.citations().stream().map(c -> c.fileName() + " p." + c.page())
                     .collect(java.util.stream.Collectors.joining("\n"));
             chatPanel.append("Agent: " + answer.answer() + "\nSources: " + citations);
-            int action = JOptionPane.showOptionDialog(this, answer.answer() + "\n\nSources:\n" + citations,
-                    "Material answer", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-                    new Object[] {"Open cited file", "Close"}, "Close");
-            if (action == 0) {
+            new ResultWindow(this, "Material answer", answer.answer() + "\n\nSources:\n" + citations, () -> perform(() -> {
                 List<MaterialFile> files = controller.materials().stream()
                         .filter(m -> m.courseId().equals(course.id()) && answer.citations().stream()
                                 .anyMatch(c -> c.fileName().equals(m.originalName()))).toList();
-                MaterialFile selected = choose("Open a cited source", files);
-                try { Desktop.getDesktop().open(controller.materialPath(selected.id()).toFile()); }
-                catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
-            }
+                if (files.isEmpty()) throw new IllegalStateException("No cited source is available in this workspace.");
+                MaterialFile selected = files.size() == 1 ? files.get(0) : choose("Open a cited source", files);
+                rememberMaterial(selected); showMaterial(selected);
+            })).setVisible(true);
         });
     }
 
@@ -1775,24 +1873,30 @@ public final class MainWindow extends JFrame {
         if (rebuildingWorkspace) return;
         Object value = selectedTreeValue();
         if (value instanceof WorkspaceBranch branch && branch.kind() == WorkspaceBranch.Kind.COURSE) {
+            selectedFileId = null;
             selectedCourseId = branch.id();
+            chatPanel.setContext(controller.course(branch.id()).name() + " · uploaded course materials");
             refreshSchedule();
             refreshCalendar();
             showCourseFiles(controller.course(branch.id()));
             coursePage.showCourse(controller.course(branch.id()));
             contentTabs.setSelectedComponent(coursePage);
         } else if (value instanceof WorkspaceBranch branch && branch.kind() == WorkspaceBranch.Kind.CATEGORY) {
+            selectedFileId = null;
             selectedCourseId = branch.id();
+            chatPanel.setContext(controller.course(branch.id()).name() + " · uploaded course materials");
             refreshSchedule();
             refreshCalendar();
             showCategoryFiles(controller.course(branch.id()), categoryOf(branch));
             showViewerTab("Files", filePanel, () -> { });
         } else if (value instanceof WorkspaceLeaf leaf) {
+            rememberMaterial(leaf.file());
             selectedCourseId = leaf.file().courseId();
             refreshSchedule();
             refreshCalendar();
             showMaterial(leaf.file());
         } else if (value instanceof WorkspaceBranch branch && branch.kind() == WorkspaceBranch.Kind.SEMESTER) {
+            selectedFileId = null;
             selectedCourseId = null;
             refreshSchedule();
             refreshCalendar();
@@ -1815,14 +1919,12 @@ public final class MainWindow extends JFrame {
         fileHeading.setText(heading);
         fileMeta.setText(files.size() + " file" + (files.size() == 1 ? "" : "s") + " · " + hint);
         openFileButton.setEnabled(false);
-        filePreview.setText(files.isEmpty() ? "No files here yet. Right-click the folder to upload one or more files."
-                : files.stream().map(m -> m.originalName() + (m.textAvailable() ? " · text ready"
-                        : " · no extracted text")).collect(java.util.stream.Collectors.joining("\n")));
-        filePreview.setCaretPosition(0);
+        materialList.setListData(files.toArray(MaterialFile[]::new));
         showViewerTab("Files", filePanel, () -> { });
     }
 
     private void showMaterial(MaterialFile material) {
+        rememberMaterial(material);
         Course course = controller.course(material.courseId());
         Component opened = openDocuments.get(material.id());
         if (opened == null) {
@@ -1838,7 +1940,10 @@ public final class MainWindow extends JFrame {
                 button(controls, "Expand / restore", this::toggleViewer);
                 document.add(controls, BorderLayout.NORTH);
                 if (material.originalName().toLowerCase(java.util.Locale.ROOT).endsWith(".pdf")) {
-                    document.add(new PdfPreviewPanel(controller.materialPath(material.id())), BorderLayout.CENTER);
+                    document.add(new PdfPreviewPanel(controller.materialPath(material.id()),
+                            page -> perform(() -> generateSlideQuiz(material, page)),
+                            () -> perform(() -> summarizeFile(material)),
+                            () -> perform(() -> generateQuiz(List.of(material.id())))), BorderLayout.CENTER);
                 } else {
                     JTextArea details = new JTextArea("Original file: " + material.originalName()
                             + "\n\nUse Open original to view this file in its normal application."

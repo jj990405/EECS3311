@@ -179,6 +179,34 @@ public final class MainWindow extends JFrame {
             }
         });
         table.setAutoCreateRowSorter(true);
+        table.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        table.setRowSelectionAllowed(true);
+        table.setColumnSelectionAllowed(false);
+        table.setToolTipText("Drag to select rows; Ctrl-click or Shift-click to extend. Right-click for actions.");
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mousePressed(java.awt.event.MouseEvent event) { showTimelineMenu(event); }
+            @Override public void mouseReleased(java.awt.event.MouseEvent event) { showTimelineMenu(event); }
+            @Override public void mouseClicked(java.awt.event.MouseEvent event) {
+                if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 2
+                        && table.rowAtPoint(event.getPoint()) >= 0)
+                    perform(() -> showDeadlineDetails(selectedDeadline()));
+            }
+        });
+        table.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("control C"), "copyDeadlines");
+        table.getActionMap().put("copyDeadlines", new javax.swing.AbstractAction() {
+            @Override public void actionPerformed(java.awt.event.ActionEvent event) {
+                perform(() -> copyDeadlines(TimelineSelection.ids(table, rowIds)));
+            }
+        });
+        table.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("shift F10"), "deadlineMenu");
+        table.getInputMap().put(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_CONTEXT_MENU, 0), "deadlineMenu");
+        table.getActionMap().put("deadlineMenu", new javax.swing.AbstractAction() {
+            @Override public void actionPerformed(java.awt.event.ActionEvent event) {
+                int row = table.getSelectedRow();
+                java.awt.Rectangle cell = row < 0 ? new java.awt.Rectangle(8, 8, 0, 0) : table.getCellRect(row, 0, true);
+                timelineMenu().show(table, cell.x + 8, cell.y + cell.height);
+            }
+        });
         table.setDefaultRenderer(Object.class, new CourseRowRenderer(modelRow -> modelRow < rowIds.size()
                 ? controller.course(controller.deadline(rowIds.get(modelRow)).courseId()) : null));
         table.setRowHeight(32);
@@ -1610,6 +1638,77 @@ public final class MainWindow extends JFrame {
         int selectedRow = table.getSelectedRow();
         if (selectedRow < 0) throw new IllegalStateException("Select a deadline in the table first.");
         return controller.deadline(rowIds.get(table.convertRowIndexToModel(selectedRow)));
+    }
+
+    private void showTimelineMenu(java.awt.event.MouseEvent event) {
+        if (!event.isPopupTrigger()) return;
+        TimelineSelection.selectPopupRow(table, table.rowAtPoint(event.getPoint()));
+        timelineMenu().show(table, event.getX(), event.getY());
+    }
+
+    private JPopupMenu timelineMenu() {
+        List<UUID> ids = TimelineSelection.ids(table, rowIds);
+        JPopupMenu menu = new JPopupMenu();
+        if (ids.isEmpty()) {
+            popupItem(menu, "New deadline...", this::addDeadline);
+            popupItem(menu, "Open calendar", this::showCalendar);
+            return menu;
+        }
+        JMenuItem count = new JMenuItem(ids.size() + (ids.size() == 1 ? " deadline selected" : " deadlines selected"));
+        count.setEnabled(false); menu.add(count); menu.addSeparator();
+        if (ids.size() == 1) {
+            popupItem(menu, "Open details", () -> showDeadlineDetails(controller.deadline(ids.get(0))));
+            popupItem(menu, "Edit deadline...", () -> editDeadline(controller.deadline(ids.get(0))));
+            menu.addSeparator();
+        }
+        popupItem(menu, "Mark completed", () -> setDeadlinesCompleted(ids, true));
+        popupItem(menu, "Mark incomplete", () -> setDeadlinesCompleted(ids, false));
+        popupItem(menu, "Copy selected rows", () -> copyDeadlines(ids));
+        menu.addSeparator();
+        popupItem(menu, ids.size() == 1 ? "Delete deadline..." : "Delete selected deadlines...", () -> deleteDeadlines(ids));
+        return menu;
+    }
+
+    private void setDeadlinesCompleted(List<UUID> ids, boolean completed) {
+        List<String> errors = new ArrayList<>(); int changed = 0;
+        for (UUID id : ids) {
+            try { controller.setCompleted(id, completed); changed++; }
+            catch (Exception ex) { errors.add(ex.getMessage()); }
+        }
+        status.setText(changed + " deadlines marked " + (completed ? "completed." : "incomplete."));
+        if (!errors.isEmpty()) showText("Some deadlines were not changed", String.join("\n", errors));
+    }
+
+    private void copyDeadlines(List<UUID> ids) {
+        if (ids.isEmpty()) return;
+        StringBuilder rows = new StringBuilder("Due\tCourse\tType\tTitle\tScope\tDone\n");
+        for (UUID id : ids) {
+            Deadline deadline = controller.deadline(id);
+            for (String cell : List.of(deadline.dueDate() == null ? "TBD" : deadline.dueDate().toString(),
+                    controller.course(deadline.courseId()).name(), deadline.type(), deadline.title(),
+                    deadline.scope(), deadline.completed() ? "Yes" : "No"))
+                rows.append(cell.replace('\t', ' ').replace('\n', ' ').replace('\r', ' ')).append('\t');
+            rows.setLength(rows.length() - 1); rows.append('\n');
+        }
+        java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+                new java.awt.datatransfer.StringSelection(rows.toString()), null);
+        status.setText(ids.size() + " selected rows copied.");
+    }
+
+    private void deleteDeadlines(List<UUID> ids) {
+        String titles = ids.stream().limit(8).map(id -> controller.deadline(id).title())
+                .collect(java.util.stream.Collectors.joining("\n"));
+        if (JOptionPane.showOptionDialog(this, "Delete " + ids.size() + " selected deadlines?\n\n"
+                + titles + (ids.size() > 8 ? "\n..." : "") + "\n\nThis cannot be undone.",
+                "Confirm deadline deletion", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+                null, new Object[] {"Cancel", "Delete"}, "Cancel") != 1) return;
+        List<String> errors = new ArrayList<>(); int deleted = 0;
+        for (UUID id : ids) {
+            try { controller.deleteDeadline(id); deleted++; }
+            catch (Exception ex) { errors.add(ex.getMessage()); }
+        }
+        status.setText(deleted + " deadlines deleted.");
+        if (!errors.isEmpty()) showText("Some deadlines were not deleted", String.join("\n", errors));
     }
 
     private void editDeadline() {

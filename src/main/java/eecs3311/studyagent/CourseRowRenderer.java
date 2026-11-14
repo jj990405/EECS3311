@@ -6,8 +6,11 @@ import java.util.function.IntFunction;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-/** Neutral course shades; resolve model rows so sorting keeps shades consistent. */
+/** A thin course marker beside the course name; row backgrounds stay neutral. */
 final class CourseRowRenderer extends DefaultTableCellRenderer {
+    private static final Color[] MARKERS = {
+        new Color(0x94B2D1), new Color(0xB2A1C8), new Color(0xA5ADCC), new Color(0xC8B68B)
+    };
     private final IntFunction<Course> courseAtModelRow;
 
     CourseRowRenderer(IntFunction<Course> courseAtModelRow) { this.courseAtModelRow = courseAtModelRow; }
@@ -16,14 +19,17 @@ final class CourseRowRenderer extends DefaultTableCellRenderer {
             boolean selected, boolean focused, int row, int column) {
         super.getTableCellRendererComponent(table, value, selected, focused, row, column);
         Course course = courseAtModelRow.apply(table.convertRowIndexToModel(row));
-        int shade = course == null ? 42 : 38 + Math.floorMod(course.name().hashCode(), 6) * 8;
-        int background = shade + (selected ? 18 : 0);
-        setBackground(new Color(background, background, background));
+        setBackground(selected ? AppTheme.RAISED : table.getBackground());
         setForeground(AppTheme.TEXT);
-        Color edge = new Color(shade + 30, shade + 30, shade + 30);
+        boolean courseColumn = table.convertColumnIndexToModel(column) == 1 && course != null;
+        var marker = courseColumn
+                ? javax.swing.BorderFactory.createMatteBorder(0, 3, 0, 0,
+                        MARKERS[Math.floorMod(course.name().hashCode(), MARKERS.length)])
+                : javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 0);
         setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createMatteBorder(0, column == 0 ? 3 : 0, 1, 0,
-                        column == 0 ? edge : AppTheme.BORDER), AppTheme.padding(4, 10, 4, 10)));
+                marker, javax.swing.BorderFactory.createCompoundBorder(
+                        javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, AppTheme.BORDER),
+                        AppTheme.padding(4, 10, 4, 10))));
         return this;
     }
 }

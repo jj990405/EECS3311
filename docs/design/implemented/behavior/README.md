@@ -1,8 +1,8 @@
 # Implemented behavior diagrams
 
-These diagrams describe the Java implementation inspected on 13 November 2026, with SD01a/SD10a/SD10b/SD13 refreshed on 14 November for the upload, quiz and classification follow-up. They are supporting design artifacts for the later Stage 2 report, not the report itself or evidence that every runtime scenario has passed.
+These diagrams describe the Java implementation inspected on 13 November 2026, with SD01a/SD10a/SD10b/SD13 refreshed on 14 November for the upload, quiz and classification follow-up, and SD15/UC21 added for timeline context actions. They support the Stage 2 report; they do not establish that every runtime scenario has passed.
 
-Open [Stage2_Behavior_Diagrams.drawio](Stage2_Behavior_Diagrams.drawio) in diagrams.net to edit the complete 20-page set. Each page also has a vector export in `svg/` and a full-size raster export in `png/`. Keep the original Stage 1 files in `../../diagrams/` as the historical baseline.
+Open [Stage2_Behavior_Diagrams.drawio](Stage2_Behavior_Diagrams.drawio) in diagrams.net to edit the complete 21-page set. Each page also has a vector export in `svg/` and a full-size raster export in `png/`. Keep the original Stage 1 files in `../../diagrams/` as the historical baseline.
 
 ## Reading conventions
 
@@ -11,7 +11,7 @@ Open [Stage2_Behavior_Diagrams.drawio](Stage2_Behavior_Diagrams.drawio) in diagr
 - `LLM + JSON helpers` groups the distinct `PromptBuilder`, `LlmClient`/`HttpLlmClient`, `ResponseParser`, and `Json` helpers on one lifeline to keep the diagrams readable. Labels identify the task and parse operation. `CommandInvoker / AgentCommand` similarly collapses the invoker-to-command forwarding in two longer sequences.
 - Some domain getters and ordinary return messages are omitted. All important data-changing paths show persistence and the relevant approval boundary. The application never gives the LLM direct access to the filesystem or `DataStore`.
 - The sequence sheets describe successful paths plus stated conditions and alternatives. Their footer notes are implementation limits, not additional implemented functionality.
-- UC01-UC17 retain the Stage 1 IDs. UC03-1 (GUI calendar) and UC03-2 (CLI timeline) are consolidated into the UC03 ellipse. UC18-UC20 are new identifiers used only by this implemented-diagram set.
+- UC01-UC17 retain the Stage 1 IDs. UC03-1 (GUI calendar) and UC03-2 (CLI timeline) are consolidated into the UC03 ellipse. UC18-UC21 are new identifiers used only by this implemented-diagram set.
 
 ## Sequence index and code anchors
 
@@ -33,6 +33,7 @@ Open [Stage2_Behavior_Diagrams.drawio](Stage2_Behavior_Diagrams.drawio) in diagr
 | [SD11](svg/SD11.svg) Weak-topic review | F14 / UC15 | `WeakTopicAnalyzer.statistics/analyze`, `AgentController.saveSelfAssessment/weakTopicAdvice`, `StudyArtifacts` attempts and confidence records |
 | [SD12](svg/SD12.svg) History and recent memory | F15 / UC16 | `InteractionHistory.add/list/recent/delete`, `AgentController.history/deleteHistory/answerQuestion` |
 | [SD13](svg/SD13.svg) AI file classification | New / UC18 | `AgentController.suggestUploadCategories/suggestFileCategories/moveMaterial`, `DocumentClassification`, `UploadReviewDialog`, `DataStore.moveMaterial` |
+| [SD15](svg/SD15.svg) Timeline context actions | New N06 / UC21 | `MainWindow.timelineMenu`, `TimelineSelection`, `AgentController.setCompleted/deleteDeadline` |
 | [SD14](svg/SD14.svg) Bulk calendar and daily TBD notices | New / UC19; extends F02/F07 | `suggestCalendarFromFiles`, `MainWindow.reviewCalendarSuggestions/addCalendarSuggestions/showUndatedReminders`, `hasSyllabusDuplicate`, `unseenUndatedReminders/markUndatedRemindersShown` |
 
 The original SD01, SD09 and SD10 have been split into sub-sheets because their distinct upload/week, Q&A/summary and MCQ/essay paths now contain enough steps to warrant separate views. This changes presentation, not their feature IDs.
@@ -75,4 +76,4 @@ The LLM actor represents the configured API. The implementation uses `HttpLlmCli
 
 ## Artifact verification
 
-The combined `.drawio` XML and all 20 SVG exports were parsed successfully. All 20 raster exports were visually checked together on a contact sheet, with larger individual views used for dense sequence and use-case pages. Temporary generation/QA files are in the ignored `codex/` folder. Runtime verification is tracked by the parent implementation audit separately; generating a diagram does not establish that its scenario passes.
+The combined `.drawio` XML and all 21 SVG exports were parsed successfully. The prior 20 raster exports were checked together on a contact sheet, with larger individual views used for dense sequence and use-case pages. SD15 and the updated UC-A were rendered and reviewed with the report appendix. Temporary generation/QA files are in the ignored `codex/` folder. Runtime verification is tracked by the parent implementation audit separately; generating a diagram does not establish that its scenario passes.

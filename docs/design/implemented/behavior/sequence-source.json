@@ -1603,5 +1603,99 @@
       ]
     ],
     "note": "Date inputs are validated against the semester. Duplicate import entries are skipped. Daily reminders run only while the GUI is open or at next launch; there is no OS background reminder service."
+  },
+  {
+    "id": "SD15",
+    "title": "Select timeline rows and apply contextual actions",
+    "features": "New N06 / UC21; extends F03, F09",
+    "actors": [
+      "Student",
+      "MainWindow / JTable",
+      "TimelineSelection",
+      "AgentController",
+      "DataStore"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Drag rows / Ctrl-click / Shift-click; right-click or Shift+F10"
+      ],
+      [
+        1,
+        2,
+        "selectPopupRow(table, row); preserve an existing selected group"
+      ],
+      [
+        1,
+        2,
+        "ids(table, modelIds): convert view rows through active sorting"
+      ],
+      [
+        2,
+        1,
+        "Immutable UUID snapshot for menu actions",
+        true
+      ],
+      [
+        1,
+        0,
+        "Show details/edit for one item; completion/copy/delete for selection",
+        true
+      ],
+      [
+        0,
+        1,
+        "Choose Mark completed / Mark incomplete"
+      ],
+      [
+        1,
+        3,
+        "setCompleted(id, value) [each captured ID]"
+      ],
+      [
+        3,
+        4,
+        "Persist completion; changed() -> refresh callbacks"
+      ],
+      [
+        0,
+        1,
+        "Choose Copy selected rows [alternative]"
+      ],
+      [
+        1,
+        0,
+        "Copy tab-separated text; no stored data changes",
+        true
+      ],
+      [
+        0,
+        1,
+        "Choose Delete selected deadlines [alternative]"
+      ],
+      [
+        1,
+        0,
+        "Confirm count and titles; Cancel leaves all data unchanged",
+        true
+      ],
+      [
+        0,
+        1,
+        "Confirm deletion [only confirmed branch]"
+      ],
+      [
+        1,
+        3,
+        "deleteDeadline(id) [each captured ID]"
+      ],
+      [
+        3,
+        4,
+        "Delete persisted entity; changed() -> refresh callbacks"
+      ]
+    ],
+    "note": "User actions are deterministic and do not call the LLM or create AI proposals. Blank-area menu offers New deadline and Calendar. Snapshot IDs prevent sorting/store-refresh selection changes from targeting other rows. Dragging selects rows; it does not reschedule dates."
   }
 ]

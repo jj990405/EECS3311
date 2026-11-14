@@ -1,57 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1350" height="1156" viewBox="0 0 1350 1156">
+<svg xmlns="http://www.w3.org/2000/svg" width="1350" height="1268" viewBox="0 0 1350 1268">
 <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
-<rect x="0" y="0" width="1350" height="1156" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="0" y="0" width="1350" height="1268" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">UC-A - Workspace and schedule</text>
 <text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">Updated use cases | Student uses GUI or CLI unless explicitly marked GUI | Stage 1 IDs retained</text>
 <line x1="32" y1="100" x2="1318" y2="100" stroke="#b8c7d7" stroke-width="2"/>
-<rect x="300" y="125" width="740" height="976" rx="4" fill="#fafcfe" stroke="#7890a6" stroke-width="1.5"/>
+<rect x="300" y="125" width="740" height="1088" rx="4" fill="#fafcfe" stroke="#7890a6" stroke-width="1.5"/>
 <text x="670" y="154" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="17" font-weight="700" fill="#1e3146">Semester Study and Deadline Management Agent</text>
-<ellipse cx="100.0" cy="586.0" rx="18.0" ry="18.0" fill="#ffffff" stroke="#395b7b" stroke-width="1.5"/>
-<line x1="100" y1="604.0" x2="100" y2="659.0" stroke="#395b7b" stroke-width="2"/>
-<line x1="70" y1="623.0" x2="130" y2="623.0" stroke="#395b7b" stroke-width="2"/>
-<line x1="100" y1="659.0" x2="75" y2="690.0" stroke="#395b7b" stroke-width="2"/>
-<line x1="100" y1="659.0" x2="125" y2="690.0" stroke="#395b7b" stroke-width="2"/>
-<text x="100" y="718.0" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="17" font-weight="700" fill="#1e3146">Student</text>
-<ellipse cx="1210.0" cy="586.0" rx="18.0" ry="18.0" fill="#ffffff" stroke="#395b7b" stroke-width="1.5"/>
-<line x1="1210" y1="604.0" x2="1210" y2="659.0" stroke="#395b7b" stroke-width="2"/>
-<line x1="1180" y1="623.0" x2="1240" y2="623.0" stroke="#395b7b" stroke-width="2"/>
-<line x1="1210" y1="659.0" x2="1185" y2="690.0" stroke="#395b7b" stroke-width="2"/>
-<line x1="1210" y1="659.0" x2="1235" y2="690.0" stroke="#395b7b" stroke-width="2"/>
-<text x="1210" y="718.0" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="17" font-weight="700" fill="#1e3146">External LLM API</text>
-<line x1="132" y1="628.0" x2="390" y2="222" stroke="#91a3b4" stroke-width="1"/>
+<ellipse cx="100.0" cy="642.0" rx="18.0" ry="18.0" fill="#ffffff" stroke="#395b7b" stroke-width="1.5"/>
+<line x1="100" y1="660.0" x2="100" y2="715.0" stroke="#395b7b" stroke-width="2"/>
+<line x1="70" y1="679.0" x2="130" y2="679.0" stroke="#395b7b" stroke-width="2"/>
+<line x1="100" y1="715.0" x2="75" y2="746.0" stroke="#395b7b" stroke-width="2"/>
+<line x1="100" y1="715.0" x2="125" y2="746.0" stroke="#395b7b" stroke-width="2"/>
+<text x="100" y="774.0" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="17" font-weight="700" fill="#1e3146">Student</text>
+<ellipse cx="1210.0" cy="642.0" rx="18.0" ry="18.0" fill="#ffffff" stroke="#395b7b" stroke-width="1.5"/>
+<line x1="1210" y1="660.0" x2="1210" y2="715.0" stroke="#395b7b" stroke-width="2"/>
+<line x1="1180" y1="679.0" x2="1240" y2="679.0" stroke="#395b7b" stroke-width="2"/>
+<line x1="1210" y1="715.0" x2="1185" y2="746.0" stroke="#395b7b" stroke-width="2"/>
+<line x1="1210" y1="715.0" x2="1235" y2="746.0" stroke="#395b7b" stroke-width="2"/>
+<text x="1210" y="774.0" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="17" font-weight="700" fill="#1e3146">External LLM API</text>
+<line x1="132" y1="684.0" x2="390" y2="222" stroke="#91a3b4" stroke-width="1"/>
 <ellipse cx="670.0" cy="223.0" rx="280.0" ry="38.0" fill="#ffffff" stroke="#6b879f" stroke-width="1.5"/>
 <text x="670" y="213" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC01 / F01</text>
 <text x="670" y="239" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">Manage semesters, courses and files</text>
-<line x1="132" y1="628.0" x2="390" y2="334" stroke="#91a3b4" stroke-width="1"/>
-<line x1="950" y1="334" x2="1170" y2="628.0" stroke="#91a3b4" stroke-width="1"/>
+<line x1="132" y1="684.0" x2="390" y2="334" stroke="#91a3b4" stroke-width="1"/>
+<line x1="950" y1="334" x2="1170" y2="684.0" stroke="#91a3b4" stroke-width="1"/>
 <ellipse cx="670.0" cy="335.0" rx="280.0" ry="38.0" fill="#e8f1fa" stroke="#6b879f" stroke-width="1.5"/>
 <text x="670" y="325" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC02 / F02</text>
 <text x="670" y="351" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">Extract and approve syllabus deadlines</text>
-<line x1="132" y1="628.0" x2="390" y2="446" stroke="#91a3b4" stroke-width="1"/>
+<line x1="132" y1="684.0" x2="390" y2="446" stroke="#91a3b4" stroke-width="1"/>
 <ellipse cx="670.0" cy="447.0" rx="280.0" ry="38.0" fill="#ffffff" stroke="#6b879f" stroke-width="1.5"/>
 <text x="670" y="437" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC03 / F03</text>
 <text x="670" y="463" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">View global calendar or filtered timeline</text>
-<line x1="132" y1="628.0" x2="390" y2="558" stroke="#91a3b4" stroke-width="1"/>
+<line x1="132" y1="684.0" x2="390" y2="558" stroke="#91a3b4" stroke-width="1"/>
 <ellipse cx="670.0" cy="559.0" rx="280.0" ry="38.0" fill="#ffffff" stroke="#6b879f" stroke-width="1.5"/>
 <text x="670" y="549" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC04 / F03</text>
 <text x="670" y="575" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">Add, edit and delete deadlines</text>
-<line x1="132" y1="628.0" x2="390" y2="670" stroke="#91a3b4" stroke-width="1"/>
+<line x1="132" y1="684.0" x2="390" y2="670" stroke="#91a3b4" stroke-width="1"/>
 <ellipse cx="670.0" cy="671.0" rx="280.0" ry="38.0" fill="#ffffff" stroke="#6b879f" stroke-width="1.5"/>
 <text x="670" y="661" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC10 / F09</text>
 <text x="670" y="687" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">Mark completion and inspect progress</text>
-<line x1="132" y1="628.0" x2="390" y2="782" stroke="#91a3b4" stroke-width="1"/>
-<line x1="950" y1="782" x2="1170" y2="628.0" stroke="#91a3b4" stroke-width="1"/>
+<line x1="132" y1="684.0" x2="390" y2="782" stroke="#91a3b4" stroke-width="1"/>
+<line x1="950" y1="782" x2="1170" y2="684.0" stroke="#91a3b4" stroke-width="1"/>
 <ellipse cx="670.0" cy="783.0" rx="280.0" ry="38.0" fill="#e8f1fa" stroke="#6b879f" stroke-width="1.5"/>
 <text x="670" y="773" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC18 / New</text>
 <text x="670" y="799" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">Review AI file classification (GUI)</text>
-<line x1="132" y1="628.0" x2="390" y2="894" stroke="#91a3b4" stroke-width="1"/>
-<line x1="950" y1="894" x2="1170" y2="628.0" stroke="#91a3b4" stroke-width="1"/>
+<line x1="132" y1="684.0" x2="390" y2="894" stroke="#91a3b4" stroke-width="1"/>
+<line x1="950" y1="894" x2="1170" y2="684.0" stroke="#91a3b4" stroke-width="1"/>
 <ellipse cx="670.0" cy="895.0" rx="280.0" ry="38.0" fill="#e8f1fa" stroke="#6b879f" stroke-width="1.5"/>
 <text x="670" y="885" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC19 / New</text>
 <text x="670" y="911" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">Bulk import calendar suggestions (GUI)</text>
-<line x1="132" y1="628.0" x2="390" y2="1006" stroke="#91a3b4" stroke-width="1"/>
+<line x1="132" y1="684.0" x2="390" y2="1006" stroke="#91a3b4" stroke-width="1"/>
 <ellipse cx="670.0" cy="1007.0" rx="280.0" ry="38.0" fill="#ffffff" stroke="#6b879f" stroke-width="1.5"/>
 <text x="670" y="997" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC20 / New</text>
 <text x="670" y="1023" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">Delete all local study data (GUI)</text>
-<text x="320" y="1132" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="400" fill="#536579">AI-changing results require UC17 review. Manual changes and read-only outputs do not.</text>
+<line x1="132" y1="684.0" x2="390" y2="1118" stroke="#91a3b4" stroke-width="1"/>
+<ellipse cx="670.0" cy="1119.0" rx="280.0" ry="38.0" fill="#ffffff" stroke="#6b879f" stroke-width="1.5"/>
+<text x="670" y="1109" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3146">UC21 / New</text>
+<text x="670" y="1135" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#1e3146">Select timeline rows and use context actions (GUI)</text>
+<text x="320" y="1244" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="400" fill="#536579">AI-changing results require UC17 review. Manual changes and read-only outputs do not.</text>
 </svg>

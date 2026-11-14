@@ -44,4 +44,4 @@ README-only `83ab8d8` is deliberately not counted. These candidates contain actu
 
 `7cdfd95` primarily moves the same application into a unified repository layout, so it is excluded from this conservative count. A path move can appear as thousands of insertions/deletions without being thousands of new implementation lines. Meaningfulness is supported by behavior changes, not file count or raw diff size.
 
-The current Nov13 fixes are additional progress after these reporting windows. They cannot repair an earlier missing push window. No new commit has been created for this audit without owner approval.
+The approved follow-up commits `fdcfcd7`, `1ab1b5a` and `7d55e8e` were pushed after these reporting windows. They cannot repair an earlier missing push window. The owner approved the current timeline context actions, muted course markers, SD15 and report/filming materials for a further Nov14 commit after the requirement audit; they are not counted toward an earlier period.

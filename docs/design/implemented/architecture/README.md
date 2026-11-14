@@ -49,7 +49,7 @@ All names refer to `src/main/java/eecs3311/studyagent/`.
 | `WorkspaceNode.java`, `WorkspaceBranch.java`, `WorkspaceLeaf.java`, `WorkspaceTree.java` | Sealed interface, contained child list, empty leaf list and recursive projection builder | I06 |
 | `MainWindow.java`, `StudyTimer.java`, `StudyArtifacts.java`, `WeakTopicAnalyzer.java`, `ReminderService.java` | Swing listener registration / timer polling; study-session persistence; artifact grading; topic statistics and deadline notifications | I07 |
 
-Additional UI classes are concrete Swing components used by `MainWindow`: `CalendarPanel`, `CoursePage`, `TimerPanel`, `TimerRecordPanel`, `ChatPanel`, `PdfPreviewPanel`, `StudyNotesPanel`, `QuizDialog`, `QuizSessionPanel`, `UploadReviewDialog`, and `DatePickerDialog`. Utilities include `AppTheme`, `FlexibleDate`, `CourseColors`, `FileCategorySuggester`, `DocumentClassification`, `CourseRowRenderer`, `DeadlineTitleMatcher`, `CalendarView`, and `Json`. They are omitted from detailed class sheets where they do not change the relationship being explained.
+Additional UI classes are concrete Swing components used by `MainWindow`: `CalendarPanel`, `CoursePage`, `TimerPanel`, `TimerRecordPanel`, `ChatPanel`, `PdfPreviewPanel`, `StudyNotesPanel`, `QuizDialog`, `QuizSessionPanel`, `UploadReviewDialog`, and `DatePickerDialog`. Utilities include `AppTheme`, `FlexibleDate`, `CourseColors`, `FileCategorySuggester`, `DocumentClassification`, `CourseRowRenderer`, `TimelineSelection`, `DeadlineTitleMatcher`, `CalendarView`, and `Json`. They are omitted from detailed class sheets where they do not change the relationship being explained.
 
 ## Differences from the Stage 1 class plan
 
@@ -80,4 +80,4 @@ The `.drawio` and `.svg` files were parsed as XML after generation. Every SVG wa
 
 Temporary generation code and contact sheets are kept under ignored `codex/`, not submitted as application source. A later code change that adds/removes a class, alters a retained dependency, or changes a workflow's approval boundary requires a matching diagram update.
 
-Nov14 follow-up: the classification helper reads all extracted pages for uncertain/conflicting files, with an explicit reviewed pre-upload UI. Course tints and the quiz navigator are presentation components; the shared facade, persistence and six GoF collaborations above remain unchanged. SD13 and SD10a were refreshed accordingly.
+Nov14 follow-up: the classification helper reads all extracted pages for uncertain/conflicting files, with an explicit reviewed pre-upload UI. Thin course markers and the quiz navigator are presentation components; the shared facade, persistence and six GoF collaborations above remain unchanged. SD13 and SD10a were refreshed accordingly.

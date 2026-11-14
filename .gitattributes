@@ -1,2 +1,8 @@
+# Preserve document bytes and PDF cross-reference offsets on every checkout.
+*.pdf binary
+*.png binary
+*.docx binary
+
+# The POSIX Maven wrapper must retain LF even on Windows checkouts.
 mvnw text eol=lf
 *.cmd text eol=crlf

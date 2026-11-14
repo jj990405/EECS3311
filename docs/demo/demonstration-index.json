@@ -1,0 +1,238 @@
+{
+  "recording_plan_date": "2026-11-14",
+  "instructions": "Replace empty URL/time with actual accessible recordings; planned segment IDs are not timestamps.",
+  "features": [
+    {
+      "feature": "F01",
+      "name": "Workspace/materials  -  implemented, modified upload flow",
+      "planned_segments": [
+        "V1.01",
+        "V1.02",
+        "V1.03",
+        "V3.01",
+        "V3.02"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F02",
+      "name": "Syllabus deadlines  -  implemented",
+      "planned_segments": [
+        "V1.04",
+        "V3.02"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F03",
+      "name": "Calendar/timeline  -  implemented, expanded",
+      "planned_segments": [
+        "V1.05",
+        "V3.03"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F04",
+      "name": "Priority  -  implemented",
+      "planned_segments": [
+        "V1.05",
+        "V3.03"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F05",
+      "name": "Study timer/records  -  implemented",
+      "planned_segments": [
+        "V2.01",
+        "V3.06"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F06",
+      "name": "Reference files  -  implemented",
+      "planned_segments": [
+        "V2.02",
+        "V3.04"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F07",
+      "name": "Deadline notices  -  implemented",
+      "planned_segments": [
+        "V1.07",
+        "V3.03"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F08",
+      "name": "Natural-language edits  -  implemented",
+      "planned_segments": [
+        "V2.07",
+        "V3.06"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F09",
+      "name": "Progress  -  implemented",
+      "planned_segments": [
+        "V1.05",
+        "V3.03"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F10",
+      "name": "Weekly brief  -  implemented",
+      "planned_segments": [
+        "V2.08",
+        "V3.06"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F11",
+      "name": "Grounded Q&A  -  implemented",
+      "planned_segments": [
+        "V2.02",
+        "V3.04"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F12",
+      "name": "Summaries/study notes  -  implemented, reading UI changed",
+      "planned_segments": [
+        "V2.03",
+        "V3.04"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F13",
+      "name": "Quiz/essay  -  implemented, storage split",
+      "planned_segments": [
+        "V2.04",
+        "V2.05",
+        "V3.05"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F14",
+      "name": "Weak topics  -  implemented",
+      "planned_segments": [
+        "V2.06",
+        "V3.05"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "F15",
+      "name": "History/memory  -  implemented",
+      "planned_segments": [
+        "V2.08",
+        "V3.06"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "N01",
+      "name": "Reviewed file classification and moves",
+      "planned_segments": [
+        "V1.02"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "N02",
+      "name": "On-demand source workspace",
+      "planned_segments": [
+        "V1.03",
+        "V2.03"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "N03",
+      "name": "Bulk calendar import and undated reminders",
+      "planned_segments": [
+        "V1.04",
+        "V1.07"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "N04",
+      "name": "Easier setup and date/color selection",
+      "planned_segments": [
+        "V1.01",
+        "V3.01"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "N05",
+      "name": "Confirmed full reset",
+      "planned_segments": [
+        "V3.07"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    },
+    {
+      "feature": "N06",
+      "name": "Timeline selection and context actions",
+      "planned_segments": [
+        "V1.06"
+      ],
+      "video_url": "",
+      "start_time": "",
+      "status": "Not recorded"
+    }
+  ]
+}

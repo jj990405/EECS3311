@@ -18,7 +18,16 @@ Prepared 13 November 2026 from repository history, this conversation and the cur
 | 13 Nov audit | Owner requested complete feature verification and parallel current diagrams before the report → source/Stage 1 audit, real API acceptance harness, actual CLI transcripts, native EXE computer use → date-only schedule edit, typo merge consistency, unlinked timer briefing totals, daily totals and narrow controls corrected. |
 | 13 Nov rendering feedback | Native GUI showed narrow course/timer controls, raw Markdown and dense notes → action grids, wrapping, real styled emphasis and paragraph spacing → rebuilt, automated tests and native reinspection. |
 
-## Measured API usage and remaining cost fields
+## Development subscription and application API usage
+
+The two cost categories are reported separately. The development tool was **OpenAI Codex, accessed through a ChatGPT Pro subscription (USD 200/month)**. The running Java application used the **OpenAI API (`gpt-6-luna`), with USD 0.02 in displayed usage charges** at the audit snapshot. Subscription pricing is not a metered token charge for this repository.
+
+| Purpose | Tool / service | Cost | Token usage |
+| --- | --- | --- | --- |
+| Software development, debugging, testing and diagram preparation | OpenAI Codex — ChatGPT Pro subscription | **USD 200/month (subscription fee)** | Project-specific historical total not available from subscription usage records |
+| AI features executed by the Java application | OpenAI API — `gpt-6-luna` | **USD 0.02 (displayed API usage)** | **138,179 total: 116,494 input + 21,685 output**, observed dashboard scope below |
+
+The owner confirmed this separation on Nov14. Other work also used the development subscription; the account-wide weekly allowance graph is not reported as this project's token usage. The subscription fee and API usage are not combined into a purported per-project invoice.
 
 At the owner's request, the API analytics pages were inspected directly through native browser Computer Use on **14 November 2026, shortly after midnight Toronto time**. Selected scope: **Personal organization → Default project**, date selector **Oct20–Nov14, 2026**, all API sources/keys/users/models. The chart labels use UTC and the page URL ends at `until=2026-11-15`.
 
@@ -34,14 +43,14 @@ At the owner's request, the API analytics pages were inspected directly through 
 
 These are the selected API project's aggregate totals at observation time, not an invoice or a per-repository meter. The observed model matches the application. No API-key filter was selected, so unrelated uses of the same Default project cannot be excluded from those totals. Future calls/late reporting can change the figures; refresh before final submission. The dashboard display does not establish additional decimal precision beyond $0.02.
 
-| Cost category | Token total | Money total | Evidence to obtain |
+| Cost category | Token total | Money total | Evidence / boundary |
 | --- | --- | --- | --- |
-| Codex development, including diagram agents | Project-specific historical raw token total unavailable | Project-specific money cost **not separable from available records** | Owner explicitly confirmed Nov14 that this week's development usage includes other work. Account subscription price and account-wide allowance consumption must not be attributed to this project. |
-| Application API development/testing | Dashboard aggregate138,179 (scope above) | Dashboard rounded USD$0.02 (scope above) | Actual project analytics inspected. Per-repository attribution and invoice precision are not available from this aggregate. |
+| Codex software development, including diagram agents | Project-specific historical raw token total unavailable | **USD 200/month subscription fee** | Actual ChatGPT Pro subscription price inspected in native Usage Overview; also confirmed by owner. Shared across projects; no per-repository token or fee allocation inferred. |
+| Application API execution/testing | Dashboard aggregate 138,179 (scope above) | **USD 0.02 API usage**, rounded as displayed | Actual API project analytics inspected. Owner identifies these calls as the application's API usage. Dashboard scope and invoice precision remain as stated above. |
 | Earlier lost AI-agent session | Unknown | Unknown | Owner's invoice or usage record, if available. |
 
 The application client currently discards the provider's usage metadata and retains response content. The successful core audit logged **15 calls**, but this is only that run, not all development usage, retries or CLI/GUI calls. Do not report15 as the project-wide total. Use the actual dashboard aggregate with its scope and precision above; do not substitute current model price estimates for measured spend.
 
 This documentation includes no API keys, local `.env` contents, private billing details or raw uploaded course documents.
 
-The Codex native **Settings → Usage → Overview** displayed ChatGPT Pro200 at $200/month. This is account plan context only, **not this project's cost**. **Analytics →30d** selected Oct16–Nov14,2026; expanding this chat, “Explain Project2 requirements,” showed GPT-6.1Sol / High / Standard. Its row used allowance/credit metrics rather than raw project tokens or an invoice. The owner explicitly clarified that this week's development usage belongs to other work as well. Therefore neither the weekly account graph nor the monthly subscription fee is entered as an EECS3311 development expense, and no percentage-to-dollar allocation is made. No subscription, payment, plan limit or account setting was changed during this read-only inspection.
+The Codex native **Settings → Usage → Overview** displayed the ChatGPT Pro200 plan at $200/month, recorded above as the development tool's **subscription fee**. **Analytics →30d** selected Oct16–Nov14,2026; expanding this chat, “Explain Project2 requirements,” showed GPT-6.1Sol / High / Standard. Its row used allowance/credit metrics rather than raw project tokens or an invoice. Other work also used this subscription, so no account-wide weekly graph or percentage-to-dollar allocation is presented as this repository's measured consumption. No subscription, payment, plan limit or account setting was changed during this read-only inspection.

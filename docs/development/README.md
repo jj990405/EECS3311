@@ -1,6 +1,6 @@
 # Development audit — 13 November 2026
 
-Supporting records prepared before writing `stage2-report`. They describe the working tree based on commit `f7c2d6e` plus the current fixes; the new fixes and diagrams are not yet committed. Commit/push requires the owner's approval.
+Supporting records prepared before writing `stage2-report`. The verified implementation fixes, tests and diagrams were committed and pushed in [fdcfcd7](https://github.com/jj990405/EECS3311/commit/fdcfcd7) on Nov14 after owner approval. A subsequent documentation clarification separates the development subscription fee from the application's API usage.
 
 - [Feature inventory and verification](feature-matrix.md): every Stage 1 feature F01–F15, additions, entry points, collaboration, and practical limits.
 - [Patterns and design changes](patterns-and-changes.md): six distinct GoF patterns, Simple Factory, and explicit Stage 1 differences.

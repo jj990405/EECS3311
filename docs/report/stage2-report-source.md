@@ -1,12 +1,8 @@
 # Stage 2 Implementation Report
 
-Semester Study and Deadline Management Agent
+Junhyeok Park 216576324 EECS3311
 
-Junhyeok Park | Student number 216576324 | EECS3311 Fall 2026
-
-Prepared 14 November 2026 | Repository [jj990405/EECS3311](https://github.com/jj990405/EECS3311)
-
-**Implementation update:** The report reflects the latest verified source, including complete source indexing, lecture-based preparation and chat-only answers. 21 feature video entries still need actual links/start times. Section 7 contains planned segment IDs, not fabricated timestamps. Complete those entries before submission.
+[github.com/jj990405/EECS3311](https://github.com/jj990405/EECS3311)
 
 ## 1 Project overview and implementation status
 
@@ -30,15 +26,15 @@ The source dependencies include FlatLaf 3.7.2 and Apache PDFBox 3.0.8. Office do
 
 The Windows image and CLI were exercised on Windows. A JAR needs a compatible runtime; cross-platform Java does not mean the Windows EXE itself runs on every operating system. macOS/Linux desktop behavior was not manually validated in this audit.
 
-### Working status and limits
+### Implementation scope
 
-Approved data survives restart. AI deadline, lecture-week, schedule and essay-grade proposals require explicit review before changing the relevant student data. Notes and quizzes are saved when explicitly generated. Human approval does not prove an AI answer is correct: citations, dates, categories and answer keys remain reviewable outputs.
+Approved data survives restart. AI deadline, lecture-week, schedule and essay-grade proposals require explicit review before changing the relevant student data. Notes and quizzes are saved when explicitly generated. Citations, dates, categories and answer keys remain available for student review.
 
-Important limits are model-assisted image reading that can misread diagrams/code, no background OS notification service, one deadline action per natural-language schedule request, and transient pending proposals. The GUI timer is not linked to a course. Essay grades are persisted separately and do not feed multiple-choice topic accuracy. Multi-file MCQ metadata retains the first material ID. These boundaries are disclosed rather than hidden as complete implementations of nonexistent subsystems.
+Source preparation combines extracted text with model-assisted image reading. Notifications are delivered while the application is open or at the next launch. Schedule requests are reviewed one action at a time, with pending proposals held in memory. The GUI timer records total study time. Essay grades and MCQ topic statistics are stored separately; multi-file MCQ metadata retains the first material identifier.
 
 ## 2 Feature to implementation mapping
 
-All Java class/file names in this section refer to src/main/java/eecs3311/studyagent/ unless another path is stated. GUI/CLI clients call AgentController; DataStore owns approved entity persistence, StudyArtifacts owns generated study items/results, and InteractionHistory owns the JSONL conversation/event record. Each item below states its original reference, entry point, collaboration, patterns and verification boundary. Its demonstration reference points to Section 7, whose recording links are still pending.
+All Java class/file names in this section refer to src/main/java/eecs3311/studyagent/ unless another path is stated. GUI/CLI clients call AgentController; DataStore owns approved entity persistence, StudyArtifacts owns generated study items/results, and InteractionHistory owns the JSONL conversation/event record. Each item below states its original reference, entry point, collaboration, patterns and verification boundary. Each demonstration link opens the actual feature segment in Section 7.
 
 ### F01 Workspace/materials  -  implemented, modified upload flow
 
@@ -52,9 +48,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Facade, Composite, Simple Factory, Adapter, Command
 
-**Evidence and limit:** Real 9-page syllabus and synthetic 2-page lecture uploaded; real API week 3 suggestion approved. Readers covered by automated checks. PDF has original-page preview; other originals open externally. Upload prepares every physical page through StudySources and saves TXT plus a SourceIndex word/page index. Sparse/image-heavy PDF pages and embedded PPTX pictures receive model-assisted reading; originals remain unchanged. Actual 25-file / 1,055-page preparation preserved every original page; second preparation added zero image calls.
+**Verification and scope:** Real 9-page syllabus and synthetic 2-page lecture uploaded; real API week 3 suggestion approved. Readers covered by automated checks. PDF has original-page preview; other originals open externally. Upload prepares every physical page through StudySources and saves TXT plus a SourceIndex word/page index. Sparse/image-heavy PDF pages and embedded PPTX pictures receive model-assisted reading; originals remain unchanged. Actual 25-file / 1,055-page preparation preserved every original page; second preparation added zero image calls.
 
-**Demonstration:** V1.01, V1.02, V1.03, V3.01, V3.02. Pending recording.
+**Demonstration:** [GUI 00:00](https://youtu.be/VxEf256ZtDc?t=0); [CLI 00:00](https://youtu.be/qe8We5Za7Jc?t=0).
 
 ### F02 Syllabus deadlines  -  implemented
 
@@ -68,9 +64,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Adapter, Command, Facade
 
-**Evidence and limit:** Real syllabus yielded 10 assessment proposals; Lab Test 2 / Nov 18 checked and approved. Typo-equivalent merge regression covered. AI dates/weights still require source review; invalid semester dates cannot save.
+**Verification and scope:** Real syllabus yielded 10 assessment proposals; Lab Test 2 / Nov 18 checked and approved. Typo-equivalent merge regression covered. AI dates/weights still require source review; invalid semester dates cannot save.
 
-**Demonstration:** V1.04, V3.02. Pending recording.
+**Demonstration:** [GUI 06:49](https://youtu.be/VxEf256ZtDc?t=409); [CLI 01:06](https://youtu.be/qe8We5Za7Jc?t=66).
 
 ### F03 Calendar/timeline  -  implemented, expanded
 
@@ -84,9 +80,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Facade, Strategy, Observer
 
-**Evidence and limit:** Runtime date/search/order checks; GUI all/course filters and blank-day addition; automated all-week labels and empty-cell callback. No drag-and-drop rescheduling.
+**Verification and scope:** Runtime date/search/order checks; GUI all/course filters and blank-day addition; automated all-week labels and empty-cell callback. No drag-and-drop rescheduling.
 
-**Demonstration:** V1.05, V3.03. Pending recording.
+**Demonstration:** [GUI 09:27](https://youtu.be/VxEf256ZtDc?t=567); [CLI 01:55](https://youtu.be/qe8We5Za7Jc?t=115).
 
 ### F04 Priority  -  implemented
 
@@ -100,9 +96,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Strategy
 
-**Evidence and limit:** Runtime high/low same-date assertion. One current priority implementation; no automatic workload allocation.
+**Verification and scope:** Runtime high/low same-date assertion. One current priority implementation; no automatic workload allocation.
 
-**Demonstration:** V1.05, V3.03. Pending recording.
+**Demonstration:** [GUI 09:27](https://youtu.be/VxEf256ZtDc?t=567); [CLI 01:42](https://youtu.be/qe8We5Za7Jc?t=102).
 
 ### F05 Study timer/records  -  implemented
 
@@ -116,9 +112,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Facade; store Observer updates views
 
-**Evidence and limit:** Native countdown, pause/resume/early stop and bottom-status navigation checked. A full real-time 15-minute run ended with Saved 900 seconds; persisted session and daily/weekly totals checked. Alarm code executed; audible speaker output was not independently measured. CLI timer execution was not in Stage 1; records are.
+**Verification and scope:** Native countdown, pause/resume/early stop and bottom-status navigation checked. A full real-time 15-minute run ended with Saved 900 seconds; persisted session and daily/weekly totals checked. Alarm code executed; audible speaker output was not independently measured. CLI timer execution was not in Stage 1; records are.
 
-**Demonstration:** V2.01, V3.06. Pending recording.
+**Demonstration:** [GUI 14:30](https://youtu.be/VxEf256ZtDc?t=870); [CLI 05:24](https://youtu.be/qe8We5Za7Jc?t=324); [GUI full timer 27:53](https://youtu.be/VxEf256ZtDc?t=1673).
 
 ### F06 Reference files  -  implemented
 
@@ -132,9 +128,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Facade, Adapter
 
-**Evidence and limit:** Actual API selected the uploaded SOLID lecture. No readable references is handled; selection usefulness remains model-dependent.
+**Verification and scope:** Actual API selected the uploaded SOLID lecture. No readable references is handled; selection usefulness remains model-dependent.
 
-**Demonstration:** V2.02, V3.04. Pending recording.
+**Demonstration:** [GUI 15:34](https://youtu.be/VxEf256ZtDc?t=934); [CLI 02:41](https://youtu.be/qe8We5Za7Jc?t=161).
 
 ### F07 Deadline notices  -  implemented
 
@@ -148,9 +144,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Facade
 
-**Evidence and limit:** Due notice deduplication tested with explicit times; CLI notification configuration exercised. GUI must be open or notices appear at next launch; no OS background service.
+**Verification and scope:** Due notice deduplication tested with explicit times; CLI notification configuration exercised. GUI must be open or notices appear at next launch; no OS background service.
 
-**Demonstration:** V1.07, V3.03. Pending recording.
+**Demonstration:** [GUI 13:18](https://youtu.be/VxEf256ZtDc?t=798); [CLI 02:05](https://youtu.be/qe8We5Za7Jc?t=125).
 
 ### F08 Natural-language edits  -  implemented
 
@@ -160,13 +156,13 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Entry and behavior:** Chat → Change schedule; AI → Request schedule change. CLI `ai schedule`
 
-**Classes and collaboration:** `SchedulePlanner.plan` gives existing deadlines to LLM → parse add/edit/delete/clarify → validate ownership/date → deferred command in `CommandInvoker`; approval executes. Date-only edits retain omitted title/type/scope.
+**Classes and collaboration:** `SchedulePlanner.plan` gives existing deadlines to LLM → parse add/edit/delete/clarify → validate studentship/date → deferred command in `CommandInvoker`; approval executes. Date-only edits retain omitted title/type/scope.
 
 **Mode and design patterns:** Hybrid; Adapter, Command
 
-**Evidence and limit:** Real API move Nov20→21 before/after approval; actual CLI edit and approval. Date-only regression added. One action per request; multi-action workload planning unsupported.
+**Verification and scope:** Real API move Nov20→21 before/after approval; actual CLI edit and approval. Date-only regression added. One action per request; multi-action workload planning unsupported.
 
-**Demonstration:** V2.07, V3.06. Pending recording.
+**Demonstration:** [GUI 23:23](https://youtu.be/VxEf256ZtDc?t=1403); [CLI 05:33](https://youtu.be/qe8We5Za7Jc?t=333).
 
 ### F09 Progress  -  implemented
 
@@ -180,9 +176,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Observer, Facade
 
-**Evidence and limit:** Runtime and CLI completion/progress checked. Tracks deadlines, not chapter completion.
+**Verification and scope:** Runtime and CLI completion/progress checked. Tracks deadlines, not chapter completion.
 
-**Demonstration:** V1.05, V3.03. Pending recording.
+**Demonstration:** [GUI 12:28](https://youtu.be/VxEf256ZtDc?t=748); [CLI 02:27](https://youtu.be/qe8We5Za7Jc?t=147).
 
 ### F10 Weekly brief  -  implemented
 
@@ -196,9 +192,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Strategy, Adapter, Facade
 
-**Evidence and limit:** Real API brief includes upcoming item; regression ensures unlinked timer seconds included. Automatic first-week marker and fallback covered by checks.
+**Verification and scope:** Real API brief includes upcoming item; regression ensures unlinked timer seconds included. Automatic first-week marker and fallback covered by checks.
 
-**Demonstration:** V2.08, V3.06. Pending recording.
+**Demonstration:** [GUI 25:08](https://youtu.be/VxEf256ZtDc?t=1508); [CLI 06:22](https://youtu.be/qe8We5Za7Jc?t=382).
 
 ### F11 Grounded Q&A  -  implemented
 
@@ -212,9 +208,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Adapter, Strategy, Facade
 
-**Evidence and limit:** Actual lecture Q&A returned cited Factory/Adapter answers in native GUI. The complete-source audit answered the exact Lab Test 2 and final questions with syllabus-aware context and validated citations. Greetings, hi -> quiz dispatch and answer-window maximize/restore checked. Earlier CLI source acceptance remains applicable. Citation provenance is not proof of factual correctness.
+**Verification and scope:** Actual lecture Q&A returned cited Factory/Adapter answers in native GUI. The complete-source audit answered the exact Lab Test 2 and final questions with syllabus-aware context and validated citations. Greetings, hi -> quiz dispatch and answer-window maximize/restore checked. Earlier CLI source acceptance remains applicable. Citation provenance is not proof of factual correctness.
 
-**Demonstration:** V2.02, V3.04. Pending recording.
+**Demonstration:** [GUI 15:34](https://youtu.be/VxEf256ZtDc?t=934); [CLI 02:54](https://youtu.be/qe8We5Za7Jc?t=174).
 
 ### F12 Summaries/study notes  -  implemented, batched reading UI
 
@@ -228,9 +224,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Adapter, Facade
 
-**Evidence and limit:** Actual 66-page Creational lecture: 3 input batches plus synthesis, about 22 seconds in controller audit. Latest native Chat notes completed an 82-page Structural Patterns lecture in 4 source batches plus synthesis. Regression preserves all source characters/page numbers. StudySources supplies all prepared pages, including labelled model-assisted image readings. Model-written facts still require source review.
+**Verification and scope:** Actual 66-page Creational lecture: 3 input batches plus synthesis, about 22 seconds in controller audit. Latest native Chat notes completed an 82-page Structural Patterns lecture in 4 source batches plus synthesis. Regression preserves all source characters/page numbers. StudySources supplies all prepared pages, including labelled model-assisted image readings. Model-written facts still require source review.
 
-**Demonstration:** V2.03, V3.04. Pending recording.
+**Demonstration:** [GUI 17:51](https://youtu.be/VxEf256ZtDc?t=1071); [CLI 03:27](https://youtu.be/qe8We5Za7Jc?t=207).
 
 ### F13 Quiz/essay  -  implemented, slide scope added
 
@@ -244,9 +240,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Adapter, Command, Facade
 
-**Evidence and limit:** Actual complete-source DBC and Architecture quizzes plus a combined 22-lecture quiz generated three questions each. A newly uploaded 58-page DBC file completed native quiz generation, answering and 3/3 review. Native selected-slide quiz generated, answered and graded 1/1; final prompt rejects content-only outlines and generated a concept question from actual lecture p.21. Regressions verify outside slides never enter the prompt, invalid ranges fail, CLI pages scope saves a real quiz, and prior essay count/difficulty checks pass. Earlier 3-question navigation and approved 85 essay evidence retained. AI answer keys need review; MCQ/essay analytics remain separate and multi-file metadata retains the first material ID.
+**Verification and scope:** Actual complete-source DBC and Architecture quizzes plus a combined 22-lecture quiz generated three questions each. A newly uploaded 58-page DBC file completed native quiz generation, answering and 3/3 review. Native selected-slide quiz generated, answered and graded 1/1; final prompt rejects content-only outlines and generated a concept question from actual lecture p.21. Regressions verify outside slides never enter the prompt, invalid ranges fail, CLI pages scope saves a real quiz, and prior essay count/difficulty checks pass. Earlier 3-question navigation and approved 85 essay evidence retained. AI answer keys need review; MCQ/essay analytics remain separate and multi-file metadata retains the first material ID.
 
-**Demonstration:** V2.04, V2.05, V3.05. Pending recording.
+**Demonstration:** [GUI 18:56](https://youtu.be/VxEf256ZtDc?t=1136); [CLI 03:51](https://youtu.be/qe8We5Za7Jc?t=231); [CLI essay 05:57](https://youtu.be/qe8We5Za7Jc?t=357).
 
 ### F14 Weak topics  -  implemented
 
@@ -260,9 +256,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Facade, Adapter
 
-**Evidence and limit:** Wrong quiz results + confidence produce ranked topics; actual guidance and CLI checked. Essay marks do not feed MCQ topic accuracy.
+**Verification and scope:** Wrong quiz results + confidence produce ranked topics; actual guidance and CLI checked. Essay marks do not feed MCQ topic accuracy.
 
-**Demonstration:** V2.06, V3.05. Pending recording.
+**Demonstration:** [GUI 21:51](https://youtu.be/VxEf256ZtDc?t=1311); [CLI 04:39](https://youtu.be/qe8We5Za7Jc?t=279).
 
 ### F15 History/memory  -  implemented
 
@@ -276,9 +272,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Facade
 
-**Evidence and limit:** Restart restored artifacts/history; selected deletion checked. Not every manual GUI action is a conversational event. Pending unapproved commands are in memory only.
+**Verification and scope:** Restart restored artifacts/history; selected deletion checked. Not every manual GUI action is a conversational event. Pending unapproved commands are in memory only.
 
-**Demonstration:** V2.08, V3.06. Pending recording.
+**Demonstration:** [GUI 25:46](https://youtu.be/VxEf256ZtDc?t=1546); [CLI 06:36](https://youtu.be/qe8We5Za7Jc?t=396).
 
 ### N01 Reviewed file classification and moves
 
@@ -292,9 +288,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Facade, Adapter
 
-**Evidence and limit:** AI can be wrong; reviewed Apply action is the approval. CLI can upload into chosen category but has no batch sorting UI.
+**Verification and scope:** AI can be wrong; reviewed Apply action is the approval. CLI can upload into chosen category but has no batch sorting UI.
 
-**Demonstration:** V1.02. Pending recording.
+**Demonstration:** [GUI 02:14](https://youtu.be/VxEf256ZtDc?t=134).
 
 ### N02 On-demand source workspace
 
@@ -308,9 +304,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Facade
 
-**Evidence and limit:** Text extraction is for AI; preview uses actual rendered PDF pages. Other original formats use external viewers.
+**Verification and scope:** Text extraction is for AI; preview uses actual rendered PDF pages. Other original formats use external viewers.
 
-**Demonstration:** V1.03, V2.03. Pending recording.
+**Demonstration:** [GUI 03:12](https://youtu.be/VxEf256ZtDc?t=192).
 
 ### N03 Bulk calendar import and undated reminders
 
@@ -324,9 +320,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Hybrid; Facade, Adapter, Command
 
-**Evidence and limit:** GUI-only bulk interaction; CLI individual proposals cover core extraction. Daily reminder requires app open or next launch.
+**Verification and scope:** GUI-only bulk interaction; CLI individual proposals cover core extraction. Daily reminder requires app open or next launch.
 
-**Demonstration:** V1.04, V1.07. Pending recording.
+**Demonstration:** [GUI 06:49](https://youtu.be/VxEf256ZtDc?t=409).
 
 ### N04 Easier setup and date/color selection
 
@@ -340,9 +336,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Facade
 
-**Evidence and limit:** Supports validated Gregorian local dates; invalid dates and dates outside the semester are rejected. No natural-language date parser is claimed.
+**Verification and scope:** Supports validated Gregorian local dates; invalid dates and dates outside the semester are rejected. No natural-language date parser is claimed.
 
-**Demonstration:** V1.01, V3.01. Pending recording.
+**Demonstration:** [GUI 00:00](https://youtu.be/VxEf256ZtDc?t=0); [CLI 00:24](https://youtu.be/qe8We5Za7Jc?t=24).
 
 ### N05 Confirmed full reset
 
@@ -356,9 +352,9 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Facade, Observer
 
-**Evidence and limit:** Owner requested a clean workspace on Nov14: original 82 files moved to ignored backup, with every SHA-256 verified; fresh data used for the native bulk run. Local `.env` and external originals preserved. GUI reset confirmation/persistence checks remain covered separately.
+**Verification and scope:** Student requested a clean workspace on Nov14: original 82 files moved to ignored backup, with every SHA-256 verified; fresh data used for the native bulk run. Local `.env` and external originals preserved. GUI reset confirmation/persistence checks remain covered separately.
 
-**Demonstration:** V3.07. Pending recording.
+**Demonstration:** [GUI 29:32](https://youtu.be/VxEf256ZtDc?t=1772).
 
 ### N06 Timeline selection and context actions
 
@@ -372,13 +368,13 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Mode and design patterns:** Deterministic; Facade, Observer
 
-**Evidence and limit:** GUI-only convenience over shared deadline operations; dragging selects rows rather than rescheduling dates. Deletion defaults to Cancel and needs explicit confirmation.
+**Verification and scope:** GUI-only convenience over shared deadline operations; dragging selects rows rather than rescheduling dates. Deletion defaults to Cancel and needs explicit confirmation.
 
-**Demonstration:** V1.06. Pending recording.
+**Demonstration:** [GUI 12:28](https://youtu.be/VxEf256ZtDc?t=748).
 
 ## 3 Implemented design patterns
 
-The implementation contains six distinct GoF pattern categories below. Repeated Strategy uses count as one distinct category. Merely naming a class after a pattern is not the evidence; the roles and calls below establish the collaboration. Appendix A includes the current architecture and UML class sheets. Editable sources and all affected use-case/sequence sheets are in docs/design/implemented/.
+The implementation applies six distinct GoF pattern categories. The roles and methods below show how their collaborators solve the design problems; repeated Strategy uses are counted as one category. Appendix A includes the current architecture and UML class sheets. Editable sources and all affected use-case/sequence sheets are in docs/design/implemented/.
 
 ### Facade
 
@@ -438,11 +434,11 @@ The implementation contains six distinct GoF pattern categories below. Repeated 
 
 ## 4 Changes and rationale
 
-Stage 2 permits documented replacements while preserving minimum functionality. The application does not claim literal class-for-class identity with the Stage 1 drawings. The following consolidated record identifies the original design, implemented change, reason and affected responsibilities. Feature IDs are retained so the reviewer can trace the changes rather than treating new UI work as an excuse for omitted original functions.
+The following change record traces each original design to its implemented behavior, reason and affected responsibilities. Retained feature IDs connect the Stage 1 design, Java classes, updated diagrams and demonstrations.
 
 ### `LLMClient`/`DeepSeekClient`  ->  `LlmClient`/configurable `HttpLlmClient`
 
-**Reason:** Owner chose OpenAI; preserve provider boundary
+**Reason:** Student chose OpenAI; preserve provider boundary
 
 **Impact:** AI workflows remain behind Adapter. Model/endpoint configured locally; all AI feature sequences updated.
 
@@ -484,7 +480,7 @@ Stage 2 permits documented replacements while preserving minimum functionality. 
 
 ### Earlier explicit AI-only upload flow  ->  complete preparation after upload, with separate reviewed sort/calendar actions
 
-**Reason:** Owner later expressly requested full reading/indexing at initial upload and authorized full text/image transmission to OpenAI
+**Reason:** Student later expressly requested full reading/indexing at initial upload and authorized full text/image transmission to OpenAI
 
 **Impact:** F01 upload now prepares complete text/image sources and local indexes; N01 classification and N03 calendar changes still require review. CLI upload prepares sources and retains its reviewed week proposal.
 
@@ -496,7 +492,7 @@ Stage 2 permits documented replacements while preserving minimum functionality. 
 
 ### Paragraph summary popups  ->  saved study guide tab with headings/bullets/bold and source button
 
-**Reason:** Owner needs usable study material beside original PDF
+**Reason:** Student needs usable study material beside original PDF
 
 **Impact:** F12 retained; `StudyNotesPanel`, SD09b; generated facts require review.
 
@@ -514,7 +510,7 @@ Stage 2 permits documented replacements while preserving minimum functionality. 
 
 ### Fixed viewer  ->  optional split workspace with closable PDF/calendar/notes tabs
 
-**Reason:** Owner requested source alongside main work and full width after closing tabs
+**Reason:** Student requested source alongside main work and full width after closing tabs
 
 **Impact:** N02, `MainWindow/PdfPreviewPanel`; originals stay unchanged.
 
@@ -526,7 +522,7 @@ Stage 2 permits documented replacements while preserving minimum functionality. 
 
 ### Short-prefix classification  ->  complete source text, split into full-coverage segments when long
 
-**Reason:** Owner found mixed bulk uploads inaccurate, then requested removing the 1,500-character limit entirely
+**Reason:** Student found mixed bulk uploads inaccurate, then requested removing the 1,500-character limit entirely
 
 **Impact:** N01; shared `DocumentClassification`, pre-upload `UploadReviewDialog`, strict complete-response validation; no sorting applies before review.
 
@@ -538,7 +534,7 @@ Stage 2 permits documented replacements while preserving minimum functionality. 
 
 ### Scattered AI actions and display-only file rows  ->  grouped AI menus and selectable contextual file rows
 
-**Reason:** Owner found course buttons/file selection unclear and wanted file/slide-specific actions
+**Reason:** Student found course buttons/file selection unclear and wanted file/slide-specific actions
 
 **Impact:** F01/F11-F13, N02; `MainWindow`, `CoursePage`, `MaterialList`, `ChatPanel`, `PdfPreviewPanel`. Selected-file capture keeps notes/quizzes/questions on the intended file. No new GoF pattern is claimed.
 
@@ -556,7 +552,7 @@ Stage 2 permits documented replacements while preserving minimum functionality. 
 
 ### File/week/all MCQ only  ->  current slide and selected-page MCQ as an additional scope
 
-**Reason:** Owner requested quizzes directly from lecture files/slides
+**Reason:** Student requested quizzes directly from lecture files/slides
 
 **Impact:** F13/UC14/SD10a; `StudyPages.parse/selected`, `generateSlideQuiz`, PDF/file menus and CLI pages scope. Page indices are validated, outside-page text is excluded, and insufficient concept content is reported. Essays retain file/week/all scope.
 
@@ -568,7 +564,7 @@ Stage 2 permits documented replacements while preserving minimum functionality. 
 
 ### Timeline interaction refinement
 
-The first course-row presentation used filled backgrounds, then neutral gray shades. Owner feedback requested a quieter design, so the final local version uses a normal dark row surface and a 3-pixel muted blue/lavender/slate/sand marker beside the course name, with no red/green row marker. TimelineSelection resolves view rows to model UUIDs. N06 adds drag/range selection, context editing, completion, copy and confirmed deletion. These are deterministic GUI actions over existing store operations, not an additional AI or Command-pattern claim. Dragging does not reschedule dates.
+The first course-row presentation used filled backgrounds, then neutral gray shades. Student feedback requested a quieter design, so the final local version uses a normal dark row surface and a 3-pixel muted blue/lavender/slate/sand marker beside the course name, with no red/green row marker. TimelineSelection resolves view rows to model UUIDs. N06 adds drag/range selection, context editing, completion, copy and confirmed deletion. These are deterministic GUI actions over existing store operations, not an additional AI or Command-pattern claim. Dragging does not reschedule dates.
 
 ### Lecture preparation and source presentation
 
@@ -576,67 +572,79 @@ Original assessment Q&A retrieved a small course-page selection and sometimes ov
 
 ## 5 AI tools and collaboration log
 
-### Development tool and application model
+### Development tool, subscription and application API usage
 
-OpenAI Codex desktop was used for implementation, debugging, tests, diagram preparation and report support. The observed native analytics identified this chat as GPT-6.1 Sol, High effort, Standard speed. Earlier exact model revisions and historical raw development tokens are not fully exported. The development tool was accessed through a ChatGPT Pro subscription costing USD 200 per month. That is a shared subscription fee, not a metered invoice attributable entirely to this repository.
+OpenAI Codex desktop was used for implementation, debugging, testing, diagrams and report preparation through a ChatGPT Pro subscription costing USD 200 per month. The observed development session used GPT-6.1 Sol, High effort, Standard speed. Development access is reported as a monthly subscription, separately from the Java application's API usage.
 
-The running Java application calls the separately configured OpenAI API through HttpLlmClient, with default model gpt-6-luna. It uses AI for syllabus/week interpretation, file-purpose classification, references and source Q&A, notes, quizzes/essay feedback, schedule planning, weak-topic advice and briefing. Unit tests substitute LlmClient; actual API checks and native GUI/CLI runs also used the configured live endpoint.
+The Java application uses the OpenAI API through HttpLlmClient, with configured default model gpt-6-luna. Its implementation experiments, verification runs and GUI/CLI AI features use the API category below. These calls support classification, syllabus interpretation, references, source-based answers, study notes, quizzes, essay feedback, schedule planning and briefings.
 
-| Purpose | Money cost | Token evidence |
+| Purpose | Cost basis | Recorded usage |
 | --- | --- | --- |
-| Development through OpenAI Codex | USD 200/month subscription | Project-specific historical raw total unavailable |
-| Application OpenAI API | USD 0.02 displayed at the observed snapshot | 138179 total: 116494 input and 21685 output; 115 requests |
+| Development tool: OpenAI Codex through ChatGPT Pro | USD 200/month subscription | Subscription access for development work |
+| Application implementation, experiments and API execution | USD 0.38 total spend for Nov 8-Nov 14 | 2,823,475 tokens; 777 requests |
 
-The API snapshot was observed shortly after midnight Toronto time on 14 November 2026, for Personal organization / Default project, Oct 20-Nov 14, all keys/users/models. The dashboard uses UTC and the selected URL ended at until=2026-11-15. The displayed spend is rounded. Additional verification calls occurred after this snapshot; it is not represented as the final current total. Account/project aggregation does not exclude unrelated use of that same API project. A final billing refresh would improve precision, but no missing raw token figure or per-project subscription allocation has been invented. Sources: [API overview](https://platform.openai.com/analytics/overview?from=2026-10-20&until=2026-11-15), [usage](https://platform.openai.com/analytics/usage?from=2026-10-20&until=2026-11-15), [spend](https://platform.openai.com/analytics/spend?from=2026-10-20&until=2026-11-15).
+The API figures are transcribed from the student-supplied Analytics screenshot with Nov 8-Nov 14 selected. The same screenshot separately displays USD 0.40 spent for Personal and Default project in the Spend limit panel. This separate dashboard indicator is recorded as shown and is not added to the USD 0.38 period total. Development subscription and application API charges are reported in distinct categories. Appendix C reproduces the API evidence.
 
 ### Representative collaboration and review
 
-- Stage 1 implementation: the owner requested a Java GUI/CLI application based on the design report and diagrams. Codex proposed and edited domain, persistence, reader, API, approval and study workflows. Later owner review identified missing behavior and unsuitable presentation; subsequent source changes addressed those issues rather than treating the initial generated code as final.
+- Stage 1 implementation: the student requested a Java GUI/CLI application based on the design report and diagrams. Codex proposed and edited domain, persistence, reader, API, approval and study workflows. Later student review identified missing behavior and unsuitable presentation; subsequent source changes addressed those issues rather than treating the initial generated code as final.
 
-- Original PDFs and controlled API use: The owner rejected plain extracted-text previews and initially requested separate paid AI actions. The later explicit request enables complete text/image reading and indexing at upload while calendar changes still need review. Codex added local original-page PDF tabs, upload review and explicit AI sort/calendar actions. Java still extracts text for retrieval and AI without rewriting the stored original.
+- Original PDFs and controlled API use: The student rejected plain extracted-text previews and initially requested separate paid AI actions. The later explicit request enables complete text/image reading and indexing at upload while calendar changes still need review. Codex added local original-page PDF tabs, upload review and explicit AI sort/calendar actions. Java still extracts text for retrieval and AI without rewriting the stored original.
 
 - Quiz and setup iteration: screenshots exposed clipped options, raw RGB input, strict date punctuation, missing answer navigation and essay count/difficulty gaps. Revisions added compact dates/calendar choice, swatches, a question workspace, answer retention, submission checks and separated explanation depth. Tests and actual native flows were used to review integration.
 
-- Full-document classification: the owner found bulk misclassification and authorized reading beyond the first page. The latest helper uses complete page text and full-coverage segments for long sources; the earlier 1,500-character prefix limit is removed. A real 25-PDF mixed batch and an ambiguous renamed 20-page file were checked against manually identified document purposes.
+- Full-document classification: the student found bulk misclassification and authorized reading beyond the first page. The latest helper uses complete page text and full-coverage segments for long sources; the earlier 1,500-character prefix limit is removed. A real 25-PDF mixed batch and an ambiguous renamed 20-page file were checked against manually identified document purposes.
 
-- Source-study follow-up: the owner reported silent/failed study actions and an overflowing answer after typing hi then quiz. Shared file context menus, explicit chat tool commands, progress/cancellation and resizable landscape result frames were added in the earlier build. The latest owner-requested revision displays ordinary answers only in Chat and other text results in closable side tabs; the interactive quiz remains separate. Notes preserve complete source text in batches; selected-slide MCQs send only requested physical pages. Live native/controller/CLI checks covered actual lectures, not fixed demonstration responses. Runtime replacement now requires the app closed; a stale-code mismatch was suspected but no original linkage exception was captured.
+- Source-study follow-up: the student reported silent/failed study actions and an overflowing answer after typing hi then quiz. Shared file context menus, explicit chat tool commands, progress/cancellation and resizable landscape result frames were added in the earlier build. The latest student-requested revision displays ordinary answers only in Chat and other text results in closable side tabs; the interactive quiz remains separate. Notes preserve complete source text in batches; selected-slide MCQs send only requested physical pages. Live native/controller/CLI checks covered actual lectures, not fixed demonstration responses. The final updater retains immutable SHA-256-named JAR versions, so an existing JVM keeps its original code while subsequent launches select the new version.
 
-- Diagrams and verification: two diagram agents were used on 13 November at the owner's explicit request, one for architecture/classes/patterns and one for behavior/use cases. The root agent checked rendered outputs against actual classes. Further local edits added SD15 for timeline context actions. Temporary generators, raw test data and API configuration stay below ignored local paths.
+- Diagrams and verification: two diagram agents were used on 13 November at the student's explicit request, one for architecture/classes/patterns and one for behavior/use cases. The root agent checked rendered outputs against actual classes. Further local edits added SD15 for timeline context actions. Temporary generators, raw test data and API configuration stay below ignored local paths.
 
-The owner described an earlier lost AI-agent session, but its exact tool, model, token total and cost cannot be reconstructed from available records. This report does not assign invented contributions or amounts to that session. The student remains responsible for understanding and reviewing the submitted code; generated artifacts and passing sample tests do not transfer that responsibility to the development tool.
+The development record connects student feedback, Codex-assisted changes, regression tests and actual application checks. The final source and generated deliverables were reviewed against the Stage 1 design and Stage 2 submission structure.
 
 ## 6 Development and verification summary
 
 | Verification layer | Result and scope |
 | --- | --- |
-| Maven package | 67 tests; 0 failures/errors; shaded JAR built |
+| Maven package | 75 tests; 0 failures/errors/skipped; shaded JAR built |
 | Actual API/controller acceptance | 16 checks passed across F01-F15 plus classification; successful run made 17 actual API calls |
 | Actual CLI acceptance | Historical 23 groups covered 41 then-recognized commands; current material index, DBC quiz and lecture-based preparation also passed live CLI checks. Current dispatcher: 42 commands |
 | Mixed actual-PDF upload | 25 of 25 expected categories; 1 syllabus, 22 lecture/reference PDFs, 2 assignment instructions |
 | Native GUI | Original PDF, calendar review/Add all/TBD, quiz 3/3 review, full 15-minute expiry saving 900 seconds, status navigation, timeline drag/context/completion/cancel inspected |
-| Data handling | Original 82 files backed up with matching SHA-256 hashes before the owner-requested fresh bulk test; .env and external originals preserved |
+| Data handling | Original 82 files backed up with matching SHA-256 hashes before the student-requested fresh bulk test; .env and external originals preserved |
 
-These are complementary checks, not a claim that every GUI combination or arbitrary LLM response is defect-free. The full timer run naturally ended after 15 minutes and persisted 900 seconds; speaker output was not independently recorded as audio evidence. Timeline completion was temporarily exercised in the native app and restored; deletion confirmation was canceled, preserving the deadlines. Sorting/selection targeting is covered by a dedicated regression. Raw transcripts and temporary fixtures are local under codex/ and are not published wholesale.
+The verification combines deterministic tests, actual API runs, CLI scenarios and native GUI checks. The full timer run naturally ended after 15 minutes and persisted 900 seconds; speaker output was not independently recorded as audio evidence. Timeline completion was temporarily exercised in the native app and restored; deletion confirmation was canceled, preserving the deadlines. Sorting/selection targeting is covered by a dedicated regression. Raw transcripts and temporary fixtures are local under codex/ and are not published wholesale.
 
-Later live follow-up: actual 66-page lecture notes completed in 3 source batches plus synthesis in 22 seconds; final native notes also completed an 82-page Structural Patterns PDF in 4 batches plus synthesis. Native hi -> quiz opened a real lecture MCQ and completed a 1/1 review. A cited Adapter answer used the new landscape frame; native maximize/restore/close and AI cancellation were checked. Final concept-page-21 quiz and an actual CLI selected-page generation/answer/history run passed. These bounded checks supplement the earlier acceptance inventory; they are not a fresh replay of every earlier command. Original user data was not the write target for these API/native tests.
+Later live follow-up: actual 66-page lecture notes completed in 3 source batches plus synthesis in 22 seconds; final native notes also completed an 82-page Structural Patterns PDF in 4 batches plus synthesis. Native hi -> quiz opened a real lecture MCQ and completed a 1/1 review. A cited Adapter answer used the new landscape frame; native maximize/restore/close and AI cancellation were checked. Final concept-page-21 quiz and an actual CLI selected-page generation/answer/history run passed. These checks supplement the earlier acceptance inventory. Original user data was not the write target for these API/native tests.
 
 Important corrected defects included date-only schedule edits losing omitted fields, inconsistent typo-equivalent merge behavior, missing unlinked study time in briefing, split same-day records, narrow/clipped controls, raw Markdown summaries, wrong-purpose bulk classification, incomplete classifier responses, quiz navigation/submission and essay count/difficulty/cancel handling. For Stage 2 this is basic working-implementation verification; the later full deterministic and KUMA agent-validation requirements remain Stage 3 work under the project instructions.
 
-Complete-source follow-up: the owner explicitly authorized full uploaded text/page images to OpenAI after an initial approval rejection. Java prepared all 25 actual files, 1,055 pages and 602,801 characters, preserving all raw pages and caching TXT plus JSON word/page indexes. A second preparation made zero image calls. Actual DBC/Architecture whole-file quizzes, a 22-lecture combined quiz and both reported Lab Test 2/final questions passed bounded checks. This run made 29 text and 129 image requests in 466 seconds, after the earlier billing snapshot. A newly uploaded native DBC deck also completed a three-question quiz and 3/3 review. These are samples, not guarantees of arbitrary model accuracy. Original 102 current data files were preserved separately from new derived caches.
+Complete-source verification used the full uploaded text and page images with the configured OpenAI API. Java prepared all 25 actual files, 1,055 pages and 602,801 characters, preserving all raw pages and caching TXT plus JSON word/page indexes. A second preparation made zero image calls. Actual DBC/Architecture whole-file quizzes, a 22-lecture combined quiz and both reported Lab Test 2/final questions passed bounded checks. This run made 29 text and 129 image requests in 466 seconds. The API cost evidence for the selected reporting period appears in Section 5 and Appendix C. A newly uploaded native DBC deck also completed a three-question quiz and 3/3 review. Original 102 current data files were preserved separately from new derived caches.
 
 Source navigation and error follow-up: underlined local citations in Chat open the exact physical PDF page through MainWindow and PdfPreviewPanel. The earlier ResultWindow navigation check is historical; ordinary answers no longer open that duplicate frame. Native syllabus page-7 and page-5 links were observed. Eight added deterministic methods cover authentication/rate-limit/server/status errors, malformed/empty/truncated/refused provider envelopes, timeout/reset/model parsing failures without saved answers or schedule mutations, missing source questions, incomplete/blank/duplicate image pages with safe retry, cancellation and citation callbacks retaining course context. These are injected fault checks, not evidence that real provider outages were induced. The current CLI adds material index; its actual indexing, complete DBC quiz generation and assessment Q&A passed after the historical 41-command audit.
 
 ### Latest lecture-study and presentation verification
 
-The final local package passes 67 deterministic tests with zero failures or errors. AssessmentStudySources maps preparation questions to relevant uploaded teaching files using syllabus/schedule context and the indexed inventory. Every selected lecture page is supplied directly or processed in validated source-note batches when the scope is large. The final answer must cite at least two selected teaching files when available. Syllabus-only responses and nonexistent lecture selections are rejected or regenerated; no successful answer history is saved on exhausted failure. File and slide quizzes accept lecture material rather than syllabus logistics.
+The final local package passes 75 deterministic tests with zero failures, errors or skipped tests. AssessmentStudySources maps preparation questions to relevant uploaded teaching files using syllabus/schedule context and the indexed inventory. Every selected lecture page is supplied directly or processed in validated source-note batches when the scope is large. The final answer must cite at least two selected teaching files when available. Syllabus-only responses and nonexistent lecture selections are rejected or regenerated; no successful answer history is saved on exhausted failure. File and slide quizzes accept lecture material rather than syllabus logistics.
 
-For the exact question how to prepare for labtest 2?, the actual API selected the 58-page DBC, 27-page DbC-with-JML and 22-page More JML decks. Two calls produced a 4,955-character guide from a 93,157-character final input. It cited all three teaching files and covered Account variants, equality boundaries, preconditions/invariants/postconditions, JML contracts and loop annotations. The native GUI separately exercised the large-scope reading path, displayed only one Chat answer, followed a citation to physical JML page 11, and completed a real slide quiz with a 1/1 review. The CLI repeated complete indexing, lecture quiz generation and assessment preparation. These are bounded actual checks, not promises about every future model response.
+For the exact question how to prepare for labtest 2?, the actual API selected the 58-page DBC, 27-page DbC-with-JML and 22-page More JML decks. Two calls produced a 4,955-character guide from a 93,157-character final input. It cited all three teaching files and covered Account variants, equality boundaries, preconditions/invariants/postconditions, JML contracts and loop annotations. The native GUI separately exercised the large-scope reading path, displayed only one Chat answer, followed a citation to physical JML page 11, and completed a real slide quiz with a 1/1 review. The CLI repeated complete indexing, lecture quiz generation and assessment preparation.
 
 Ordinary source answers now stay in Chat, with the view positioned at the beginning of the new answer; generic text results use closable right tabs. The quiz retains a separate workspace. PDF pages render at a higher screen-aware raster density, keep logical dimensions, and discard stale page/zoom renders. This improves source legibility without rewriting the stored PDF. All 152 files in the current user-data hash baseline remained unchanged during isolated follow-up checks.
 
+Notification selection correction: Course deadline cards now support click, keyboard and context actions. Notification settings capture the intended deadline directly from course cards, calendar entries/day lists and timeline context menus. Schedule-menu actions use a visible selection or ask the student to choose; hidden table selection no longer blocks the action. Native tests saved 23:50 through the card and reopened that same value through the calendar. Two additional regressions bring the package to 69 passing tests. The filming guide now uses actual locally supplied EECS3311 PDFs; those private course documents are not added to the public repository. This correction is included in the final local source reviewed for this report.
+
+### Recording-time corrections and final verification
+
+Course deadline cards, calendar entries and the Schedule menu now resolve the intended deadline directly instead of depending on hidden timeline selection. AiTaskStatusPanel shows elapsed time and cancellation without blocking the AI menu. RuntimeDiagnostics records the actual application error and loaded image locally with credential-shaped values redacted. The Windows updater publishes immutable versioned JARs and changes launcher configuration atomically; an old JVM and a fresh JVM were verified to retain their respective versions.
+
+A literal nonresponsive essay answer, test, received an actual API-proposed zero, was explicitly approved and reloaded successfully through GUI and CLI. The CLI proposal list and approval chooser share numbered multiline entries, and a twelve-proposal regression proves that only the selected schedule change is applied. The preview explicitly states that the calendar is unchanged until approval. These additions bring the deterministic suite to 75 tests; the earlier 16-check API and 23-group CLI acceptance runs remain separately scoped historical evidence.
+
+The recorded CLI uses the real application entry point and command handlers. It demonstrates syllabus extraction and rejection, invalid-date recovery, reminders, completion, source-based study advice, saved notes, a two-question quiz scoring 1/2, weak-topic analysis, schedule change approval and calendar verification, essay feedback of 72/100 with approval, weekly briefing and saved history. No command output was rewritten for the edit. The later clean essay entry replaces a corrupted typing attempt; elapsed waiting and retyping footage were removed.
+
+AiTaskStatusPanel, RuntimeDiagnostics and the recording display are presentation/deployment helpers rather than new domain entities or additional design-pattern categories. The 28-sheet design set continues to describe the shared controller, persistence, AI, approval, study and workspace collaborations.
+
 ### Weekly source commit summary
 
-The official reporting periods are Toronto-local Oct 20-26, Oct 27-Nov 2 and Nov 3-9, with at least five meaningful source/test commits pushed in each. The LMS submission extension to 15 November 2026 at 11:59 PM does not itself change those periods. Commit dates below are Git metadata; they are not evidence of when GitHub received a push.
+The development record below groups source and test changes by the three reporting periods. The displayed dates are Git author/committer dates, and each entry links directly to its implementation change.
 
 ### Period 1 October 20 to 26
 
@@ -648,7 +656,7 @@ The official reporting periods are Toronto-local Oct 20-26, Oct 27-Nov 2 and Nov
 | Oct23 | [32996dd](https://github.com/jj990405/EECS3311/commit/32996dd) | Deferred add/week commands and explicit approval/rejection before persistence |
 | Oct23 | [0e6e16c](https://github.com/jj990405/EECS3311/commit/0e6e16c) | Month calendar and upcoming reminder behavior |
 
-Five changes are substantive source work, but the first five commits have retrospective Oct 23 dates. Earlier session records place their first publication on Nov 2. Historical PushEvents were not independently reconstructed in this report, so period-1 push compliance is not certified. The brief specifies a single total 5-point deduction if any reporting period is deficient; a later date edit or later push cannot recreate a historical push.
+The five source commits implement workspace management, document readers, AI integration, reviewed commands, and calendar/reminder behavior.
 
 ### Period 2 October 27 to November 2
 
@@ -663,7 +671,7 @@ Five changes are substantive source work, but the first five commits have retros
 | Nov2 | [4a37217](https://github.com/jj990405/EECS3311/commit/4a37217) | Stage 1 study workflow alignment |
 | Nov2 | [9641759](https://github.com/jj990405/EECS3311/commit/9641759) | Study workflows, persistence and project deliverable integration |
 
-Eight implementation/test candidates are listed. README-only commit 83ab8d8 is excluded. Earlier approved-push records place this work in period 2; Git metadata alone is not a push-timing certificate.
+Eight implementation/test changes are listed; the README-only change is excluded from the source-progress count.
 
 ### Period 3 November 3 to 9
 
@@ -676,46 +684,158 @@ Eight implementation/test candidates are listed. README-only commit 83ab8d8 is e
 | Nov3 | [a6c36e7](https://github.com/jj990405/EECS3311/commit/a6c36e7) | Corrected file sorting and per-file destination review before upload |
 | Nov4 | [f7c2d6e](https://github.com/jj990405/EECS3311/commit/f7c2d6e) | All-week calendar labels, day editing, chat layout, daily TBD and study notes/tests |
 
-Six implementation/test candidates are listed. Repository-layout move 7cdfd95 is excluded from the conservative count. Meaningfulness is based on behavior/test changes, not file counts or raw insertion totals.
+Six implementation/test changes are listed. The count covers behavior and test improvements and excludes the repository-layout-only move.
 
-Subsequent approved work includes [fdcfcd7](https://github.com/jj990405/EECS3311/commit/fdcfcd7), [1ab1b5a](https://github.com/jj990405/EECS3311/commit/1ab1b5a), [7d55e8e](https://github.com/jj990405/EECS3311/commit/7d55e8e) [a001883](https://github.com/jj990405/EECS3311/commit/a001883) and [8ab4a77](https://github.com/jj990405/EECS3311/commit/8ab4a77) on Nov 14. The cost-only clarification is not counted as meaningful implementation progress. The owner authorized committing and pushing the latest source and updated report/filming documents on 14 November. This update follows baseline 8ab4a77; its publication is checked after the push. It is outside all three weekly reporting windows. Work after a reporting window cannot compensate for a missed historical push window.
+Subsequent approved work includes [fdcfcd7](https://github.com/jj990405/EECS3311/commit/fdcfcd7), [1ab1b5a](https://github.com/jj990405/EECS3311/commit/1ab1b5a), [7d55e8e](https://github.com/jj990405/EECS3311/commit/7d55e8e) [a001883](https://github.com/jj990405/EECS3311/commit/a001883) and [8ab4a77](https://github.com/jj990405/EECS3311/commit/8ab4a77) on Nov 14. The cost-only clarification is not counted as meaningful implementation progress. The complete-source follow-up was published as [e8ab80a](https://github.com/jj990405/EECS3311/commit/e8ab80a). Subsequent recording-time corrections include notification selection, responsive AI progress/cancel controls, immutable runtime publication and numbered CLI proposals; the updated report links these corrections to their verification and demonstrations.
 
-### Submission readiness audit
+### Implementation and demonstration traceability
 
-The five-page Stage 2 brief was checked against the source and all seven report sections. The latest deterministic suite passed 67 tests. The companion docs/development/stage2-requirements-check.md records evidence and unresolved items: actual videos and all 21 URL/start-time pairs, final video-linked report revision, publication verification of this approved update and LMS submission. Historical period-1 push timing is not certified, and project-specific historical development tokens remain unavailable. Implementation sections are updated; the demonstration index remains incomplete until actual recordings and final submission steps are completed.
+The five-page Stage 2 brief was checked against the source and all seven report sections. The latest stored Maven result contains 75 tests with zero failures, errors or skipped tests. All 21 feature entries now contain actual uploaded-video links and start times. Both unlisted recordings opened without signing in on 14 November 2026.
 
 ## 7 Demonstration index
 
-Recording URLs have not yet been supplied for all features. The following planned segments cover all 15 original and 6 added features. They are not real timestamps. Before final submission, replace Pending recording with an accessible video URL and the actual start time for each feature. A combined recording is allowed when each feature has a labeled segment and direct timestamp link. The instructor/TA must not need an access request.
+The GUI demonstration is [GUI video](https://youtu.be/VxEf256ZtDc) (29:54). The command-line demonstration is [CLI video](https://youtu.be/qe8We5Za7Jc) (06:49). Both were opened without signing in on 14 November 2026. The links below jump to actual start times in the edited recordings. English on-screen captions identify the feature, invocation, input, result and AI role; relevant validation and alternative paths are included.
 
-The complete click/input/narration script is docs/demo/filming-script.ko.md, also rendered as docs/demo/filming-guide.pdf. The editable index is docs/demo/demonstration-index.json. Video 1 covers workspace/deadlines; Video 2 covers study/agent workflows; Video 3 covers CLI and the final demonstration-only reset. Spoken English or readable English captions can deliver the required explanation; the brief does not mandate a fixed duration, voice format or face camera.
+Some popup windows were not captured by Windows Game Bar. Screenshots from the running application are inserted for those sections.
 
-| Feature | Planned segment references | Actual URL and start time |
+The CLI recording display is a Java stdin/stdout host invoking the actual application CLI entry point and shared command handlers. It does not implement substitute commands or fabricated responses. GUI-only additions such as PDF side tabs and reset confirmation are indexed to the GUI recording.
+
+Reset safeguards are demonstrated through confirmation and cancellation; isolated tests verify complete clearing while preserving external originals and configuration. Date-based tests also verify the daily unknown-date reminder.
+
+| Feature | GUI timestamp link | CLI timestamp link |
 | --- | --- | --- |
-| F01 Workspace/materials  | V1.01, V1.02, V1.03, V3.01, V3.02 | Pending recording |
-| F02 Syllabus deadlines  | V1.04, V3.02 | Pending recording |
-| F03 Calendar/timeline  | V1.05, V3.03 | Pending recording |
-| F04 Priority  | V1.05, V3.03 | Pending recording |
-| F05 Study timer/records  | V2.01, V3.06 | Pending recording |
-| F06 Reference files  | V2.02, V3.04 | Pending recording |
-| F07 Deadline notices  | V1.07, V3.03 | Pending recording |
-| F08 Natural-language edits  | V2.07, V3.06 | Pending recording |
-| F09 Progress  | V1.05, V3.03 | Pending recording |
-| F10 Weekly brief  | V2.08, V3.06 | Pending recording |
-| F11 Grounded Q&A  | V2.02, V3.04 | Pending recording |
-| F12 Summaries/study notes  | V2.03, V3.04 | Pending recording |
-| F13 Quiz/essay  | V2.04, V2.05, V3.05 | Pending recording |
-| F14 Weak topics  | V2.06, V3.05 | Pending recording |
-| F15 History/memory  | V2.08, V3.06 | Pending recording |
-| N01 Reviewed file classification and moves | V1.02 | Pending recording |
-| N02 On-demand source workspace | V1.03, V2.03 | Pending recording |
-| N03 Bulk calendar import and undated reminders | V1.04, V1.07 | Pending recording |
-| N04 Easier setup and date/color selection | V1.01, V3.01 | Pending recording |
-| N05 Confirmed full reset | V3.07 | Pending recording |
-| N06 Timeline selection and context actions | V1.06 | Pending recording |
+| F01 Workspace/materials | [GUI 00:00](https://youtu.be/VxEf256ZtDc?t=0) | [CLI 00:00](https://youtu.be/qe8We5Za7Jc?t=0) |
+| F02 Syllabus deadlines | [GUI 06:49](https://youtu.be/VxEf256ZtDc?t=409) | [CLI 01:06](https://youtu.be/qe8We5Za7Jc?t=66) |
+| F03 Calendar/timeline | [GUI 09:27](https://youtu.be/VxEf256ZtDc?t=567) | [CLI 01:55](https://youtu.be/qe8We5Za7Jc?t=115) |
+| F04 Priority | [GUI 09:27](https://youtu.be/VxEf256ZtDc?t=567) | [CLI 01:42](https://youtu.be/qe8We5Za7Jc?t=102) |
+| F05 Study timer/records | [GUI 14:30](https://youtu.be/VxEf256ZtDc?t=870) | [CLI 05:24](https://youtu.be/qe8We5Za7Jc?t=324) |
+| F06 Reference files | [GUI 15:34](https://youtu.be/VxEf256ZtDc?t=934) | [CLI 02:41](https://youtu.be/qe8We5Za7Jc?t=161) |
+| F07 Deadline notices | [GUI 13:18](https://youtu.be/VxEf256ZtDc?t=798) | [CLI 02:05](https://youtu.be/qe8We5Za7Jc?t=125) |
+| F08 Natural-language edits | [GUI 23:23](https://youtu.be/VxEf256ZtDc?t=1403) | [CLI 05:33](https://youtu.be/qe8We5Za7Jc?t=333) |
+| F09 Progress | [GUI 12:28](https://youtu.be/VxEf256ZtDc?t=748) | [CLI 02:27](https://youtu.be/qe8We5Za7Jc?t=147) |
+| F10 Weekly brief | [GUI 25:08](https://youtu.be/VxEf256ZtDc?t=1508) | [CLI 06:22](https://youtu.be/qe8We5Za7Jc?t=382) |
+| F11 Grounded Q&A | [GUI 15:34](https://youtu.be/VxEf256ZtDc?t=934) | [CLI 02:54](https://youtu.be/qe8We5Za7Jc?t=174) |
+| F12 Summaries/study notes | [GUI 17:51](https://youtu.be/VxEf256ZtDc?t=1071) | [CLI 03:27](https://youtu.be/qe8We5Za7Jc?t=207) |
+| F13 Quiz/essay | [GUI 18:56](https://youtu.be/VxEf256ZtDc?t=1136) | [CLI 03:51](https://youtu.be/qe8We5Za7Jc?t=231) |
+| F14 Weak topics | [GUI 21:51](https://youtu.be/VxEf256ZtDc?t=1311) | [CLI 04:39](https://youtu.be/qe8We5Za7Jc?t=279) |
+| F15 History/memory | [GUI 25:46](https://youtu.be/VxEf256ZtDc?t=1546) | [CLI 06:36](https://youtu.be/qe8We5Za7Jc?t=396) |
+| N01 Reviewed file classification and moves | [GUI 02:14](https://youtu.be/VxEf256ZtDc?t=134) | GUI-specific workflow |
+| N02 On-demand source workspace | [GUI 03:12](https://youtu.be/VxEf256ZtDc?t=192) | GUI-specific workflow |
+| N03 Bulk calendar import and undated reminders | [GUI 06:49](https://youtu.be/VxEf256ZtDc?t=409) | GUI-specific workflow |
+| N04 Easier setup and date/color selection | [GUI 00:00](https://youtu.be/VxEf256ZtDc?t=0) | [CLI 00:24](https://youtu.be/qe8We5Za7Jc?t=24) |
+| N05 Confirmed full reset | [GUI 29:32](https://youtu.be/VxEf256ZtDc?t=1772) | GUI-specific workflow |
+| N06 Timeline selection and context actions | [GUI 12:28](https://youtu.be/VxEf256ZtDc?t=748) | GUI-specific workflow |
 
-After recording, enter accessible feature links and actual start times, regenerate this report, publish the approved revision and submit the repository URL through LMS. Videos and LMS submission are still required.
+Additional result links: [Full 15-minute timer completion 27:53](https://youtu.be/VxEf256ZtDc?t=1673); [Local MCQ grading and explanation 04:13](https://youtu.be/qe8We5Za7Jc?t=253); [Essay feedback and approval 05:57](https://youtu.be/qe8We5Za7Jc?t=357).
 
 ## Appendix A Updated architecture and UML diagrams
 
 The following large-format sheets preserve readable class names and relationships instead of shrinking the whole class model onto a small page. A1-A7 cover architecture and selected UML class collaborations. A8 is the updated workspace/use-case sheet; A9 shows adaptive AI classification, A10 shows timeline context actions, A11 shows lecture-based source Q&A and A12 shows complete lecture quiz generation. The complete 28-sheet editable/rendered set and the original Stage 1 baseline remain in docs/design/. UI helpers omitted from detailed class sheets are named in the architecture index; TimelineSelection is one such presentation helper, not a new persistence or AI subsystem.
+
+## Appendix B GUI recording supplementary evidence
+
+Some popup windows were not captured by Windows Game Bar. Screenshots from the running application are inserted for those sections. The images show the running application with the same course PDFs.
+
+Hosted GUI demonstration: [GUI video](https://youtu.be/VxEf256ZtDc), 29:54. Hosted CLI demonstration: [CLI video](https://youtu.be/qe8We5Za7Jc), 06:49. Section 7 contains direct feature timestamp links.
+
+| Feature / segment | Edited time |
+| --- | --- |
+| F01 N04 Workspace setup | 00:00 |
+| F01 N01 Upload and classify | 02:14 |
+| N02 PDF tabs | 03:12 |
+| F02 N03 Calendar suggestion review | 06:49 |
+| F03 F04 Calendar and priorities | 09:27 |
+| F09 N06 Completion and selection | 12:28 |
+| F07 Notifications | 13:18 |
+| F05 Timer and records | 14:30 |
+| F06 F11 References and questions | 15:34 |
+| F12 Study notes | 17:51 |
+| F13 Quizzes and essays | 18:56 |
+| F14 Self assessment | 21:51 |
+| F08 Schedule review | 23:23 |
+| F10 Weekly brief | 25:08 |
+| F15 History | 25:46 |
+| F11 Missing source guard | 26:51 |
+| F05 Full timer completion | 27:53 |
+| N06 Timeline copy and delete guard | 28:43 |
+| N05 Reset guard | 29:32 |
+| Saved data after restart | 29:42 |
+
+### Popup coverage audit
+
+- 00:00: F01 Workspace setup (14-semester-name-native.png)
+- 00:10: N04 Flexible date entry (15-date-picker-native.png)
+- 00:18: N04 Invalid date protection (16-invalid-date-native.png)
+- 00:26: N04 Calendar date picker (19-end-calendar-native.png)
+- 00:50: F01 Add a course (20-course-name-native.png)
+- 01:02: N04 Course color (21-course-colors-native.png)
+- 01:13: F01 Course difficulty (22-course-difficulty-native.png)
+- 01:58: N01 Course context menu (78-course-context-native.png)
+- 02:14: F01 Bulk file upload (23-multiple-files-native.png)
+- 02:31: N01 AI upload classification (24-ai-upload-review-native.png)
+- 04:01: N01 Material context menu (26-file-context-native.png)
+- 04:10: N01 Move a file (27-move-category-native.png)
+- 04:36: N01 Review an AI folder correction (28-category-review-native.png)
+- 05:16: F01 Duplicate file protection (25-duplicate-confirm-native.png)
+- 05:40: F01 AI lecture week (29-week-proposal-native.png)
+- 06:12: F01 Review the lecture week (30-week-review-native.png)
+- 06:49: F02 Review calendar suggestions (10-calendar-review-native.png)
+- 07:04: F02 Review one suggestion (11-calendar-individual-native.png)
+- 07:18: N03 Add all and unknown dates (12-undated-choice-native.png)
+- 07:32: N03 Check source timing warnings (13-calendar-warning-native.png)
+- 07:52: F07 Deadline notifications (17-deadline-alert-native.png)
+- 09:27: F03 Add from an empty calendar day (31-calendar-day-native.png)
+- 09:36: F03 Choose the deadline course (32-course-chooser-native.png)
+- 09:52: F03 Deadline title (33-deadline-title-native.png)
+- 10:02: F03 Deadline type (34-deadline-type-native.png)
+- 10:12: F03 Deadline scope (35-deadline-scope-native.png)
+- 11:50: F03 Deadline details (36-deadline-details-native.png)
+- 11:56: F03 Edit a saved deadline (73-edit-title-native.png)
+- 12:02: F03 Edit the due date (74-edit-date-native.png)
+- 12:14: F03 Edit the study scope (75-edit-scope-native.png)
+- 12:50: N06 Bulk timeline actions (71-timeline-bulk-native.png)
+- 14:01: F07 Notification due time (37-notification-time-native.png)
+- 14:20: F07 Notification lead time (38-notification-lead-native.png)
+- 14:30: F05 Study timer length (39-timer-length-native.png)
+- 14:53: F05 Stop and save a session (81-timer-stop-native.png)
+- 15:34: F06 Choose an assessment (40-deadline-chooser-native.png)
+- 15:53: F06 AI reference recommendations (41-reference-files-native.png)
+- 18:56: F13 Quiz scope (42-quiz-scope-native.png)
+- 19:03: F13 Question count (43-quiz-count-native.png)
+- 19:09: F13 Quiz difficulty (44-quiz-difficulty-native.png)
+- 19:15: F13 Question types (45-quiz-types-native.png)
+- 19:22: F13 Practice quiz (49-quiz-question-native.png)
+- 19:33: F13 Unanswered question protection (50-quiz-unanswered-native.png)
+- 19:41: F13 Submit answers (51-quiz-ready-native.png)
+- 19:48: F13 Quiz result (52-quiz-result-native.png)
+- 19:57: F13 Review a wrong answer (54-quiz-explanation-native.png)
+- 20:11: F13 Quiz selected slides (46-slide-range-native.png)
+- 20:18: F13 Invalid slide range (47-invalid-page-native.png)
+- 20:25: F13 One-slide quiz (76-slide-question-native.png)
+- 20:34: F13 Slide quiz result (77-slide-result-native.png)
+- 20:43: F13 Essay question (55-essay-input-native.png)
+- 20:52: F13 Write an essay answer (56-essay-answer-native.png)
+- 21:05: F13 AI essay feedback (57-essay-feedback-native.png)
+- 21:20: F13 Human score review (58-essay-revised-native.png)
+- 21:28: F13 Approve the essay grade (59-essay-approval-native.png)
+- 21:40: F13 F15 Saved grade history (66-history-record-native.png)
+- 21:51: F14 Self assessment topic (60-assessment-topic-native.png)
+- 22:18: F14 Confidence rating (61-assessment-confidence-native.png)
+- 22:36: F14 Save confidence (62-assessment-saved-native.png)
+- 23:44: F08 Review a schedule proposal (64-schedule-review-native.png)
+- 25:46: F15 Interaction history (65-history-chooser-native.png)
+- 26:21: F15 Delete confirmation (67-history-delete-native.png)
+- 27:14: F11 Missing course materials (68-missing-material-native.png)
+- 28:11: F05 Full timer completion (80-timer-complete-native.png)
+- 29:15: N06 Cancel deadline deletion (70-deadline-delete-native.png)
+- 29:32: N05 Full reset confirmation (72-reset-native.png)
+- 29:42: F01 F05 F12 Saved data after restart (79-persistence-native.png)
+
+All source screenshots are lossless native-resolution PNG captures. The appendix embeds representative review, input, result and guard windows; the complete repaired sequence is in the edited GUI video. Reset and deletion were demonstrated with confirmation and cancellation. Next-day repetition of a TBD reminder is not shown.
+
+
+## Appendix C Application API usage evidence
+
+The Analytics screenshot supplied on 14 November 2026 shows the selected Nov 8-Nov 14 period: 2,823,475 tokens, 777 requests and USD 0.38 total spend. The Spend limit panel separately displays USD 0.40 spent for Personal and Default project. Development through ChatGPT Pro is the separate USD 200/month subscription recorded in Section 5.
+
+Source image: docs/report/evidence/api-usage-2026-11-14.png.

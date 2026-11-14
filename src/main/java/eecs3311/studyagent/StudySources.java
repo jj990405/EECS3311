@@ -46,6 +46,7 @@ final class StudySources {
         indexes.put(file.id(),ready); return ready;
     }
     private List<String> save(MaterialFile file,List<String> pages) throws IOException {
+        if (Thread.currentThread().isInterrupted()) throw new IOException("Source preparation canceled.");
         SourceIndex indexed=SourceIndex.build(pages);
         Files.createDirectories(cache);
         Path temp=Files.createTempFile(cache,file.id().toString(),".tmp");

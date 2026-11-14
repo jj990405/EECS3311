@@ -33,6 +33,8 @@ Copy-Item -LiteralPath (Join-Path $codexRoot 'build\target\study-agent.jar') `
     --add-launcher ('Study Agent CLI=' + (Join-Path $projectRoot 'packaging\cli-launcher.properties'))
 if ($LASTEXITCODE -ne 0) { throw 'jpackage failed.' }
 $imageApp = Join-Path $imageDir 'Study Agent'
+& (Join-Path $PSScriptRoot 'update-app.ps1') -SourceJar (Join-Path $inputDir 'study-agent.jar') `
+    -AppDirectory (Join-Path $imageApp 'app')
 Copy-Item -LiteralPath (Join-Path $projectRoot '.env.example') `
     -Destination (Join-Path $imageApp '.env.example') -Force
 
@@ -46,13 +48,25 @@ $before = if (Test-Path -LiteralPath $dataDir) {
     @(Get-ChildItem -LiteralPath $dataDir -Recurse -File | Get-FileHash -Algorithm SHA256 |
         Sort-Object Path | ForEach-Object { $_.Path + ':' + $_.Hash })
 } else { @() }
-foreach ($name in 'app','runtime') {
-    $destination = Join-Path $projectRoot $name
-    New-Item -ItemType Directory -Force -Path $destination | Out-Null
-    Copy-Item -Path (Join-Path $imageApp ($name + '\*')) -Destination $destination -Recurse -Force
+$destination = Join-Path $projectRoot 'runtime'
+if (-not (Test-Path -LiteralPath $destination)) {
+    Copy-Item -LiteralPath (Join-Path $imageApp 'runtime') -Destination $destination -Recurse
 }
+$applicationDirectory = Join-Path $projectRoot 'app'
+New-Item -ItemType Directory -Force -Path $applicationDirectory | Out-Null
+foreach ($name in 'Study Agent.cfg','Study Agent CLI.cfg') {
+    $target = Join-Path $applicationDirectory $name
+    if (-not (Test-Path -LiteralPath $target)) {
+        Copy-Item -LiteralPath (Join-Path $imageApp ('app\' + $name)) -Destination $target
+    }
+}
+& (Join-Path $PSScriptRoot 'update-app.ps1') -SourceJar (Join-Path $inputDir 'study-agent.jar') `
+    -AppDirectory $applicationDirectory
 foreach ($name in 'Study Agent.exe','Study Agent CLI.exe','.env.example') {
-    Copy-Item -LiteralPath (Join-Path $imageApp $name) -Destination (Join-Path $projectRoot $name) -Force
+    $target = Join-Path $projectRoot $name
+    if ($name -eq '.env.example' -or -not (Test-Path -LiteralPath $target)) {
+        Copy-Item -LiteralPath (Join-Path $imageApp $name) -Destination $target -Force
+    }
 }
 $after = if (Test-Path -LiteralPath $dataDir) {
     @(Get-ChildItem -LiteralPath $dataDir -Recurse -File | Get-FileHash -Algorithm SHA256 |

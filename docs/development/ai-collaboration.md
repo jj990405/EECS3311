@@ -1,76 +1,32 @@
-# AI collaboration record
+# AI tools and collaboration
 
-Prepared 13 November 2026 from repository history, this conversation and the current audit. This is a factual working log for the later report. It is not a complete provider billing ledger.
+### Development tool, subscription and application API usage
 
-| Tool/platform | Model information supported by evidence | Development use / representative interaction | Review and integration |
-| --- | --- | --- | --- |
-| OpenAI Codex desktop coding agent | Native Usage analytics identifies this chat as **GPT-6.1 Sol**, High effort, Standard speed (observed Nov14). Earlier exact model revisions are not fully recorded. | User requested implementation from Stage 1 report/diagrams, GUI and CLI, Java-only PDF handling, approval before AI calendar changes, original-page PDF viewer and usable quizzes/notes. Agent generated/edited Java classes and tests. | Owner supplied screenshots/defects, rejected unusable layouts and approved individual commits. Automated tests and actual GUI/API checks were used before integration. |
-| Codex parallel agents, 13 Nov | Inherited model of the current Codex session; exact billable model ID/token count not exported here | User explicitly requested parallel diagram preparation. One agent inspected architecture/classes/pattern roles; one inspected sequences/use cases. Produced 7 architecture/class sheets and 20 behavior sheets. | Root inspected rendered architecture/command/SD14 samples and reconciled actual participants and limitations. XML/render checks performed. No app code was accepted merely because diagrams rendered. |
-| Configured external OpenAI API, application runtime | `HttpLlmClient`; default model ID `gpt-6-luna`. Local configuration may override it. Never publish the local key. | Syllabus extraction, week matching, reference selection, source Q&A, notes, MCQ/essay generation, essay feedback, schedule edits, weak-topic advice, weekly brief and file classification. | Source identifiers and dates are validated in Java; calendar/grade changes require approval. MCQ score comparison is deterministic. Actual calls exercised in audit and CLI runs. |
-| Earlier AI agent mentioned by owner | Tool/model unknown; session was lost when subscription ended | Owner described earlier partial implementation/planning. Exact contributions and token/money totals cannot be reconstructed from the present evidence. | Do not invent a vendor/model, cost, or recoverability claim. Owner should identify this if it materially contributed to submitted implementation. |
+OpenAI Codex desktop was used for implementation, debugging, testing, diagrams and report preparation through a ChatGPT Pro subscription costing USD 200 per month. The observed development session used GPT-6.1 Sol, High effort, Standard speed. Development access is reported as a monthly subscription, separately from the Java application's API usage.
 
-## Representative iterations
+The Java application uses the OpenAI API through HttpLlmClient, with configured default model gpt-6-luna. Its implementation experiments, verification runs and GUI/CLI AI features use the API category below. These calls support classification, syllabus interpretation, references, source-based answers, study notes, quizzes, essay feedback, schedule planning and briefings.
 
-| Evidence / period | Request → AI work → human/verification feedback |
-| --- | --- |
-| Initial source commits | Implement Stage 1 workspace/readers/API/approval/calendar, then timer/retrieval/notes/quizzes/planning/essay/history → source changes in ten substantive commits → later reviews exposed UI and feature gaps, addressed by follow-up implementation. |
-| Nov2–4 source history | Owner requested EXE, simpler setup, compact dates/colors, actual syllabus/API checks, usable quiz and original PDF side tabs, file sorting, bulk calendar import, daily TBD prompts and study notes → repeated code/test revisions → owner approved each resulting commit. |
-| 13 Nov audit | Owner requested complete feature verification and parallel current diagrams before the report → source/Stage 1 audit, real API acceptance harness, actual CLI transcripts, native EXE computer use → date-only schedule edit, typo merge consistency, unlinked timer briefing totals, daily totals and narrow controls corrected. |
-| 13 Nov rendering feedback | Native GUI showed narrow course/timer controls, raw Markdown and dense notes → action grids, wrapping, real styled emphasis and paragraph spacing → rebuilt, automated tests and native reinspection. |
-| 14 Nov follow-up | Owner requested a clean bulk-upload test, full reading for uncertain files, neutral course row shades, a redesigned quiz and timer-status navigation, followed immediately by CLI verification → 25 actual PDFs classified correctly, 35 deterministic tests, 16 actual API core checks and 23 actual CLI groups covering all 41 commands; full 15-minute native expiry persisted 900 seconds. |
-| 14 Nov report preparation | Owner requested thin, muted course markers, timeline drag selection/context actions, the English Stage 2 report and an executable GUI/CLI filming plan → added sorted identifier snapshots and confirmed bulk actions, a 36th regression, SD15/UC21, the report and Korean instructions with English narration. Native two-row completion/incompletion was restored; delete confirmation was canceled. Actual video links/times remain unrecorded and are explicitly marked pending. |
+| Purpose | Cost basis | Recorded usage |
+| --- | --- | --- |
+| Development tool: OpenAI Codex through ChatGPT Pro | USD 200/month subscription | Subscription access for development work |
+| Application implementation, experiments and API execution | USD 0.38 total spend for Nov 8-Nov 14 | 2,823,475 tokens; 777 requests |
 
-## Development subscription and application API usage
+The API figures are transcribed from the student-supplied Analytics screenshot with Nov 8-Nov 14 selected. The same screenshot separately displays USD 0.40 spent for Personal and Default project in the Spend limit panel. This separate dashboard indicator is recorded as shown and is not added to the USD 0.38 period total. Development subscription and application API charges are reported in distinct categories. Appendix C reproduces the API evidence.
 
-The two cost categories are reported separately. The development tool was **OpenAI Codex, accessed through a ChatGPT Pro subscription (USD 200/month)**. The running Java application used the **OpenAI API (`gpt-6-luna`), with USD 0.02 in displayed usage charges** at the audit snapshot. Subscription pricing is not a metered token charge for this repository.
+### Representative collaboration and review
 
-| Purpose | Tool / service | Cost | Token usage |
-| --- | --- | --- | --- |
-| Software development, debugging, testing and diagram preparation | OpenAI Codex — ChatGPT Pro subscription | **USD 200/month (subscription fee)** | Project-specific historical total not available from subscription usage records |
-| AI features executed by the Java application | OpenAI API — `gpt-6-luna` | **USD 0.02 (displayed API usage)** | **138,179 total: 116,494 input + 21,685 output**, observed dashboard scope below |
+- Stage 1 implementation: the student requested a Java GUI/CLI application based on the design report and diagrams. Codex proposed and edited domain, persistence, reader, API, approval and study workflows. Later student review identified missing behavior and unsuitable presentation; subsequent source changes addressed those issues rather than treating the initial generated code as final.
 
-The owner confirmed this separation on Nov14. Other work also used the development subscription; the account-wide weekly allowance graph is not reported as this project's token usage. The subscription fee and API usage are not combined into a purported per-project invoice.
+- Original PDFs and controlled API use: The student rejected plain extracted-text previews and initially requested separate paid AI actions. The later explicit request enables complete text/image reading and indexing at upload while calendar changes still need review. Codex added local original-page PDF tabs, upload review and explicit AI sort/calendar actions. Java still extracts text for retrieval and AI without rewriting the stored original.
 
-At the owner's request, the API analytics pages were inspected directly through native browser Computer Use on **14 November 2026, shortly after midnight Toronto time**. Selected scope: **Personal organization → Default project**, date selector **Oct20–Nov14, 2026**, all API sources/keys/users/models. The chart labels use UTC and the page URL ends at `until=2026-11-15`.
+- Quiz and setup iteration: screenshots exposed clipped options, raw RGB input, strict date punctuation, missing answer navigation and essay count/difficulty gaps. Revisions added compact dates/calendar choice, swatches, a question workspace, answer retention, submission checks and separated explanation depth. Tests and actual native flows were used to review integration.
 
-| Dashboard field | Observed value |
-| --- | --- |
-| Total tokens | **138,179** |
-| Requests | **115** |
-| Model breakdown | **gpt-6-luna**, all115 displayed requests |
-| Input tokens | **116,494** |
-| Output tokens | **21,685** |
-| Total spend | **USD $0.02**, rounded as displayed by Overview and Spend |
-| Observed source pages | [Overview](https://platform.openai.com/analytics/overview?from=2026-10-20&until=2026-11-15), [Usage](https://platform.openai.com/analytics/usage?from=2026-10-20&until=2026-11-15), [Spend](https://platform.openai.com/analytics/spend?from=2026-10-20&until=2026-11-15) |
+- Full-document classification: the student found bulk misclassification and authorized reading beyond the first page. The latest helper uses complete page text and full-coverage segments for long sources; the earlier 1,500-character prefix limit is removed. A real 25-PDF mixed batch and an ambiguous renamed 20-page file were checked against manually identified document purposes.
 
-These are the selected API project's aggregate totals at observation time, not an invoice or a per-repository meter. The observed model matches the application. No API-key filter was selected, so unrelated uses of the same Default project cannot be excluded from those totals. Future calls/late reporting can change the figures; refresh before final submission. The dashboard display does not establish additional decimal precision beyond $0.02.
+- Source-study follow-up: the student reported silent/failed study actions and an overflowing answer after typing hi then quiz. Shared file context menus, explicit chat tool commands, progress/cancellation and resizable landscape result frames were added in the earlier build. The latest student-requested revision displays ordinary answers only in Chat and other text results in closable side tabs; the interactive quiz remains separate. Notes preserve complete source text in batches; selected-slide MCQs send only requested physical pages. Live native/controller/CLI checks covered actual lectures, not fixed demonstration responses. The final updater retains immutable SHA-256-named JAR versions, so an existing JVM keeps its original code while subsequent launches select the new version.
 
-| Cost category | Token total | Money total | Evidence / boundary |
-| --- | --- | --- | --- |
-| Codex software development, including diagram agents | Project-specific historical raw token total unavailable | **USD 200/month subscription fee** | Actual ChatGPT Pro subscription price inspected in native Usage Overview; also confirmed by owner. Shared across projects; no per-repository token or fee allocation inferred. |
-| Application API execution/testing | Dashboard aggregate 138,179 (scope above) | **USD 0.02 API usage**, rounded as displayed | Actual API project analytics inspected. Owner identifies these calls as the application's API usage. Dashboard scope and invoice precision remain as stated above. |
-| Earlier lost AI-agent session | Unknown | Unknown | Owner's invoice or usage record, if available. |
+- Diagrams and verification: two diagram agents were used on 13 November at the student's explicit request, one for architecture/classes/patterns and one for behavior/use cases. The root agent checked rendered outputs against actual classes. Further local edits added SD15 for timeline context actions. Temporary generators, raw test data and API configuration stay below ignored local paths.
 
-The application client currently discards the provider's usage metadata and retains response content. The Nov13 successful core audit logged **15 calls**; the Nov14 rerun logged **17 calls** after adaptive classification, and these counts cover only those runs, not all development usage, retries or CLI/GUI calls. Do not report15 as the project-wide total. Use the actual dashboard aggregate with its scope and precision above; do not substitute current model price estimates for measured spend.
+The development record connects student feedback, Codex-assisted changes, regression tests and actual application checks. The final source and generated deliverables were reviewed against the Stage 1 design and Stage 2 submission structure.
 
-This documentation includes no API keys, local `.env` contents, private billing details or raw uploaded course documents.
-
-### Later Nov14 AI interaction correction
-
-The owner supplied screenshots of failed/silent study actions, unselectable material rows and an overflowing answer after typing hi then quiz. Codex added shared AI menus, exact chat tool commands, captured file context, bounded full-source note batches and selected-page MCQ generation in the GUI/CLI. Long text results now use resizable landscape frames with native maximize controls. A restarted pre-fix JAR recovered its quiz dialog; stale loaded code after runtime replacement is a possible cause, without a captured linkage exception. Packaging now prevents replacement while the app runs.
-
-The latest deterministic build passes 45 tests. Live checks used actual lecture PDFs for cited Q&A, complete notes and selected-slide quizzes; native hi -> quiz -> submission/1-of-1 review, Q&A window maximize/restore and cancellation were exercised. A real CLI page-quiz run generated, answered and saved results. These calls occur after the earlier billing snapshot, whose USD0.02 amount is not a current total. Raw responses and fixtures remain local under ignored codex paths. At that milestone publication awaited owner approval; the later authorization is recorded below.
-
-The Codex native **Settings → Usage → Overview** displayed the ChatGPT Pro200 plan at $200/month, recorded above as the development tool's **subscription fee**. **Analytics →30d** selected Oct16–Nov14,2026; expanding this chat, “Explain Project2 requirements,” showed GPT-6.1Sol / High / Standard. Its row used allowance/credit metrics rather than raw project tokens or an invoice. Other work also used this subscription, so no account-wide weekly graph or percentage-to-dollar allocation is presented as this repository's measured consumption. No subscription, payment, plan limit or account setting was changed during this read-only inspection.
-
-
-### Complete-source preparation and reported failures - 14 November 2026
-
-The owner supplied additional failures: unassigned lecture weeks blocked quizzes, a stale citation stopped Lab Test 2 Q&A, final-exam advice stayed pinned to a selected lecture, and the DBC deck appeared to contain too few concepts. Inspection found 58 physical DBC pages with only about 3,546 raw extracted characters; much of its visible teaching content was graphical. The owner requested reading all uploaded text/slides at upload, saving it for fast reuse, and removing the 1,500-character limit. Following an initial automatic-approval rejection, the owner expressly authorized the full uploaded texts and page images to the configured OpenAI API.
-
-Codex added Java StudySources preparation and persistent SourceIndex pages/word postings, image input through the existing HTTP Adapter, full-corpus quiz batches, complete syllabus extraction, explicit course/file chat scope, citation regeneration, safe styled text and missing-week recovery. A 54-test build passed. The isolated actual run prepared 25 real files, 1,055 pages and 602,801 prepared characters, preserving every raw page. Cache reuse required no additional image calls. Whole-file DBC/Architecture quizzes, a combined 22-lecture quiz and both exact assessment questions passed bounded checks. That run made 29 text requests and 129 image requests in 466 seconds. It is not a project-wide token/cost total and is after the USD0.02 snapshot. Images can still be misread; model outputs are reviewable rather than certified facts. That source/doc milestone awaited approval; the later authorization is recorded below.
-
-
-### Latest lecture-study revision and publication authorization
-
-The owner rejected duplicate answer popups and syllabus-only study advice. Codex added AssessmentStudySources: exact lecture selection, complete selected-page reading or validated source notes, and a teaching-citation requirement. Source answers remain in Chat; generic text results use right tabs and quizzes retain their workspace. PDF rendering now uses a higher screen-aware raster density. The current suite passes 67 tests. Actual API selection/read/answer covered 107 teaching pages; native Q&A followed a source to JML page 11 and graded its slide quiz 1/1. Actual CLI indexing, DBC quiz and preparation also passed. The owner authorized report/script regeneration and commit/push on Nov14. No new subscription allocation or final API amount was inferred from these extra calls.
+[API usage screenshot](../report/evidence/api-usage-2026-11-14.png) | [Implementation report](../../stage2-report.pdf)

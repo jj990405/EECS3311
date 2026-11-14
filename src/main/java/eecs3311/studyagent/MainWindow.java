@@ -89,10 +89,8 @@ public final class MainWindow extends JFrame {
     private UUID selectedCourseId;
     private UUID selectedFileId;
     private SwingWorker<?, ?> activeAi;
-    private final JLabel aiActivity = new JLabel();
-    private final JButton cancelAi = AppTheme.button("Cancel AI", false);
+    private final AiTaskStatusPanel aiStatus = new AiTaskStatusPanel(this::cancelCurrentAi);
     private final JButton aiActions = AppTheme.dropdown("AI actions", true);
-    private javax.swing.Timer aiElapsed;
     private record CalendarCourseChoice(UUID id, String label) {
         @Override public String toString() { return label; }
     }
@@ -121,6 +119,8 @@ public final class MainWindow extends JFrame {
                 file -> perform(() -> showMaterial(file)), this::materialMenu);
         this.coursePage.setFileActions(this::rememberMaterial,
                 file -> perform(() -> showMaterial(file)), this::materialMenu);
+        this.coursePage.setDeadlineActions(deadline -> perform(() -> showDeadlineDetails(deadline)),
+                this::deadlineContextMenu);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(1460, 900);
         setMinimumSize(new Dimension(900, 600));
@@ -139,10 +139,7 @@ public final class MainWindow extends JFrame {
         appName.setForeground(AppTheme.TEXT);
         JPanel identity = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         identity.setOpaque(false); identity.add(appName);
-        aiActivity.setForeground(AppTheme.MUTED); identity.add(aiActivity);
-        cancelAi.setVisible(false);
-        cancelAi.addActionListener(e -> { if (activeAi != null) activeAi.cancel(true); });
-        identity.add(cancelAi); header.add(identity, BorderLayout.WEST);
+        header.add(identity, BorderLayout.WEST);
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         actions.setOpaque(false);
         button(actions, "New semester", this::addSemester);
@@ -306,7 +303,12 @@ public final class MainWindow extends JFrame {
                 else perform(MainWindow.this::openUndatedDeadline);
             }
         });
-        add(status, BorderLayout.SOUTH);
+        JPanel footer = new JPanel(new BorderLayout(12, 0));
+        footer.setBackground(AppTheme.SURFACE);
+        footer.setBorder(AppTheme.padding(0, 0, 0, 12));
+        footer.add(status, BorderLayout.CENTER);
+        footer.add(aiStatus, BorderLayout.EAST);
+        add(footer, BorderLayout.SOUTH);
 
         controller.addChangeListener(() -> SwingUtilities.invokeLater(this::refresh));
         refresh();
@@ -427,12 +429,20 @@ public final class MainWindow extends JFrame {
 
     private void showAiMenu(JButton anchor) {
         JPopupMenu menu = new JPopupMenu();
+        if (aiBusy) {
+            JMenuItem running = new JMenuItem("Running: " + aiStatus.activity());
+            running.setEnabled(false);
+            menu.add(running);
+            popupItem(menu, "Cancel current AI task", this::cancelCurrentAi);
+            menu.addSeparator();
+        }
         popupItem(menu, "Analyze files for calendar", this::analyzeCalendarFiles);
         popupItem(menu, "Classify uploaded files", this::classifyFilesWithAi);
         popupItem(menu, "Read and index all uploaded files", () -> prepareUploadedFiles(
                 controller.materials().stream().map(MaterialFile::id).toList()));
         menu.addSeparator();
         popupItem(menu, "Ask sources", this::askSources);
+        popupItem(menu, "Suggest reference files", this::showReferences);
         popupItem(menu, "Create study notes", this::summarizeFile);
         popupItem(menu, "Saved study notes", this::showSummaries);
         popupItem(menu, "Practice quiz...", this::generateQuiz);
@@ -610,27 +620,33 @@ public final class MainWindow extends JFrame {
         }
     }
 
+    private void cancelCurrentAi() {
+        if (activeAi != null && !activeAi.isDone()) {
+            status.setText("Canceling " + aiStatus.activity() + "...");
+            activeAi.cancel(true);
+        }
+    }
+
     private <T> void runAi(String activity, Callable<T> task, Consumer<T> success) {
         if (aiBusy) {
             status.setText("An AI request is already running.");
-            JOptionPane.showMessageDialog(this, "An AI request is running. Wait for it, or use Cancel AI first.",
-                    "AI request in progress", JOptionPane.INFORMATION_MESSAGE);
+            int answer = JOptionPane.showOptionDialog(this,
+                    "Running: " + aiStatus.activity() + "\nWait for it to finish, or cancel it before starting another AI action.",
+                    "AI request in progress", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                    null, new Object[] {"Keep waiting", "Cancel current task"}, "Keep waiting");
+            if (answer == 1) cancelCurrentAi();
             return;
         }
         aiBusy = true;
-        chatPanel.setBusy(true); aiActions.setEnabled(false); cancelAi.setVisible(true);
-        long started = System.nanoTime();
-        aiActivity.setText("AI working · 0s");
-        aiElapsed = new javax.swing.Timer(1000, e -> aiActivity.setText("AI working · "
-                + java.util.concurrent.TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - started) + "s"));
-        aiElapsed.start();
+        chatPanel.setBusy(true);
+        aiStatus.start(activity);
         status.setText(activity + "...");
         activeAi = new SwingWorker<T, Void>() {
             @Override protected T doInBackground() throws Exception { return task.call(); }
             @Override protected void done() {
                 aiBusy = false;
-                aiElapsed.stop(); aiActivity.setText(""); cancelAi.setVisible(false);
-                chatPanel.setBusy(false); aiActions.setEnabled(true);
+                aiStatus.finish();
+                chatPanel.setBusy(false);
                 try {
                     T result = get();
                     status.setText(activity + " complete.");
@@ -1051,7 +1067,7 @@ public final class MainWindow extends JFrame {
         if (!items.isEmpty()) list.setSelectedIndex(0);
         if (!items.isEmpty()) panel.add(new JScrollPane(list), BorderLayout.CENTER);
         Object[] choices = items.isEmpty() ? new Object[] {"Add deadline", "Close"}
-                : new Object[] {"Add deadline", "Edit selected", "Close"};
+                : new Object[] {"Add deadline", "Edit selected", "Notification time...", "Close"};
         int action = JOptionPane.showOptionDialog(this, panel, day.toString(), JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
         if (action == 0) {
@@ -1064,6 +1080,9 @@ public final class MainWindow extends JFrame {
         } else if (action == 1 && !items.isEmpty()) {
             Deadline selected = list.getSelectedValue();
             if (selected != null) editDeadline(selected);
+        } else if (action == 2 && !items.isEmpty()) {
+            Deadline selected = list.getSelectedValue();
+            if (selected != null) configureNotification(selected);
         }
     }
 
@@ -1076,10 +1095,18 @@ public final class MainWindow extends JFrame {
     }
 
     private void configureNotification() {
-        Deadline deadline = selectedDeadline();
+        configureNotification(selectedDeadline());
+    }
+
+    private void configureNotification(Deadline selected) {
+        Deadline deadline = controller.deadline(selected.id());
         java.time.LocalTime time = java.time.LocalTime.parse(ask("Due time (HH:MM)", deadline.dueTime().toString()));
         int minutes = Integer.parseInt(ask("Notify minutes before", Integer.toString(deadline.notifyBeforeMinutes())));
-        try { controller.setNotification(deadline.id(), time, minutes); }
+        try {
+            controller.setNotification(deadline.id(), time, minutes);
+            status.setText("Notification saved: " + deadline.title() + " · " + time
+                    + " · " + minutes + " minutes before");
+        }
         catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
     }
 
@@ -1193,13 +1220,10 @@ public final class MainWindow extends JFrame {
     }
 
     private void showReferences() {
-        Deadline deadline;
-        if (table.getSelectedRow() >= 0) deadline = selectedDeadline();
-        else {
-            Course course = selectedCourseId == null ? chooseCourse() : controller.course(selectedCourseId);
-            deadline = choose("Choose deadline", controller.schedule(AgentController.Period.ALL,
-                    course.id(), "", LocalDate.now()));
-        }
+        if (controller.schedule(AgentController.Period.ALL, selectedCourseId, "", LocalDate.now()).isEmpty())
+            throw new IllegalStateException("No assessment deadlines are saved yet. Use AI actions > Analyze files for calendar, "
+                    + "review and add the suggestions, or use New deadline. Then select the assessment to find study files.");
+        Deadline deadline = selectedDeadline();
         runAi("Finding reference files", () -> controller.suggestReferences(deadline.id()), files -> {
             if (files.isEmpty()) { showText("Reference files", "No matching uploaded files were found."); return; }
             MaterialFile selected = choose("References for " + deadline.title(), files);
@@ -1803,8 +1827,22 @@ public final class MainWindow extends JFrame {
 
     private Deadline selectedDeadline() {
         int selectedRow = table.getSelectedRow();
-        if (selectedRow < 0) throw new IllegalStateException("Select a deadline in the table first.");
-        return controller.deadline(rowIds.get(table.convertRowIndexToModel(selectedRow)));
+        if (contentTabs.getSelectedIndex() == 0 && selectedRow >= 0)
+            return controller.deadline(rowIds.get(table.convertRowIndexToModel(selectedRow)));
+        List<Deadline> candidates = controller.schedule(AgentController.Period.ALL, selectedCourseId, "", LocalDate.now());
+        if (contentTabs.getSelectedComponent() == coursePage && coursePage.selectedDeadlineId() != null)
+            for (Deadline item : candidates)
+                if (item.id().equals(coursePage.selectedDeadlineId())) return item;
+        if (candidates.isEmpty()) throw new IllegalStateException("Add a deadline first.");
+        return choose("Choose deadline", candidates);
+    }
+
+    private JPopupMenu deadlineContextMenu(Deadline deadline) {
+        JPopupMenu menu = new JPopupMenu();
+        popupItem(menu, "Open details", () -> showDeadlineDetails(deadline));
+        popupItem(menu, "Edit deadline...", () -> editDeadline(deadline));
+        popupItem(menu, "Notification time...", () -> configureNotification(deadline));
+        return menu;
     }
 
     private void showTimelineMenu(java.awt.event.MouseEvent event) {
@@ -1826,6 +1864,7 @@ public final class MainWindow extends JFrame {
         if (ids.size() == 1) {
             popupItem(menu, "Open details", () -> showDeadlineDetails(controller.deadline(ids.get(0))));
             popupItem(menu, "Edit deadline...", () -> editDeadline(controller.deadline(ids.get(0))));
+            popupItem(menu, "Notification time...", () -> configureNotification(controller.deadline(ids.get(0))));
             menu.addSeparator();
         }
         popupItem(menu, "Mark completed", () -> setDeadlinesCompleted(ids, true));
@@ -1917,15 +1956,17 @@ public final class MainWindow extends JFrame {
                         + (deadline.dueDate() == null ? "TBD" : deadline.dueDate())
                         + "\nWeight: " + (deadline.weight() == null ? "Unknown" : deadline.weight() + "%")
                         + "\nScope: " + deadline.scope()
+                        + "\nNotification: " + deadline.dueTime() + " · " + deadline.notifyBeforeMinutes() + " minutes before"
                         + (deadline.sourceText().isBlank() ? "" : "\nSource: " + deadline.sourceText()),
                 "Deadline", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-                new Object[] {"Edit", "Toggle completed", "Delete", "Close"}, "Close");
+                new Object[] {"Edit", "Toggle completed", "Notification time...", "Delete", "Close"}, "Close");
         if (choice == 0) perform(() -> editDeadline(deadline));
         else if (choice == 1) perform(() -> {
             try { controller.setCompleted(deadline.id(), !deadline.completed()); }
             catch (java.io.IOException ex) { throw new IllegalStateException(ex); }
         });
-        else if (choice == 2) perform(() -> deleteDeadline(deadline));
+        else if (choice == 2) perform(() -> configureNotification(deadline));
+        else if (choice == 3) perform(() -> deleteDeadline(deadline));
     }
 
     private void openUndatedDeadline() {

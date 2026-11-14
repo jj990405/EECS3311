@@ -1,0 +1,16 @@
+{
+  "source": "Student-supplied Analytics screenshot",
+  "selected_period": "Nov 8-Nov 14, 2026",
+  "application_api": {
+    "total_tokens": 2823475,
+    "total_requests": 777,
+    "total_spend_usd": 0.38,
+    "separate_spend_limit_indicator_usd": 0.4
+  },
+  "development_tool": {
+    "name": "OpenAI Codex via ChatGPT Pro",
+    "cost_usd_per_month": 200,
+    "basis": "subscription"
+  },
+  "image": "docs/report/evidence/api-usage-2026-11-14.png"
+}

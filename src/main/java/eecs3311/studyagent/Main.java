@@ -11,16 +11,9 @@ public final class Main {
 
     public static void main(String[] args) throws Exception {
         boolean cli = Arrays.asList(args).contains("--cli");
-        Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
-            error.printStackTrace();
-            if (!cli && error instanceof LinkageError) SwingUtilities.invokeLater(() ->
-                    javax.swing.JOptionPane.showMessageDialog(null,
-                            "Application classes could not be loaded. Close Study Agent and reopen it. "
-                            + "Do not replace app files while it is running.", "Restart Study Agent",
-                            javax.swing.JOptionPane.ERROR_MESSAGE));
-        });
         Path projectRoot = Path.of(System.getProperty("studyagent.root", "."))
                 .toAbsolutePath().normalize();
+        RuntimeDiagnostics.install(projectRoot, cli);
         Path data = projectRoot.resolve("data");
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--data")) {

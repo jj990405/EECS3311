@@ -197,8 +197,16 @@ public final class CommandLineInterface {
     private CommandInvoker.Proposal chooseProposal() {
         List<CommandInvoker.Proposal> items = controller.pendingProposals();
         if (items.isEmpty()) throw new IllegalStateException("No pending proposals.");
-        for (int i = 0; i < items.size(); i++) System.out.printf("%d. %s%n", i + 1, items.get(i).description());
+        printProposals(items);
         return items.get(number("Proposal number", items.size()));
+    }
+
+    private void printProposals(List<CommandInvoker.Proposal> items) {
+        for (int i = 0; i < items.size(); i++) {
+            String prefix = (i + 1) + ". ";
+            String continuation = " ".repeat(prefix.length());
+            System.out.println(prefix + items.get(i).description().replace("\n", "\n" + continuation));
+        }
     }
 
     private void suggestSyllabus() throws IOException {
@@ -211,7 +219,15 @@ public final class CommandLineInterface {
         System.out.println(result.description());
     }
 
-    private void proposals() { for (var item : controller.pendingProposals()) System.out.println(item.description()); }
+    private void proposals() {
+        var items = controller.pendingProposals();
+        if (items.isEmpty()) {
+            System.out.println("No pending proposals.");
+            return;
+        }
+        printProposals(items);
+        System.out.println("These proposals are not applied. Type 'approve' or 'reject', then choose a proposal number.");
+    }
     private void approve() throws IOException { controller.approveProposal(chooseProposal().id()); System.out.println("Approved."); }
     private void reject() { controller.rejectProposal(chooseProposal().id()); System.out.println("Rejected."); }
 
@@ -499,8 +515,10 @@ public final class CommandLineInterface {
 
     private void planSchedule() throws IOException {
         Course course = chooseCourse();
-        System.out.println(controller.planScheduleChange(course.id(), ask("Schedule change request")).description());
-        System.out.println("Review and approve it with 'proposals' and 'approve'.");
+        var proposal = controller.planScheduleChange(course.id(), ask("Schedule change request"));
+        System.out.println("Proposed change (not saved):");
+        System.out.println(proposal.description());
+        System.out.println("The calendar is unchanged. Type 'approve' to select and save this change, or 'proposals' to review all pending proposals.");
     }
     private void weakTopics() throws IOException {
         var topics = controller.topicStatistics(chooseCourse().id());

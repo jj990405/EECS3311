@@ -19,5 +19,8 @@ Study Agent.exe
 Study Agent CLI.exe
 Study-Agent-Windows-x64.zip
 
+# Local demonstration exports; hosted video links are in the report.
+video/*.mp4
+
 # Older local checkout
 EECS3311-git/

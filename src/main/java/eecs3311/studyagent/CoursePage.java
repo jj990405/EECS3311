@@ -25,6 +25,17 @@ public final class CoursePage extends JPanel {
     private java.util.function.Function<MaterialFile, javax.swing.JPopupMenu> fileMenu = file -> new javax.swing.JPopupMenu();
     private java.util.UUID selectedFile;
     private final java.util.Map<java.util.UUID, JPanel> fileRows = new java.util.HashMap<>();
+    private java.util.function.Consumer<Deadline> openDeadline = deadline -> { };
+    private java.util.function.Function<Deadline, javax.swing.JPopupMenu> deadlineMenu = deadline -> new javax.swing.JPopupMenu();
+    private java.util.UUID selectedDeadline;
+    private final java.util.Map<java.util.UUID, JPanel> deadlineRows = new java.util.HashMap<>();
+
+    void setDeadlineActions(java.util.function.Consumer<Deadline> open,
+                            java.util.function.Function<Deadline, javax.swing.JPopupMenu> menu) {
+        openDeadline = open; deadlineMenu = menu;
+    }
+
+    java.util.UUID selectedDeadlineId() { return selectedDeadline; }
 
     void setFileActions(java.util.function.Consumer<MaterialFile> select,
                         java.util.function.Consumer<MaterialFile> open,
@@ -86,12 +97,50 @@ public final class CoursePage extends JPanel {
                 + (progress.overdue() > 0 ? "   ·   " + progress.overdue() + " overdue" : ""));
         content.removeAll();
         fileRows.clear();
+        deadlineRows.clear();
         List<Deadline> deadlines = controller.schedule(AgentController.Period.ALL, course.id(), "", LocalDate.now());
+        if (deadlines.stream().noneMatch(d -> d.id().equals(selectedDeadline))) selectedDeadline = null;
         section("Deadlines", deadlines.size());
         if (deadlines.isEmpty()) empty("No deadlines yet. Add one or analyze your uploaded syllabus.");
         for (Deadline deadline : deadlines) {
             String date = deadline.dueDate() == null ? "TBD" : deadline.dueDate().toString();
-            row(date, deadline.title(), deadline.completed() ? "Complete" : deadline.type());
+            JPanel card = row(date, deadline.title(), deadline.completed() ? "Complete" : deadline.type());
+            deadlineRows.put(deadline.id(), card);
+            card.setFocusable(true);
+            card.getAccessibleContext().setAccessibleName(deadline.title() + " deadline");
+            Runnable select = () -> {
+                selectedDeadline = deadline.id();
+                deadlineRows.forEach((id, panel) -> paintFileRow(panel, id.equals(selectedDeadline)));
+                card.requestFocusInWindow();
+            };
+            java.awt.event.MouseAdapter listener = new java.awt.event.MouseAdapter() {
+                private void popup(java.awt.event.MouseEvent event) {
+                    if (!event.isPopupTrigger()) return;
+                    select.run(); deadlineMenu.apply(deadline).show(event.getComponent(), event.getX(), event.getY());
+                }
+                @Override public void mousePressed(java.awt.event.MouseEvent event) { select.run(); popup(event); }
+                @Override public void mouseReleased(java.awt.event.MouseEvent event) { popup(event); }
+                @Override public void mouseClicked(java.awt.event.MouseEvent event) {
+                    if (javax.swing.SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 1)
+                        openDeadline.accept(deadline);
+                }
+            };
+            card.addMouseListener(listener);
+            for (var child : card.getComponents()) child.addMouseListener(listener);
+            card.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+            card.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("ENTER"), "openDeadline");
+            card.getActionMap().put("openDeadline", new javax.swing.AbstractAction() {
+                @Override public void actionPerformed(java.awt.event.ActionEvent event) {
+                    select.run(); openDeadline.accept(deadline);
+                }
+            });
+            card.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("shift F10"), "deadlineMenu");
+            card.getActionMap().put("deadlineMenu", new javax.swing.AbstractAction() {
+                @Override public void actionPerformed(java.awt.event.ActionEvent event) {
+                    select.run(); deadlineMenu.apply(deadline).show(card, 8, card.getHeight());
+                }
+            });
+            paintFileRow(card, deadline.id().equals(selectedDeadline));
         }
         List<MaterialFile> materials = controller.materials().stream()
                 .filter(m -> m.courseId().equals(course.id())).toList();
@@ -129,6 +178,7 @@ public final class CoursePage extends JPanel {
     }
 
     public void clear() {
+        selectedDeadline = null; deadlineRows.clear();
         selectedFile = null; fileRows.clear();
         heading.setText("Select a course");
         summary.setText("Choose a course in the workspace to see its work and files.");

@@ -24,9 +24,9 @@
 
 ## 준비와 실행
 
-(로컬 `codex/recording-app-20261114/`의 **Study Agent.exe**를 녹화용으로 사용한다. **Study Agent CLI.exe**, app/, runtime/, sample-materials/를 함께 둔다. 다른 컴퓨터에서는 README대로 패키징한 실행 폴더를 사용한다. EXE 하나만 복사하지 않는다.)
+(로컬 `codex/recording-app-20261114/`의 **Study Agent.exe**를 녹화용으로 사용한다. **Study Agent CLI.exe**, app/, runtime/을 함께 둔다. 촬영 자료는 아래의 .sample 폴더에서 선택한다. 다른 컴퓨터에서는 README대로 패키징한 실행 폴더를 사용한다. EXE 하나만 복사하지 않는다.)
 (녹화용 트리가 비어 있는지 먼저 확인한다. 기존 데이터가 있다면 삭제 전에 녹화용 복사본인지 확인한다. 원래 Project 데이터는 지우지 않는다. GUI와 CLI는 동시에 켜지 않는다. 같은 녹화 폴더를 쓰면 CLI가 GUI의 저장 기록을 읽는다.)
-(sample-materials/의 네 합성 예제를 사용한다. 공식 YorkU 자료라고 설명하지 않는다. 실제 과목 자료를 사용하면 질문과 날짜를 해당 자료에 맞춘다. 로컬 API 설정은 미리 준비하고 화면에 열지 않는다.)
+(이번 촬영 자료는 로컬 C:/Users/x3777/.sample/의 실제 EECS3311 PDF 5개다: EECS3311_F26_syllabus.pdf, EECS3311-14-DBC.pdf, EECS3311-15-DbC-with-JML.pdf, EECS3311-17-More JML.pdf, Project-Instruction.pdf. 강의 원본은 공개 저장소에 넣지 않는다. 로컬 API 설정은 미리 준비하고 화면에 열지 않는다.)
 (앱·퀴즈 창 글자가 읽히는 해상도로 최대화한다. 설치된 녹화 도구로 화면과 마이크를 10초 시험 촬영하고 재생한다. 개인 알림을 끈다. API 키·.env·인증·메일 화면은 넣지 않는다.)
 (각 장면은 괄호의 클릭·입력 순서대로 실행하고 영어 인용문을 읽는다. 음성 대신 같은 영어를 자막으로 넣어도 된다. 입력과 실제 결과를 2~3초 남긴다. AI 대기를 편집할 때는 대기 생략 표시를 넣는다. 문항·점수·선택 번호는 매번 달라질 수 있으니 실제 화면을 본다.)
 (영상 파일 이름 예: 01-workspace-deadlines.mp4, 02-study-agent.mp4, 03-cli.mp4. 각 장면 ID를 메모하고 녹화가 끝난 뒤 실제 시작 시간을 기록한다.)
@@ -36,7 +36,7 @@
 (권장 9~12분. 다음 장면 순서대로 녹화한다.)
 (앱을 열기 직전에 아래 소개를 읽는다.)
 
-> This is the Semester Study and Deadline Management Agent. I will demonstrate the running Java GUI and CLI, including source-based AI study tools and schedule changes that require student approval. The materials in this recording are synthetic examples.
+> This is the Semester Study and Deadline Management Agent. I will demonstrate the running Java GUI and CLI, including source-based AI study tools and schedule changes that require student approval. This recording uses the actual uploaded EECS3311 syllabus and lecture PDFs.
 
 ### V1.01 F01 N04 학기와 과목 만들기
 
@@ -56,9 +56,9 @@
 ### V1.02 F01 N01 여러 파일 업로드와 분류
 
 (EECS3311을 선택하고 Add files를 누른다.)
-(녹화 폴더의 sample-materials에서 `demo-syllabus.txt`, `week3-lecture.txt`, `week3-lecture.pdf`, `design-review-specification.txt`를 Ctrl 또는 Shift로 함께 고른다.)
+(파일 선택창 주소창에 C:/Users/x3777/.sample/를 붙여넣고 PDF 5개를 Ctrl 또는 Shift로 함께 고른다.)
 (Review file folders에서 파일별 목적지를 읽고 AI sort files를 누른다.)
-(Syllabus 1개, Lecture Materials 2개, Assignment Specifications 1개인지 확인하고 Upload files를 누른다.)
+(Syllabus 1개, Lecture Materials 3개, Assignment Specifications 1개인지 확인하고 Upload files를 누른다.)
 (이유와 목적지 수정이 가능함을 보여준다. 업로드 후 전체 페이지 읽기·이미지 판독·검색 인덱스 저장이 끝나 Ready for questions and quizzes가 표시될 때까지 기다린다. 이후 퀴즈는 저장된 자료를 재사용한다.)
 
 
@@ -73,11 +73,11 @@
 
 ### V1.03 N02 F01 PDF와 강의 주차
 
-(week3-lecture.pdf를 클릭한다.)
+(EECS3311-15-DbC-with-JML.pdf를 클릭한다.)
 (오른쪽 원본 PDF 탭에서 다음 페이지, 이전 페이지, Fit width를 누른다.)
 (분할선을 움직이고 탭의 x로 닫는다.)
 (모두 닫았을 때 오른쪽 창이 사라지는 것을 보여준다.)
-(강의 파일을 선택해 AI actions > Suggest lecture week를 누르고 Week 3 제안을 검토해 승인한다.)
+(강의 파일을 선택해 AI actions > Suggest lecture week를 누르고 실제 강의 주차 제안을 검토해 승인한다.)
 (필요하면 파일 우클릭에서 주차를 수동 지정하는 대안도 보여준다.)
 
 
@@ -87,12 +87,12 @@
 
 (상단 AI actions > Analyze files for calendar를 누른다.)
 (제안 제목, 날짜, 비중, 출처, evidence, warning을 보여준다.)
-(예제의 Quiz 1은 November 20, Design Review는 November 21, Final Exam은 TBD다.)
-(출처 TXT도 열어 대조한다.)
+(실제 syllabus에서 Lab Test 2는 November 18, Project Deliverable 2는 November 10, Final Exam은 TBD인지 원문과 대조한다. 추가 지침에 다른 마감이 나오면 출처와 경고를 비교하고 결정한다.)
+(출처 PDF와 해당 페이지를 열어 대조한다.)
 (Review selected로 항목 하나를 열고 Edit 또는 Cancel을 보여준다.)
 (Add all을 누르면 Final Exam 날짜를 즉시 묻는다.)
 (Keep TBD를 선택한다.)
-(같은 Design Review가 syllabus와 specification에 있어도 중복 일정이 생기지 않는지 확인한다.)
+(동일한 과제 제안이 여러 출처에서 나와도 중복 일정이 생기지 않는지 확인한다.)
 (승인 후 Calendar에 실제 항목이 생기는 것을 보여준다.)
 
 
@@ -101,7 +101,7 @@
 ### V1.05 F03 F04 F09 달력과 우선순위와 진행률
 
 (Calendar에서 월 이동, Today, All courses와 한 과목 필터를 보여준다. 일정 추가 직전에는 필터를 All courses로 돌리고 November 2026을 연다.)
-(빈 11월 16일을 클릭하고 Add deadline을 누른다. EECS3311을 고르고 제목 High priority demo, 타입 Assignment, scope SOLID로 저장한다. 같은 날을 다시 클릭해 EECS2030의 Low priority demo, 타입 Quiz, scope Data structures를 추가한다.)
+(빈 11월 16일을 클릭하고 Add deadline을 누른다. EECS3311을 고르고 제목 High priority demo, 타입 Assignment, scope Design by Contract로 저장한다. 같은 날을 다시 클릭해 EECS2030의 Low priority demo, 타입 Quiz, scope Data structures를 추가한다.)
 (두 일정 모두 2026년 11월 16일을 사용해 같은 날짜의 난이도 우선순위를 비교한다.)
 (Timeline에서 날짜가 먼저이고 같은 날은 HIGH 과목이 먼저임을 보여준다.)
 (헤더를 클릭해 정렬을 바꿀 수 있지만, 우선순위 설명 때는 기본 일정 순서를 보여준다.)
@@ -126,8 +126,8 @@
 
 ### V1.07 F07 N03 알림과 미정 날짜
 
-(오늘 날짜인 데모 일정 하나를 만든다.)
-(Schedule 메뉴의 notification 설정에서 현재보다 약 2분 뒤의 시각을 `HH:MM`으로 넣고 lead time은 `0`으로 한다.)
+(오늘 날짜인 Notification demo 일정을 만든다. Course 탭의 카드는 이제 직접 클릭·우클릭할 수 있다. 상단 Schedule → Notification time도 선택이 없으면 일정 선택 창을 연다.)
+(Course의 오늘 일정 카드를 클릭 → 상세 창의 Notification time...를 누른다. 카드 우클릭 → Notification time... 또는 달력 날짜 클릭 → 일정 선택 → Notification time...도 가능하다. Due time에 현재보다 약 2분 뒤 HH:MM, Notify minutes before에 0을 넣는다. 1분 간격으로 검사하므로 최대 약 1분 늦을 수 있다.)
 (앱을 켠 채 기다려 실제 알림과 제목을 보여준다.)
 (기다린 구간은 편집 표시 후 줄여도 된다.)
 (Final Exam이 TBD인 사실과 하루 한 번 미정 날짜를 다시 묻는 기능을 설명한다.)
@@ -155,22 +155,25 @@
 
 ### V2.02 F06 F11 참고 파일과 출처 질문
 
-(EECS3311의 week3-lecture.pdf를 선택하고 Chat 입력란에 hi를 입력한 뒤 Enter를 누른다.)
+(EECS3311의 EECS3311-15-DbC-with-JML.pdf를 선택하고 Chat 입력란에 hi를 입력한 뒤 Enter를 누른다.)
 (안내 응답과 선택한 파일의 범위 표시를 보여준다.)
 (인사는 로컬 안내이며 공부 질문부터 실제 AI API를 사용한다고 설명한다.)
 (Chat에서 quiz를 입력하면 퀴즈 설정과 실제 풀이 화면이 열린다. notes는 공부 노트, slide quiz는 페이지 범위 퀴즈로 연결된다. V2.04에서 quiz 입력 경로를 사용해도 된다.)
 
 
-(Quiz 1 일정을 고른 뒤 Reference files 또는 AI actions > Suggest reference files를 누른다.)
-(week3 강의가 추천된 결과를 보여준다.)
-(week3-lecture.pdf를 다시 선택하고 Chat의 범위 드롭다운을 Selected file only로 바꾼 뒤 아래 질문을 입력하고 Ask sources를 누른다. Course materials가 기본값이며 이 경우 선택 파일이 있어도 과목 전체에서 찾는다.)
+(여기서 일정은 AI 연습 퀴즈가 아니라 syllabus에 적힌 시험·과제다. EECS3311을 고르고 중앙 Timeline 탭에서 Lab Test 2 행을 찾는다.)
+(행이 없으면 먼저 AI actions → Analyze files for calendar → 제안 검토 → Add all 또는 Add checked to calendar로 저장한다. Final Exam 날짜는 모르면 Keep TBD를 선택한다. 저장 후 Timeline으로 돌아와 Lab Test 2, 2026-11-18 행을 한 번 클릭한다. 원문 날짜가 바뀌었다면 해당 자료의 날짜로 확인한다.)
+(상단 AI actions → Suggest reference files를 누른다. 일정 선택 창이 나오면 Lab Test 2를 고른다. Course 탭에서는 하단 AI actions → Reference files로도 같은 기능을 연다.)
+(Reference files는 선택한 시험을 공부할 때 참고할 업로드 PDF를 추천하는 기능이다. 새 퀴즈를 만드는 기능이 아니다.)
+(JML 강의가 추천된 결과를 보여준다.)
+(EECS3311-15-DbC-with-JML.pdf를 다시 선택하고 Chat의 범위 드롭다운을 Selected file only로 바꾼 뒤 아래 질문을 입력하고 Ask sources를 누른다. Course materials가 기본값이며 이 경우 선택 파일이 있어도 과목 전체에서 찾는다.)
 
 
-`What is the Open Closed principle? Explain it using the uploaded lecture.`
+`What is the difference between preconditions and postconditions? Explain it using the uploaded JML lecture.`
 
 (답의 파란색 밑줄 출처에서 파일명·페이지를 클릭한다. 오른쪽 PDF 탭이 같은 파일의 정확한 물리 페이지로 이동하는지 보여준다. Chat 안의 출처도 같은 방식으로 동작한다.)
 (답변이 Chat 안에 한 번만 나타나고 중복 팝업이 없는지 보여준다. 긴 답은 Chat 안에서 스크롤한다. 일반 AI 답변은 Chat에만 표시한다. 설정·확인·오류 창은 남아 있고, 퀴즈 풀이가 별도 작업 창을 사용한다.)
-(Course materials 범위에서 `How should I prepare for Quiz 1?`을 묻는다. 실제 자료로 녹화한다면 `How should I prepare for Lab Test 2?`를 사용한다. syllabus의 날짜 안내만이 아니라 관련 강의의 개념, 실제 예제 연습, 주의점, 자가 점검 질문이 나오고 강의 페이지도 인용되는지 보여준다.)
+(Course materials 범위에서 `How should I prepare for Lab Test 2?`를 묻는다. syllabus의 날짜 안내만이 아니라 관련 강의의 개념, 실제 예제 연습, 주의점, 자가 점검 질문이 나오고 강의 페이지도 인용되는지 보여준다.)
 (자료가 없는 EECS2030을 선택해 같은 공부 질문을 보내 입력 부족 안내를 보여준다.)
 (다시 EECS3311의 강의 PDF로 돌아온다.)
 (응답이 근거 없는 내용을 만들거나 오류가 나면 그 결과를 성공으로 설명하지 말고 재검토한다.)
@@ -180,8 +183,8 @@
 
 ### V2.03 F12 공부 노트
 
-(week3-lecture.pdf를 고르고 우클릭 AI: Study notes 또는 상단 AI actions > Create study notes를 누른다.)
-(상단 AI working 경과 시간과 Cancel AI, 하단 읽기 진행 상황을 보여준다.)
+(EECS3311-15-DbC-with-JML.pdf를 고르고 우클릭 AI: Study notes 또는 상단 AI actions > Create study notes를 누른다.)
+(창 하단의 AI 작업 이름·경과 시간·Cancel AI와 읽기 진행 상황을 보여준다. AI actions 메뉴는 작업 중에도 열리며 현재 작업 취소를 제공한다.)
 (취소 경로도 보이려면 한 번 Cancel AI 후 재실행한다.)
 (완료된 노트의 제목, 핵심 bullet, 설명과 출처를 보여준다.)
 (Open source PDF로 원본을 나란히 연다.)
@@ -192,7 +195,7 @@
 
 ### V2.04 F13 객관식 퀴즈
 
-(AI actions > Practice quiz에서 One file, week3-lecture.pdf, 문제 수 `3`, difficulty MEDIUM, Multiple choice를 고른다.)
+(AI actions > Practice quiz에서 One file, EECS3311-15-DbC-with-JML.pdf, 문제 수 `3`, difficulty MEDIUM, Multiple choice를 고른다.)
 (파일 범위에는 Lecture Materials만 사용하며 syllabus로 퀴즈를 만들지 않는다. 다른 범위 Lecture week와 All lectures가 있음을 먼저 보여줘도 된다. 주차가 하나도 지정되지 않은 상태에서 Lecture week를 선택하면 강의 파일 선택 표가 바로 열린다. 사용할 파일을 체크하면 주차를 억지로 지정하지 않고 진행한다. 전체 강의는 모든 저장 페이지를 분할해서 읽는다.)
 (1번 답을 고르고 3번으로 이동한 후 1번으로 돌아와 답이 남아 있음을 보여준다.)
 (2번을 비운 상태에서는 최종 Submit이 비활성화됨을 보여준다.)
@@ -203,14 +206,14 @@
 
 > F13 is quiz generation and grading. The model generates the questions and answer keys. The app grades multiple-choice answers locally, preserves selections during navigation and prevents incomplete submission. The review explains chosen and correct answers.
 
-(원본 week3-lecture.pdf의 2쪽으로 이동한다.)
+(원본 EECS3311-15-DbC-with-JML.pdf의 11쪽으로 이동한다. 코드와 requires/ensures 예제가 보이는지 확인한다.)
 (PDF 상단 AI 메뉴 또는 PDF 본문 우클릭의 Quiz this slide를 누른다.)
-(기본 페이지가 2인지 확인하고 문항 수 1, 난이도 MEDIUM으로 생성한다.)
+(기본 페이지가 11인지 확인하고 문항 수 1, 난이도 MEDIUM으로 생성한다.)
 (실제 답을 선택하고 Submit quiz를 누른 뒤 점수와 해설까지 보여준다.)
 
 
 (파일 우클릭 AI: Quiz pages / slides에서 0을 넣어 범위 오류를 보여준다.)
-(다시 열어 1-2를 넣으면 범위 지정이 가능함을 보여준다.)
+(다시 열어 10-12를 넣으면 범위 지정이 가능함을 보여준다.)
 (표지나 목차만 고르면 내용 부족 안내가 나올 수 있으므로 개념이 있는 페이지로 바꾼다.)
 (범위 퀴즈는 객관식이며, 선택 페이지 밖의 내용은 입력하지 않는다.)
 
@@ -223,7 +226,7 @@
 (답변에는 다음처럼 자료에 근거한 문장을 넣되 실제 질문에 맞게 수정한다.)
 
 
-`Command encapsulates a request as an object. The invoker holds it while the user reviews a proposal. Approval executes the command on the data store. Observer listeners then refresh the GUI after the store changes.`
+`A precondition describes what the caller must satisfy. A postcondition describes what the method must establish. An invariant constrains valid object states, and JML expresses these contracts using requires, ensures and invariant clauses.`
 
 (AI 피드백과 제안 점수를 보여준다.)
 (Proposed score 입력에서 예를 들어 `85`로 수정하고 승인한다.)
@@ -237,7 +240,7 @@
 
 ### V2.06 F14 약점과 자기평가
 
-(Study > Self assessment에서 topic `SOLID`, confidence `2`를 넣는다.)
+(Study > Self assessment에서 topic `Design by Contract`, confidence `2`를 넣는다.)
 (Weak topics에서 객관식 정답률과 자기평가를 보여준다.)
 (상단 AI actions > Weak topics / review advice에서 업로드 강의 추천을 보여준다.)
 (에세이 점수는 현재 객관식 topic accuracy에 합산되지 않는다고 설명한다.)
@@ -250,10 +253,10 @@
 (EECS3311에서 AI actions > Request schedule change 또는 Chat의 Change schedule에 입력한다.)
 
 
-`Move Design Review to November 22, 2026. Keep its title, type and scope.`
+`Move High priority demo to November 22, 2026. Keep its title, type and scope.`
 
 (before/after를 읽고 한 번 Reject한 뒤 같은 요청을 다시 보내 Approve한다.)
-(승인 전에는 원래 날짜, 승인 후에는 11월 22일인 것을 Calendar에서 보여준다.)
+(승인 전에는 원래 11월 16일, 승인 후에는 11월 22일인 것을 Calendar에서 보여준다.)
 
 
 > F08 turns a natural-language request into a reviewed command. Java checks the target and date. Rejecting changes nothing; approval executes the stored command. One request handles one deadline action.
@@ -311,17 +314,17 @@ n
 (CLI 업로드 장면은 material add에서 과목 EECS3311, category `2` Lecture Materials를 고르고 파일 경로를 붙여넣는다.)
 (이미 있으면 Replace 질문에 `n`을 넣고, 다음 File path는 공란으로 끝낸다.)
 (새 강의 업로드이면 week 제안에 y 또는 n을 입력한다.)
-(경로는 녹화 폴더의 sample-materials 파일 우클릭으로 경로 복사를 한 후 **둘러싼 따옴표 없이** 붙여넣는다.)
+(경로는 C:/Users/x3777/.sample/의 실제 PDF를 우클릭해 복사한 후 둘러싼 따옴표 없이 붙여넣는다.)
 
 
 | 명령 / 실제 질문 | 입력 또는 조작 |
 | --- | --- |
-| material add | EECS3311 번호 → Category 2 Lecture Materials → week3-lecture.txt 전체 경로 |
+| material add | EECS3311 번호 → Category 2 Lecture Materials → EECS3311-15-DbC-with-JML.pdf 전체 경로 |
 | 기존 파일 Replace? | n → 다음 File path는 공란으로 종료 |
 | 신규 파일 업로드인 경우 | 주차 제안 y/n에 답한 후 다음 File path는 공란으로 종료 |
-| ai week | week3-lecture.txt 번호 |
-| proposals → approve | Week 3 제안 번호 |
-| ai syllabus | demo-syllabus.txt 번호 |
+| ai week | EECS3311-15-DbC-with-JML.pdf 번호 |
+| proposals → approve | 실제 강의 주차 제안 번호 |
+| ai syllabus | EECS3311_F26_syllabus.pdf 번호 |
 | proposals → reject | 이미 추가한 일정의 중복 제안 번호 |
 
 
@@ -335,7 +338,7 @@ n
 
 | 명령 | 실제 질문 순서대로 입력 |
 | --- | --- |
-| deadline add | EECS3311 번호 → CLI practice → Assignment → 20261123 → SOLID |
+| deadline add | EECS3311 번호 → CLI practice → Assignment → 20261123 → Design by Contract |
 | timeline | all → n → 공란 검색 |
 | calendar | 2026-11 |
 | complete | CLI practice 번호 |
@@ -357,10 +360,10 @@ n
 
 | 명령 | 실제 질문 순서대로 입력 |
 | --- | --- |
-| ai references | Quiz 1 번호 |
-| ask | EECS3311 번호 → What is the Open Closed principle? |
-| ask | EECS3311 번호 → How should I prepare for Quiz 1 using the uploaded lectures? |
-| summary create | week3-lecture.pdf 번호 |
+| ai references | Lab Test 2 번호 |
+| ask | EECS3311 번호 → What is a precondition in Design by Contract? |
+| ask | EECS3311 번호 → How should I prepare for Lab Test 2 using the uploaded lectures? |
+| summary create | EECS3311-15-DbC-with-JML.pdf 번호 |
 | summary list | 같은 파일 번호 |
 
 (출처 파일과 페이지를 보여준다.)
@@ -373,16 +376,16 @@ n
 
 | 명령 | 실제 질문 순서대로 입력 |
 | --- | --- |
-| quiz create | file → week3-lecture.pdf 번호 → 문제 수 2 → 난이도 2 → mcq |
+| quiz create | file → EECS3311-15-DbC-with-JML.pdf 번호 → 문제 수 2 → 난이도 2 → mcq |
 | quiz take | EECS3311 번호 → 방금 만든 퀴즈 번호 → 실제 1번·2번 답 각 1~4 |
-| self assess | EECS3311 번호 → SOLID → 2 |
+| self assess | EECS3311 번호 → Design by Contract → 2 |
 | weak topics | EECS3311 번호 |
 | weak advice | EECS3311 번호 |
 | essay list | GUI에서 승인한 에세이의 원본 파일 번호 |
 
 (quiz create의 file 대신 pages, week 또는 all을 쓸 수 있다.)
-(pages는 파일 번호 다음에 1-2 같은 페이지 범위를 물으며 mcq 타입을 사용한다. 표의 화살표는 한꺼번에 입력할 문자가 아니라 각 프롬프트 순서다.)
-(슬라이드 범위도 촬영하려면 quiz create → pages → PDF 번호 → 1-2 → 2 → 2 → mcq 순으로 한 번 더 실행하고 풀이·제출 결과까지 보여준다.)
+(pages는 파일 번호 다음에 10-12 같은 페이지 범위를 물으며 mcq 타입을 사용한다. 표의 화살표는 한꺼번에 입력할 문자가 아니라 각 프롬프트 순서다.)
+(슬라이드 범위도 촬영하려면 quiz create → pages → PDF 번호 → 10-12 → 2 → 2 → mcq 순으로 한 번 더 실행하고 풀이·제출 결과까지 보여준다.)
 (week는 과목과 주차를 묻고, all은 과목을 묻는다.)
 (타입은 mcq/essay/both다.)
 (Both는 2개 이상이어야 한다.)
@@ -391,7 +394,7 @@ n
 
 | 명령 | 실제 질문 순서대로 입력 |
 | --- | --- |
-| essay create | week3-lecture.pdf 번호 |
+| essay create | EECS3311-15-DbC-with-JML.pdf 번호 |
 | essay take | EECS3311 번호 → 새 에세이 번호 → 질문에 맞는 한 줄 답변 |
 | proposals → approve | 해당 essay grade 제안 번호 |
 | essay list | 같은 원본 파일 번호 |

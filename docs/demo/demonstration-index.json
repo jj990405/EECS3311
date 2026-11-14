@@ -1,238 +1,506 @@
 {
-  "recording_plan_date": "2026-11-14",
-  "instructions": "Replace empty URL/time with actual accessible recordings; planned segment IDs are not timestamps.",
+  "instructions": "Actual edited-video timestamps. Each timestamp_url opens the corresponding feature segment.",
   "features": [
     {
       "feature": "F01",
       "name": "Workspace/materials  -  implemented, modified upload flow",
-      "planned_segments": [
-        "V1.01",
-        "V1.02",
-        "V1.03",
-        "V3.01",
-        "V3.02"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "00:00",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=0",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "00:00",
+          "seconds": 0,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=0"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "00:00",
+          "seconds": 0,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=0"
+        }
+      ]
     },
     {
       "feature": "F02",
       "name": "Syllabus deadlines  -  implemented",
-      "planned_segments": [
-        "V1.04",
-        "V3.02"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "06:49",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=409",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "06:49",
+          "seconds": 409,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=409"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "01:06",
+          "seconds": 66,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=66"
+        }
+      ]
     },
     {
       "feature": "F03",
       "name": "Calendar/timeline  -  implemented, expanded",
-      "planned_segments": [
-        "V1.05",
-        "V3.03"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "09:27",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=567",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "09:27",
+          "seconds": 567,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=567"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "01:55",
+          "seconds": 115,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=115"
+        }
+      ]
     },
     {
       "feature": "F04",
       "name": "Priority  -  implemented",
-      "planned_segments": [
-        "V1.05",
-        "V3.03"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "09:27",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=567",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "09:27",
+          "seconds": 567,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=567"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "01:42",
+          "seconds": 102,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=102"
+        }
+      ]
     },
     {
       "feature": "F05",
       "name": "Study timer/records  -  implemented",
-      "planned_segments": [
-        "V2.01",
-        "V3.06"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "14:30",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=870",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "14:30",
+          "seconds": 870,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=870"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "05:24",
+          "seconds": 324,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=324"
+        },
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "27:53",
+          "seconds": 1673,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1673",
+          "scope": "Full timer completion"
+        }
+      ]
     },
     {
       "feature": "F06",
       "name": "Reference files  -  implemented",
-      "planned_segments": [
-        "V2.02",
-        "V3.04"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "15:34",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=934",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "15:34",
+          "seconds": 934,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=934"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "02:41",
+          "seconds": 161,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=161"
+        }
+      ]
     },
     {
       "feature": "F07",
       "name": "Deadline notices  -  implemented",
-      "planned_segments": [
-        "V1.07",
-        "V3.03"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "13:18",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=798",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "13:18",
+          "seconds": 798,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=798"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "02:05",
+          "seconds": 125,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=125"
+        }
+      ]
     },
     {
       "feature": "F08",
       "name": "Natural-language edits  -  implemented",
-      "planned_segments": [
-        "V2.07",
-        "V3.06"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "23:23",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1403",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "23:23",
+          "seconds": 1403,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1403"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "05:33",
+          "seconds": 333,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=333"
+        }
+      ]
     },
     {
       "feature": "F09",
       "name": "Progress  -  implemented",
-      "planned_segments": [
-        "V1.05",
-        "V3.03"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "12:28",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=748",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "12:28",
+          "seconds": 748,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=748"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "02:27",
+          "seconds": 147,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=147"
+        }
+      ]
     },
     {
       "feature": "F10",
       "name": "Weekly brief  -  implemented",
-      "planned_segments": [
-        "V2.08",
-        "V3.06"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "25:08",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1508",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "25:08",
+          "seconds": 1508,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1508"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "06:22",
+          "seconds": 382,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=382"
+        }
+      ]
     },
     {
       "feature": "F11",
       "name": "Grounded Q&A  -  implemented",
-      "planned_segments": [
-        "V2.02",
-        "V3.04"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "15:34",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=934",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "15:34",
+          "seconds": 934,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=934"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "02:54",
+          "seconds": 174,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=174"
+        }
+      ]
     },
     {
       "feature": "F12",
       "name": "Summaries/study notes  -  implemented, batched reading UI",
-      "planned_segments": [
-        "V2.03",
-        "V3.04"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "17:51",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1071",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "17:51",
+          "seconds": 1071,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1071"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "03:27",
+          "seconds": 207,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=207"
+        }
+      ]
     },
     {
       "feature": "F13",
       "name": "Quiz/essay  -  implemented, slide scope added",
-      "planned_segments": [
-        "V2.04",
-        "V2.05",
-        "V3.05"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "18:56",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1136",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "18:56",
+          "seconds": 1136,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1136"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "03:51",
+          "seconds": 231,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=231"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "05:57",
+          "seconds": 357,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=357",
+          "scope": "Essay feedback and approval"
+        }
+      ]
     },
     {
       "feature": "F14",
       "name": "Weak topics  -  implemented",
-      "planned_segments": [
-        "V2.06",
-        "V3.05"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "21:51",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1311",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "21:51",
+          "seconds": 1311,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1311"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "04:39",
+          "seconds": 279,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=279"
+        }
+      ]
     },
     {
       "feature": "F15",
       "name": "History/memory  -  implemented",
-      "planned_segments": [
-        "V2.08",
-        "V3.06"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "25:46",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1546",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "25:46",
+          "seconds": 1546,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1546"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "06:36",
+          "seconds": 396,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=396"
+        }
+      ]
     },
     {
       "feature": "N01",
       "name": "Reviewed file classification and moves",
-      "planned_segments": [
-        "V1.02"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "02:14",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=134",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "02:14",
+          "seconds": 134,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=134"
+        }
+      ]
     },
     {
       "feature": "N02",
       "name": "On-demand source workspace",
-      "planned_segments": [
-        "V1.03",
-        "V2.03"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "03:12",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=192",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "03:12",
+          "seconds": 192,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=192"
+        }
+      ]
     },
     {
       "feature": "N03",
       "name": "Bulk calendar import and undated reminders",
-      "planned_segments": [
-        "V1.04",
-        "V1.07"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "06:49",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=409",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "06:49",
+          "seconds": 409,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=409"
+        }
+      ]
     },
     {
       "feature": "N04",
       "name": "Easier setup and date/color selection",
-      "planned_segments": [
-        "V1.01",
-        "V3.01"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "00:00",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=0",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "00:00",
+          "seconds": 0,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=0"
+        },
+        {
+          "interface": "CLI",
+          "video_url": "https://youtu.be/qe8We5Za7Jc",
+          "start_time": "00:24",
+          "seconds": 24,
+          "timestamp_url": "https://youtu.be/qe8We5Za7Jc?t=24"
+        }
+      ]
     },
     {
       "feature": "N05",
       "name": "Confirmed full reset",
-      "planned_segments": [
-        "V3.07"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "29:32",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1772",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "29:32",
+          "seconds": 1772,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1772"
+        }
       ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "coverage_note": "The recording shows reset confirmation and cancellation. Actual clearing was verified separately in an isolated automated test."
     },
     {
       "feature": "N06",
       "name": "Timeline selection and context actions",
-      "planned_segments": [
-        "V1.06"
-      ],
-      "video_url": "",
-      "start_time": "",
-      "status": "Not recorded"
+      "video_url": "https://youtu.be/VxEf256ZtDc",
+      "start_time": "12:28",
+      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
+      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=748",
+      "recordings": [
+        {
+          "interface": "GUI",
+          "video_url": "https://youtu.be/VxEf256ZtDc",
+          "start_time": "12:28",
+          "seconds": 748,
+          "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=748"
+        }
+      ]
     }
-  ]
+  ],
+  "recording_date": "2026-11-14",
+  "videos": [
+    {
+      "interface": "GUI",
+      "url": "https://youtu.be/VxEf256ZtDc",
+      "duration": "29:54"
+    },
+    {
+      "interface": "CLI",
+      "url": "https://youtu.be/qe8We5Za7Jc",
+      "duration": "06:49"
+    }
+  ],
+  "access_check": "Both unlisted videos opened without signing in; GUI playback reached 0:02 and CLI playback control entered its running state. No access request was required.",
+  "recording_note": "Some popup windows were not captured by Windows Game Bar. Screenshots from the running application are inserted for those sections."
 }

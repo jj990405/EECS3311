@@ -46,7 +46,7 @@ class FileOrganizationTest {
             assertTrue(Json.string(file, "textSample").contains("design patterns"));
             return Json.write(Map.of("suggestions", java.util.List.of(Map.of(
                     "id", Json.string(file, "id"), "category", "LECTURE_MATERIALS",
-                    "reason", "Lecture slides"))));
+                    "reason", "Lecture slides", "confidence", "HIGH", "needsFullReview", false))));
         });
         var semester = agent.createSemester("Fall 2026", LocalDate.of(2026, 9, 1),
                 LocalDate.of(2026, 12, 31));

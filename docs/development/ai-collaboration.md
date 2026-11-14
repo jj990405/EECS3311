@@ -17,6 +17,7 @@ Prepared 13 November 2026 from repository history, this conversation and the cur
 | Nov2–4 source history | Owner requested EXE, simpler setup, compact dates/colors, actual syllabus/API checks, usable quiz and original PDF side tabs, file sorting, bulk calendar import, daily TBD prompts and study notes → repeated code/test revisions → owner approved each resulting commit. |
 | 13 Nov audit | Owner requested complete feature verification and parallel current diagrams before the report → source/Stage 1 audit, real API acceptance harness, actual CLI transcripts, native EXE computer use → date-only schedule edit, typo merge consistency, unlinked timer briefing totals, daily totals and narrow controls corrected. |
 | 13 Nov rendering feedback | Native GUI showed narrow course/timer controls, raw Markdown and dense notes → action grids, wrapping, real styled emphasis and paragraph spacing → rebuilt, automated tests and native reinspection. |
+| 14 Nov follow-up | Owner requested a clean bulk-upload test, full reading for uncertain files, neutral course row shades, a redesigned quiz and timer-status navigation, followed immediately by CLI verification → 25 actual PDFs classified correctly, 35 deterministic tests, 16 actual API core checks and 23 actual CLI groups covering all 41 commands; full 15-minute native expiry persisted 900 seconds. |
 
 ## Development subscription and application API usage
 
@@ -49,7 +50,7 @@ These are the selected API project's aggregate totals at observation time, not a
 | Application API execution/testing | Dashboard aggregate 138,179 (scope above) | **USD 0.02 API usage**, rounded as displayed | Actual API project analytics inspected. Owner identifies these calls as the application's API usage. Dashboard scope and invoice precision remain as stated above. |
 | Earlier lost AI-agent session | Unknown | Unknown | Owner's invoice or usage record, if available. |
 
-The application client currently discards the provider's usage metadata and retains response content. The successful core audit logged **15 calls**, but this is only that run, not all development usage, retries or CLI/GUI calls. Do not report15 as the project-wide total. Use the actual dashboard aggregate with its scope and precision above; do not substitute current model price estimates for measured spend.
+The application client currently discards the provider's usage metadata and retains response content. The Nov13 successful core audit logged **15 calls**; the Nov14 rerun logged **17 calls** after adaptive classification, and these counts cover only those runs, not all development usage, retries or CLI/GUI calls. Do not report15 as the project-wide total. Use the actual dashboard aggregate with its scope and precision above; do not substitute current model price estimates for measured spend.
 
 This documentation includes no API keys, local `.env` contents, private billing details or raw uploaded course documents.
 

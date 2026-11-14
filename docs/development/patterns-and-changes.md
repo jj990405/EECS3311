@@ -1,6 +1,6 @@
 # Patterns and Stage 1 changes
 
-Verified from the implementation on 13 November 2026. There are **six distinct GoF patterns**, without counting Simple Factory or repeated Strategy uses as extra distinct patterns. Source folder: `src/main/java/eecs3311/studyagent/`.
+Verified from the implementation on 14 November 2026. There are **six distinct GoF patterns**, without counting Simple Factory or repeated Strategy uses as extra distinct patterns. Source folder: `src/main/java/eecs3311/studyagent/`.
 
 | Pattern | Participants / actual methods | Design problem and why this is a real use | Stage 1 alignment |
 | --- | --- | --- | --- |
@@ -28,10 +28,11 @@ The rendered [class/architecture sheets](../design/implemented/architecture/READ
 | Automatic AI after upload → explicit AI buttons after deterministic batch upload | Owner requested upload everything first and control API use | F01 week assignment and F02 extraction still available; N01 classification and N03 bulk analysis are reviewed steps. |
 | Nonselected calendar weeks show dots → all weeks show course/title labels + course filter + day editor | Make deadlines usable without selecting every week | F03 keeps month navigation and adds empty-day create/edit. Affected `CalendarPanel/MainWindow`, SD03. |
 | Paragraph summary popups → saved study guide tab with headings/bullets/bold and source button | Owner needs usable study material beside original PDF | F12 retained; `StudyNotesPanel`, SD09b; generated facts require review. |
-| Wide quiz option popups → `QuizDialog` question-by-question vertical choices and review | Long choices previously exceeded screen width | F13 retained with file/week/all scope, count, difficulty and type; MCQ and essay stored separately. |
-| Raw RGB/date input → swatches/automatic color and typed compact date/calendar picker | Remove unnecessary setup knowledge and strict punctuation | N04 extends F01/F03. Color still identifies course in tree/calendar. |
+| Wide quiz option popups → `QuizDialog` hosting `QuizSessionPanel` with question navigation, wrapping choices, progress and review | Long choices previously exceeded screen width | F13 retained with file/week/all scope, count, difficulty and type; MCQ and essay stored separately. |
+| Raw RGB/date input → swatches/automatic color and typed compact date/calendar picker | Remove unnecessary setup knowledge and strict punctuation | N04 extends F01/F03. Color identifies course in tree/calendar and timeline rows with neutral gray shades. |
 | Fixed viewer → optional split workspace with closable PDF/calendar/notes tabs | Owner requested source alongside main work and full width after closing tabs | N02, `MainWindow/PdfPreviewPanel`; originals stay unchanged. |
 | Individual extraction only → explicit bulk review/Add all/TBD decisions and daily unknown-date reminder | Reduce repetitive approval while keeping date uncertainty visible | N03 extends F02/F07; duplicate prevention and date validation still run. |
+| Short-prefix classification → multi-position sampling and full-document review when uncertain | Owner found mixed bulk uploads inaccurate and authorized fuller API reading | N01; shared `DocumentClassification`, pre-upload `UploadReviewDialog`, strict complete-response validation; no sorting applies before review. |
 | No reset/classification flow → reviewed category moves and confirmed local reset | Recover from wrong folders and restart a workspace | N01/N05 additions; stored copies move, original external files and `.env` stay. |
 
 These are declared implementation differences, not a claim of literal class-for-class identity with Stage 1. All original feature IDs are accounted for in the feature matrix. The final report must preserve these explanations and include a video reference for every implemented original and added feature.

@@ -1,74 +1,57 @@
-# Verification record — 13 November 2026
+# Verification record — 14 November 2026
 
-Baseline source: `f7c2d6e`; current audit fixes are uncommitted. Both local HEAD and GitHub `origin/main` were confirmed at `f7c2d6ec816f5dbc60105bb52291887d9bcd14fa` with read-only `git ls-remote`. This document is supporting evidence for the later report, not a final report or video demonstration.
+Source baseline: `1ab1b5a` (after the approved Nov13 audit and cost clarification). The owner approved committing and pushing this follow-up on 14 November 2026. It records bounded evidence for the later Stage 2 report; it is not the final report or a video submission.
 
-## Check layers and evidence
+## Results
 
-| Layer | Result | What this establishes / limit |
+| Layer | Observed result | Scope and practical limit |
 | --- | --- | --- |
-| Maven build and deterministic checks | **25 tests, 0 failures, 0 errors**; packaged shaded JAR | Persistence, priority/filtering, readers, source/response validation, approval, calendar import, daily TBD markers, compact date/color setup, quiz/essay/history, narrow controls, daily timer totals and date-only edit regressions. A test method may exercise several assertions; do not present 25 as the number of all scenarios. |
-| Actual API core acceptance | **16 feature checks passed**, 0 failures; successful run recorded 15 API calls | Real 9-page EECS3311 syllabus; explicitly synthetic 2-page SOLID lecture and week schedule. Exercises F01–F15 plus classification. Sources below. This is one observed set of responses, not a guarantee for every PDF/model output. |
-| Actual CLI acceptance | **12 command groups passed**, no `Error:` or unknown commands | Invoked the real `CommandLineInterface.run` with scripted input and actual API. Setup, syllabus/week proposals and approval, schedule/calendar/progress/notices, references/Q&A, notes/MCQ/essay, weaknesses, brief/history. Transcript retained locally. |
-| Native launchers | GUI EXE launched directly through computer use; CLI EXE default launch emitted help and exited normally; explicit `--cli --data` smoke passed | No PowerShell is needed to launch the prepared GUI. A CLI is expected to display a text console. Passing custom jpackage arguments replaces launcher defaults, so custom CLI invocations explicitly include `--cli`. |
-| Native GUI through computer use | Original PDF preview/paging, saved notes, MCQ 2/2 review, timer controls/records, calendar filter/day add, source chat and split divider, bulk review/Add all/TBD all checked | Real Swing app image with isolated copied data. The UI checks are a selected running acceptance tour, not a recording of every possible menu combination. Additional automated/CLI/controller evidence covers the full feature inventory. |
-| User data preservation | **82 original files before and after; all SHA-256 hashes identical** | Root `data/` stayed unchanged. Testing used new directories below ignored `codex/`; original `.env` retained. API keys and copied course files are excluded from Git. |
-| Diagrams | 7 architecture/class + 17 sequence + 3 use-case sheets; XML parse and SVG→PNG render checks | Two parallel source audits, rendered contact sheets and dense views reviewed. Root inspected architecture, command and bulk import sheets. Draw.io sources are editable; no claim of interactive diagrams.net editing validation. |
+| Maven package and deterministic checks | **35 tests, 0 failures, 0 errors** | Persistence/readers, date/source validation, approvals, priority, calendar/TBD markers, layout, timer totals, full-document segmentation, complete classification responses, sorted row colors, quiz answer retention/submission gate/read-only review, CLI essay scope/count, chosen question difficulty versus course explanation depth, and malformed essay regeneration. Test methods are not a count of all scenarios. |
+| Actual API core acceptance | **16 checks passed**, 0 failures; **17 calls** in the successful run | F01–F15 plus classification: real 9-page EECS3311 syllabus, explicitly synthetic 2-page SOLID lecture and schedule. Sources, approval, persistence, timer controls, reminders, references, schedule edits, Q&A, notes, MCQ, essay, weak topics, briefing and history. |
+| Actual mixed PDF classification | **25 of 25 correct** against a manual document-purpose check | 1 official syllabus, 22 teaching/reference PDFs, 2 assignment/project instruction PDFs. Separate API classification and actual native pre-upload AI sorting both checked. An ambiguous renamed 20-page Admin deck received full-document review. This sample result does not imply universal accuracy. |
+| Actual CLI acceptance | **23 groups passed; all 41 recognized commands exercised** | Real `CommandLineInterface.run`, scripted input and configured API. Basic 12 groups plus 11 supplemental groups. File/week/all quiz scope, MCQ/essay/both, two requested essays, duplicate upload skip, compact-date retry, multi-semester choice, approval/rejection, history deletion, schedule CRUD, filtering, reminders and all study commands. |
+| Native EXE | GUI EXE launched directly; latest CLI EXE `--cli --data` help/records/exit smoke passed | Prepared launchers use the same SHA-256-matched shaded JAR. GUI needs no terminal. CLI naturally presents a text console; explicit custom launcher arguments include `--cli`. |
+| Native quiz | Actual SOLID PDF → 3-question quiz → **3/3**, 100% review | Question navigation, preserved prior answer, disabled final submission with an unanswered question, full-row choices and explanation review observed. Correct/wrong labels and read-only review also checked deterministically. |
+| Native timer | **15-minute real-time expiry → 900 seconds persisted** | Started 00:36:07, saved 00:51:07 Toronto. Expiry notification observed while quiz review was open. Restart preserved record. Additional pause/resume/stop saved 20 seconds; GUI daily and weekly total displayed 15 min 20 sec. Alarm code executed, but speaker output was not independently recorded/measured. |
+| Native follow-up workflow | Neutral gray course rows, 25-file upload/review, original PDFs, timer status navigation and bulk calendar import checked | 3 readable syllabus/assignment files analyzed, 10 assessment suggestions. Add all immediately requested the unknown Final Exam date; Keep TBD retained uncertainty, cutoff warnings required confirmation, calendar showed named entries in every affected week. |
+| Owner-requested clean workspace | Original **82 files backed up; all SHA-256 hashes match** | Original `data/` moved into ignored backup, root data started fresh for the bulk test. `.env` and external originals retained. Current workspace contains verified uploaded files and explicitly named demo deadlines/quiz/timer evidence; it is not the old database. |
+| Diagrams and source mapping | 7 architecture/class + 17 sequence + 3 use-case sheets | SD01a/SD10a/SD10b/SD13 updated for this follow-up. XML parsed and affected SVG/PNG renders inspected. Diagram labels document collaborations, not proof of AI correctness. |
 
-Reproducible deterministic build from source: `mvnw.cmd package` with JDK17+. Audit used available JDK25 and offline cached dependencies. The environment needed `-Daether.syncContext.named.factory=noop` for local Maven locking; this is an audit environment workaround, not an application feature.
+## Reproducible checks and local evidence
 
-Local-only artifacts are under `codex/`:
+Build from source with JDK17+: `mvnw.cmd package`. The audit used cached dependencies with JDK25 and `-Daether.syncContext.named.factory=noop` for this environment's Maven locking. That flag is not an application requirement.
 
-- `feature-audit-20261113/run-26f006f6-750b-4c57-9265-35cb8b3ffdef/results.tsv` — 16 passed feature checks, successful actual API run; generated answer/summary/brief/advice and isolated data alongside it.
-- `cli-acceptance-20261113/run-0bf0ee7d-f52d-4b20-a329-f79cf630309e/cli-transcript.txt` — actual CLI commands, inputs and outputs for 12 groups.
-- `FeatureAudit.java`, `CliAudit.java` — Java audit harnesses. They use the submitted classes and real configured API, not hard-coded answers. Synthetic source material is explicitly labeled.
-- `build/target/surefire-reports/` — Maven XML/text results.
-- `build/acceptance-gui-20261113/` — isolated app image used for native UI checks, with copied test data. Its temporary `.env` is removed after testing; root `.env` is preserved.
-- `original-data-audit-20261113.json` — original path/hash baseline.
+Raw evidence stays below ignored `codex/`; these paths are relative to the repository:
 
-Do not publish these raw local artifacts wholesale: they can contain course excerpts, generated content, and personal paths. The checked-in matrix summarizes outcomes without exposing secrets.
+- `build/target/surefire-reports/` — 35-test XML/text results.
+- `feature-audit-20261114/run-dcc9540d-fbe5-421d-a3c3-a198332e6b3d/results.tsv` — 16 passed actual API checks and generated study artifacts.
+- `bulk-upload-20261114/classification-results.tsv` — 25 real PDFs, expected and returned categories. The input directory contains local copies of course PDFs, including the renamed ambiguous file.
+- `cli-acceptance-20261114/run-2119c2cf-b9d3-434c-8806-5b235620eaa4/cli-transcript.txt` — 12 basic CLI groups.
+- `cli-complete-20261114/run-385ef4a2-0f72-4ea4-b618-685c44faa572/transcript.txt` — 11 supplemental groups. Combined input blocks were compared against all 41 commands in the actual switch dispatcher; none was missing.
+- `FeatureAudit.java`, `BulkUploadAudit.java`, `CliAudit.java`, `CliSupplementAudit.java` — Java-only audit harnesses calling the application implementation, with the actual configured API where applicable.
+- `backups/data-before-bulk-20261114-002500/` and `original-data-audit-20261113.json` — the 82-file original database backup and verified hash baseline.
 
-## Actual API checks
+Do not publish raw evidence wholesale: it can contain course excerpts, generated content and personal paths. Credentials, data, runtime images, EXEs and ZIP remain excluded from Git.
 
-1. Upload real syllabus and synthetic PDF; confirm extracted pages and persistence.
-2. Syllabus extracts 10 assessments; verify Lab Test2 / November18 against source, approve one and reject others.
-3. Syllabus context suggests lecture week3; store changes only after approval.
-4. Schedule sorting, same-date difficulty, search, completion and month labels.
-5. Timer pause/resume/early stop saves a session.
-6. Reference recommendation returns the uploaded SOLID lecture.
-7. Due notices are deduplicated; undated notice returns on next date after being marked shown.
-8. Natural-language schedule edit changes Nov20 to Nov21 only after approval.
-9. Open/Closed answer cites uploaded `SOLID-lecture.pdf`, page1.
-10. Two-page notes and consolidated guide generated, saved and reopenable.
-11. Two real-generated MCQs grade 2/2 with model answer keys; wrong answers are also recorded for topic statistics.
-12. Essay question and AI feedback generated; proposed grade corrected to85 and persisted after approval.
-13. Wrong answers plus confidence produce weak topics and actual source-based advice.
-14. Actual weekly brief contains upcoming schedule context.
-15. Misfiled synthetic lecture produces a category suggestion; reviewed move preserves original file.
-16. Restart restores data/artifacts/history; selected history deletion persists.
+## Follow-up defects and corrections
 
-Initial harness attempts included a path-normalization mistake and overly specific request-log parsing. Those were harness defects, corrected before the successful run; they are not counted as application failures or hidden as passing tests.
-
-## Defects corrected in this audit
-
-| Observed problem | Correction | Verification |
+| Problem | Correction | Evidence |
 | --- | --- | --- |
-| AI date-only edit could omit title/type and fail, although the original deadline already had them | `SchedulePlanner` supplies existing type/scope in context and preserves omitted fields on edits | `ScheduleEditTest`; actual API edit and CLI edit/approval passed |
-| Duplicate detection recognized typo-equivalent titles, but Merge still required exact title equality | Use `DeadlineTitleMatcher.same` consistently for merge and candidate duplicate warnings | `CalendarImportTest` now merges the typo candidate, approves it and asserts only one stored deadline |
-| Weekly briefing used course-linked study seconds, while normal GUI timer is unlinked | Supply all persisted weekly study seconds, explicitly labeled not course-linked | `StudyRecordsTest` checks 900 seconds from two unlinked sessions reaches the model context |
-| Same-day sessions appeared as separate rows; seconds were hidden as zero minutes | Aggregate daily totals in GUI/CLI, display minutes+seconds and weekly total | Regression with two sessions; native GUI displayed one day totaling12 seconds, then another saved8 seconds |
-| Narrow course page and timer lost action buttons offscreen | Responsive action grids, wrapped course rows and viewport-width content | `NarrowPanelTest` checks all5 course and7 timer buttons remain inside a310×600 panel; native narrow pane inspected |
-| Course page could scroll below its first deadline when rebuilt | Disable text caret auto-update and reset course viewport to top after rebuild | Native reinspection after final build |
-| Paused timer looked like a running timer; inactive actions enabled | Explicit Paused state and enabled/disabled duration/pause/resume/stop controls | Native15:00 start →14:52 Paused →Stop saves8 seconds; timer expiry logic accelerated in test |
-| Store refresh could reselect a file and reopen/switch content after a study operation | Guard selection callbacks during workspace rebuild | Native timer save left timer active tab; notes/chat kept their selected surface during bulk import |
-| Generated guide displayed raw `**` and cramped paragraphs | Styled bold spans, actual paragraph attributes, larger text and section spacing | Automated emphasis/spacing assertion and native saved guide visual check |
-| Calendar had no explicit all-course/one-course control | Independent calendar filter and filter-aware day addition | Native filter to EECS2021, added a quiz on emptyNov19 and confirmed correct course/date |
+| Mixed uploads could inherit the selected Syllabus folder; first-prefix classification missed document purpose | Inspect names/titles locally, sample first/middle/last pages; uncertain/conflicting files receive every extracted page in 18,000-character segments and an aggregate purpose decision | All 25 actual PDFs classified correctly; renamed 20-page file fully reviewed; regression concatenates every segment and verifies no omitted text |
+| Missing or duplicate AI classifications could silently become partial sorting | Require each expected UUID exactly once and reject unknown IDs/categories; apply results only after complete success and human review | Missing/duplicate response regression; native pre-upload review before any file storage |
+| Timeline rows did not visually distinguish courses | Different neutral gray cell backgrounds and a gray first-column edge, resolving sorted view rows to model rows | Native gray rows plus sorted-row and monochrome-selection regression |
+| Quiz layout lacked usable navigation and reliable long-choice presentation | `QuizSessionPanel` with navigator, progress, wrapping vertical choices, retained answers, explicit submit gate and explanation review | Native actual-PDF 3/3 flow; deterministic answer-jump/submit/read-only checks |
+| Canceling an AI-result answer dialog displayed an empty error | Handle review cancellation separately from application failures; keep generated questions available | Native two-question generation confirmed; cancellation regression checked in final EXE |
+| Bottom timer status opened undated deadlines instead of the timer | Active timer status selects Study timer; inactive status retains undated-deadline action | Latest EXE: Timeline → bottom remaining-time click → Study timer |
+| GUI essay-only quiz ignored requested count; CLI quiz lacked week/all and essay/both settings | Honor essay count and selected difficulty; use course difficulty for MCQ/essay explanations; regenerate blank essay questions; expose scope/count/difficulty/type through CLI | Deterministic two-essay week test; actual CLI all/week/file and mixed types passed |
 
-Native bulk analysis was also rerun on the real syllabus plus synthetic schedule: 2 files analyzed,10 suggestions; first row and evidence immediately visible. Add all immediately prompted for unknown FinalExam date. Keeping TBD and confirming quiz cutoff warnings added9 entries and skipped1 existing duplicate. Calendar showed all-week named results; source chat remained visible. That validates the requested review flow without silently inventing dates.
+The earlier Nov13 audit also corrected date-only schedule edits, typo-equivalent deadline merges, unlinked timer briefing totals, daily record aggregation, narrow course/timer controls, view refresh selection, Markdown styling and calendar course filtering. Those changes were committed as `fdcfcd7` after approval and are retained.
 
-## Boundaries still relevant to a demo
+## Boundaries
 
-- Full15-minute natural expiry and audible alarm were not waited through in this audit. Expiry logic was tested with1 second; native real timer start/pause/resume/stop/records were checked. Record a real expiry segment for the strongest video evidence.
-- Reset persistence is tested on isolated data; native destructive confirmation is inspected and canceled. Owner data is not cleared as part of verification.
-- The app has no OCR, background notification service, general multi-action planner or automatic verification of factual AI correctness. Pending proposals do not survive restart; approved data does.
-- Not every GUI path was manually replayed in every configuration. The full inventory has combined automated, native UI, actual controller/API and actual CLI coverage, as stated above.
-- API aggregate and native Pro subscription/credit metrics were inspected on Nov14 and recorded in the collaboration log. Historical development raw tokens remain unavailable in the inspected UI. Video links are still unrecorded; no final report has been produced. The owner approved committing and pushing the audit changes on Nov14; this record describes the pre-commit verification snapshot.
+- Full inventory F01–F15 has combined deterministic, actual API/controller, native GUI and actual CLI evidence. Every GUI menu combination was not replayed manually. A passing sample does not guarantee arbitrary future model responses.
+- Stage 1 responsibilities remain mapped, but implementation classes and some workflows differ. The [change record](patterns-and-changes.md) explicitly documents provider, helper/registry, memory, Observer and grading differences. Do not describe this as literal class-for-class identity.
+- No OCR, background OS notification service or general multi-action planner. Timer/periodic reminders require the GUI open or notifications appear on next launch. Pending proposals are transient; approved data persists.
+- AI source citations, answer keys, dates and categories still require review. Files still uncertain after full review stay in Other for manual choice. A scanned page cannot be fully text-reviewed without OCR.
+- The measured $0.02 API dashboard amount in the cost log is a timestamped earlier snapshot. This follow-up made additional calls; refresh analytics before the final report. Development remains the separately declared USD200/month subscription.
+- Demonstration videos, public links/timestamps and final Stage 2 report remain to be produced. The owner explicitly approved one new commit and push for this follow-up on 14 November 2026.

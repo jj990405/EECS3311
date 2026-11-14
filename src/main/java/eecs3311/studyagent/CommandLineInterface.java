@@ -423,11 +423,36 @@ public final class CommandLineInterface {
         for (var item : controller.summaries(chooseReadableMaterial().id())) System.out.println(item.text() + "\n");
     }
     private void createQuiz() throws IOException {
-        MaterialFile material = chooseReadableMaterial();
-        int count = Integer.parseInt(ask("Question count (1-10)"));
-        Difficulty difficulty = Difficulty.valueOf(ask("Difficulty (HIGH/MEDIUM/LOW)").toUpperCase());
-        var quiz = controller.generateQuiz(material.id(), count, difficulty);
-        System.out.println("Saved quiz " + quiz.id() + " with " + quiz.questions().size() + " questions.");
+        List<UUID> materials = chooseQuizMaterials();
+        int count = number("Question count (1-10)", 10) + 1;
+        Difficulty difficulty = chooseDifficulty();
+        String type = askDefault("Question type (mcq/essay/both)", "mcq").toLowerCase();
+        if (!List.of("mcq", "essay", "both").contains(type))
+            throw new IllegalArgumentException("Choose mcq, essay, or both.");
+        if (type.equals("both") && count < 2) throw new IllegalArgumentException("Choose at least two questions for both types.");
+        if (!type.equals("essay")) {
+            var quiz = controller.generateQuiz(materials, type.equals("both") ? count - 1 : count, difficulty);
+            System.out.println("Saved quiz " + quiz.id() + " with " + quiz.questions().size() + " multiple-choice questions.");
+        }
+        int essays = type.equals("essay") ? count : type.equals("both") ? 1 : 0;
+        for (int i = 0; i < essays; i++) {
+            var prompt = controller.generateEssayPrompt(materials, difficulty);
+            System.out.println("Saved essay question: " + prompt.question());
+        }
+    }
+    private List<UUID> chooseQuizMaterials() {
+        String scope = askDefault("Quiz scope (file/week/all)", "file").toLowerCase();
+        if (scope.equals("file")) return List.of(chooseReadableMaterial().id());
+        if (!scope.equals("week") && !scope.equals("all")) throw new IllegalArgumentException("Choose file, week, or all.");
+        Course course = chooseCourse();
+        List<MaterialFile> materials = controller.materials().stream().filter(file ->
+                file.courseId().equals(course.id()) && file.category() == Category.LECTURE_MATERIALS && file.textAvailable()).toList();
+        if (scope.equals("week")) {
+            int week = number("Lecture week (1-18)", 18) + 1;
+            materials = materials.stream().filter(file -> Integer.valueOf(week).equals(file.lectureWeek())).toList();
+        }
+        if (materials.isEmpty()) throw new IllegalStateException("No readable lectures match this scope. Upload files and assign weeks first.");
+        return materials.stream().map(MaterialFile::id).toList();
     }
     private void takeQuiz() throws IOException {
         List<StudyArtifacts.Quiz> quizzes = controller.quizzes(chooseCourse().id());

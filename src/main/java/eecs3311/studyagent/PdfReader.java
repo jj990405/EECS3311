@@ -12,10 +12,14 @@ import org.apache.pdfbox.text.PDFTextStripper;
 public final class PdfReader implements DocumentReader {
     @Override
     public List<String> extractText(Path file) throws IOException {
+        return extractPreview(file, Integer.MAX_VALUE);
+    }
+
+    List<String> extractPreview(Path file, int maxPages) throws IOException {
         try (PDDocument document = Loader.loadPDF(file.toFile())) {
             PDFTextStripper stripper = new PDFTextStripper();
             List<String> pages = new ArrayList<>();
-            for (int page = 1; page <= document.getNumberOfPages(); page++) {
+            for (int page = 1; page <= Math.min(maxPages, document.getNumberOfPages()); page++) {
                 stripper.setStartPage(page);
                 stripper.setEndPage(page);
                 pages.add(stripper.getText(document).trim());

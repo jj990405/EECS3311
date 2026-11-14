@@ -53,7 +53,7 @@ import javax.swing.tree.TreePath;
 /** Swing viewer for the implemented workspace and schedule functions. */
 public final class MainWindow extends JFrame {
     private record QuizBuild(StudyArtifacts.Quiz multipleChoice,
-                             StudyArtifacts.EssayPrompt essay) { }
+                             List<StudyArtifacts.EssayPrompt> essays) { }
     private final AgentController controller;
     private final JTree tree = new JTree();
     private final DefaultTableModel tableModel = new DefaultTableModel(
@@ -179,6 +179,8 @@ public final class MainWindow extends JFrame {
             }
         });
         table.setAutoCreateRowSorter(true);
+        table.setDefaultRenderer(Object.class, new CourseRowRenderer(modelRow -> modelRow < rowIds.size()
+                ? controller.course(controller.deadline(rowIds.get(modelRow)).courseId()) : null));
         table.setRowHeight(32);
         table.setBackground(AppTheme.SURFACE);
         table.setForeground(AppTheme.TEXT);
@@ -252,10 +254,13 @@ public final class MainWindow extends JFrame {
         status.setOpaque(true);
         status.setBackground(AppTheme.SURFACE);
         status.setBorder(AppTheme.padding(8, 16, 8, 16));
-        status.setToolTipText("Click to inspect undated deadlines");
+        status.setToolTipText("Click to open the study timer or inspect undated deadlines");
+        status.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
         status.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override public void mouseClicked(java.awt.event.MouseEvent event) {
-                perform(MainWindow.this::openUndatedDeadline);
+                if (controller.studyActive() || status.getText().startsWith("Study timer"))
+                    contentTabs.setSelectedComponent(timerPanel);
+                else perform(MainWindow.this::openUndatedDeadline);
             }
         });
         add(status, BorderLayout.SOUTH);
@@ -534,6 +539,8 @@ public final class MainWindow extends JFrame {
                     T result = get();
                     status.setText(activity + " complete.");
                     success.accept(result);
+                } catch (CancellationException ignored) {
+                    status.setText(activity + " complete. Review closed.");
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     status.setText(activity + " interrupted.");
@@ -776,43 +783,8 @@ public final class MainWindow extends JFrame {
     }
 
     private List<Category> reviewUploadDestinations(File[] files, Category selectedFolder) {
-        DefaultTableModel model = new DefaultTableModel(new Object[] {"File", "Destination folder", "Basis"}, 0) {
-            @Override public Class<?> getColumnClass(int column) {
-                return column == 1 ? Category.class : String.class;
-            }
-            @Override public boolean isCellEditable(int row, int column) { return column == 1; }
-        };
-        for (File file : files) {
-            var hint = FileCategorySuggester.suggest(file.getName());
-            model.addRow(new Object[] {file.getName(), FileCategorySuggester.defaultDestination(
-                    file.getName(), selectedFolder),
-                    hint.isPresent() ? "File-name suggestion" : selectedFolder == null
-                            ? "No clear hint; review this row" : "Selected folder; review this row"});
-        }
-        JTable destinations = new JTable(model);
-        destinations.setRowHeight(32);
-        destinations.getColumnModel().getColumn(0).setPreferredWidth(390);
-        destinations.getColumnModel().getColumn(1).setPreferredWidth(190);
-        destinations.getColumnModel().getColumn(2).setPreferredWidth(240);
-        destinations.getColumnModel().getColumn(1).setCellEditor(
-                new javax.swing.DefaultCellEditor(new JComboBox<>(Category.values())));
-        JPanel review = new JPanel(new BorderLayout(0, 10));
-        review.setBorder(AppTheme.padding(16, 16, 16, 16));
-        review.add(new JLabel("Check each destination. Click a folder cell to change it before upload."),
-                BorderLayout.NORTH);
-        JScrollPane scroll = new JScrollPane(destinations);
-        scroll.setPreferredSize(new Dimension(850, Math.min(460, 65 + files.length * 32)));
-        review.add(scroll, BorderLayout.CENTER);
-        int choice = JOptionPane.showOptionDialog(this, review, "Sort files before upload",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                new Object[] {"Upload to shown folders", "Cancel"}, "Upload to shown folders");
-        if (choice != 0) return null;
-        if (destinations.isEditing()) destinations.getCellEditor().stopCellEditing();
-        List<Category> result = new ArrayList<>();
-        for (int row = 0; row < model.getRowCount(); row++) result.add((Category) model.getValueAt(row, 1));
-        return result;
+        return UploadReviewDialog.review(this, controller, files, selectedFolder);
     }
-
     private void moveMaterial(MaterialFile file) {
         Category target = choose("Move " + file.originalName() + " to", List.of(Category.values()));
         if (target == file.category()) return;
@@ -1190,6 +1162,7 @@ public final class MainWindow extends JFrame {
     private void generateQuiz() {
         List<UUID> materials = chooseQuizMaterials();
         int count = Integer.parseInt(ask("Number of questions (1-10)", "3"));
+        if (count < 1 || count > 10) throw new IllegalArgumentException("Choose 1 to 10 questions.");
         Difficulty difficulty = choose("Quiz difficulty", List.of(Difficulty.values()));
         String types = choose("Question types", List.of("Multiple choice", "Essay", "Both"));
         if (types.equals("Both") && count < 2)
@@ -1197,12 +1170,13 @@ public final class MainWindow extends JFrame {
         runAi("Generating quiz", () -> {
             StudyArtifacts.Quiz mcq = types.equals("Essay") ? null
                     : controller.generateQuiz(materials, types.equals("Both") ? count - 1 : count, difficulty);
-            StudyArtifacts.EssayPrompt essay = types.equals("Multiple choice") ? null
-                    : controller.generateEssayPrompt(materials);
-            return new QuizBuild(mcq, essay);
+            List<StudyArtifacts.EssayPrompt> essays = new ArrayList<>();
+            int essayCount = types.equals("Essay") ? count : types.equals("Both") ? 1 : 0;
+            for (int i = 0; i < essayCount; i++) essays.add(controller.generateEssayPrompt(materials, difficulty));
+            return new QuizBuild(mcq, essays);
         }, built -> {
             if (built.multipleChoice() != null) takeQuiz(built.multipleChoice());
-            if (built.essay() != null) answerEssayPrompt(built.essay());
+            for (var essay : built.essays()) answerEssayPrompt(essay);
         });
     }
 

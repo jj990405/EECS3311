@@ -1,6 +1,6 @@
 # Implemented behavior diagrams
 
-These diagrams describe the Java implementation inspected on 13 November 2026. They are supporting design artifacts for the later Stage 2 report, not the report itself or evidence that every runtime scenario has passed.
+These diagrams describe the Java implementation inspected on 13 November 2026, with SD01a/SD10a/SD10b/SD13 refreshed on 14 November for the upload, quiz and classification follow-up. They are supporting design artifacts for the later Stage 2 report, not the report itself or evidence that every runtime scenario has passed.
 
 Open [Stage2_Behavior_Diagrams.drawio](Stage2_Behavior_Diagrams.drawio) in diagrams.net to edit the complete 20-page set. Each page also has a vector export in `svg/` and a full-size raster export in `png/`. Keep the original Stage 1 files in `../../diagrams/` as the historical baseline.
 
@@ -28,11 +28,11 @@ Open [Stage2_Behavior_Diagrams.drawio](Stage2_Behavior_Diagrams.drawio) in diagr
 | [SD08](svg/SD08.svg) Weekly brief | F10 / UC11 | `AgentController.weeklyBriefing/weeklyBriefDue/markWeeklyBriefShown`, `MainWindow.showWeeklyBriefIfNeeded`, `WeakTopicAnalyzer` |
 | [SD09a](svg/SD09a.svg) Source-based Q&A | F11 / UC12 | `AgentController.answerQuestion`, `ReferenceSelector`, `MaterialSearcher.search`, `ExplanationStrategy.forDifficulty`, `InteractionHistory.recent`, `GroundedAnswer` |
 | [SD09b](svg/SD09b.svg) Saved study notes | F12 / UC13 | `AgentController.generateSummary/summaries`, `StudyArtifacts.saveSummary`, `StudyNotesPanel`, GUI `showStudyNotes` |
-| [SD10a](svg/SD10a.svg) Multiple-choice quiz | F13 / UC14 | `generateQuiz/quizContext/gradeQuiz`, `StudyArtifacts.Question/Quiz/Attempt`, `QuizDialog`, CLI `createQuiz/takeQuiz` |
+| [SD10a](svg/SD10a.svg) Multiple-choice quiz | F13 / UC14 | `generateQuiz/quizContext/gradeQuiz`, `StudyArtifacts.Question/Quiz/Attempt`, `QuizDialog`/`QuizSessionPanel`, CLI `createQuiz/takeQuiz` |
 | [SD10b](svg/SD10b.svg) Essay and score approval | F13 / UC14, UC17 | `generateEssayPrompt`, `suggestEssayGrade`, `proposeEssayGrade`, `StudyArtifacts.saveEssayGrade`, GUI `answerEssayPrompt` |
 | [SD11](svg/SD11.svg) Weak-topic review | F14 / UC15 | `WeakTopicAnalyzer.statistics/analyze`, `AgentController.saveSelfAssessment/weakTopicAdvice`, `StudyArtifacts` attempts and confidence records |
 | [SD12](svg/SD12.svg) History and recent memory | F15 / UC16 | `InteractionHistory.add/list/recent/delete`, `AgentController.history/deleteHistory/answerQuestion` |
-| [SD13](svg/SD13.svg) AI file classification | New / UC18 | `AgentController.suggestFileCategories/moveMaterial`, `MainWindow.classifyFilesWithAi`, `DataStore.moveMaterial` |
+| [SD13](svg/SD13.svg) AI file classification | New / UC18 | `AgentController.suggestUploadCategories/suggestFileCategories/moveMaterial`, `DocumentClassification`, `UploadReviewDialog`, `DataStore.moveMaterial` |
 | [SD14](svg/SD14.svg) Bulk calendar and daily TBD notices | New / UC19; extends F02/F07 | `suggestCalendarFromFiles`, `MainWindow.reviewCalendarSuggestions/addCalendarSuggestions/showUndatedReminders`, `hasSyllabusDuplicate`, `unseenUndatedReminders/markUndatedRemindersShown` |
 
 The original SD01, SD09 and SD10 have been split into sub-sheets because their distinct upload/week, Q&A/summary and MCQ/essay paths now contain enough steps to warrant separate views. This changes presentation, not their feature IDs.

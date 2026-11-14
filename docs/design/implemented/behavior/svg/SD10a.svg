@@ -2,7 +2,7 @@
 <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
 <rect x="0" y="0" width="1680" height="1352" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD10a - Generate and locally grade a multiple-choice quiz</text>
-<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F13 / UC14 | Actual Java implementation | 13 November 2026</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F13 / UC14 | Actual Java implementation | 14 November 2026</text>
 <line x1="32" y1="100" x2="1648" y2="100" stroke="#b8c7d7" stroke-width="2"/>
 <rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
@@ -23,7 +23,8 @@
 <text x="1313.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">StudyArtifacts</text>
 <line x1="1313.3333333333333" y1="191" x2="1313.3333333333333" y2="1216" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="1451.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
-<text x="1550.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">QuizDialog</text>
+<text x="1550.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">QuizDialog /</text>
+<text x="1550.0" y="175" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">QuizSessionPanel</text>
 <line x1="1550.0" y1="191" x2="1550.0" y2="1216" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <line x1="130.0" y1="263" x2="366.66666666666663" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
 <rect x="85.43333333333334" y="215" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
@@ -62,8 +63,8 @@
 <rect x="750.3333333333333" y="735" width="415.99999999999994" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="958.3333333333333" y="750" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. take(quiz) [GUI] / print question prompts [CLI]</text>
 <line x1="130.0" y1="828" x2="1550.0" y2="828" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="619.7" y="800" width="440.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="840.0" y="815" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Select answers and submit; cancel saves no attempt</text>
+<rect x="533.6" y="800" width="612.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="840.0" y="815" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Navigate questions; answers retained; all answered enables Submit [GUI]</text>
 <line x1="1550.0" y1="893" x2="366.66666666666663" y2="893" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
 <rect x="852.8333333333333" y="865" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="958.3333333333333" y="880" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. List&lt;Integer&gt; answers</text>
@@ -85,6 +86,6 @@
 <text x="248.33333333333331" y="1173" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">answer and explanation</text>
 <rect x="32" y="1238" width="1616" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
 <text x="48" y="1264" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
-<text x="48" y="1289" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Question generation is AI-based. Grading is deterministic equality with the stored answer index; the app cannot prove that an AI-authored answer key is pedagogically correct. Saved MCQ</text>
-<text x="48" y="1312" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">metadata currently records the first material in a multi-file scope.</text>
+<text x="48" y="1289" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">GUI uses a navigator, wrapping choices, progress and read-only explanation review; cancel saves no attempt. CLI uses question prompts. Grading compares stored answer indices, not pedagogical</text>
+<text x="48" y="1312" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">truth. Multi-file MCQ metadata records the first material ID; essay count/type is separate (SD10b).</text>
 </svg>

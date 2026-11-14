@@ -2,7 +2,7 @@
 <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
 <rect x="0" y="0" width="1680" height="1417" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD01a - Upload and organize original materials</text>
-<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F01 / UC01 | Actual Java implementation | 13 November 2026</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F01 / UC01 | Actual Java implementation | 14 November 2026</text>
 <line x1="32" y1="100" x2="1648" y2="100" stroke="#b8c7d7" stroke-width="2"/>
 <rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
@@ -86,6 +86,6 @@
 <text x="248.33333333333331" y="1238" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Desktop.open(file)</text>
 <rect x="32" y="1303" width="1616" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
 <text x="48" y="1329" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
-<text x="48" y="1354" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Upload does not call the LLM. Unsupported/scanned content remains stored; AI text features require readable text. Duplicate-name replacement is confirmed by the boundary. Lecture-week matching</text>
-<text x="48" y="1377" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">is a separate action (SD01b).</text>
+<text x="48" y="1354" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Storage is deterministic. Optional pre-upload AI folder review is shown in SD13; no file is saved until confirmation. Unsupported/scanned content remains stored but AI needs readable text.</text>
+<text x="48" y="1377" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Duplicate replacement is confirmed. Lecture-week matching is separate (SD01b).</text>
 </svg>

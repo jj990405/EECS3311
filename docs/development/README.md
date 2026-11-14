@@ -1,6 +1,6 @@
-# Development audit — 13 November 2026
+# Development audit — 14 November 2026
 
-Supporting records prepared before writing `stage2-report`. The verified implementation fixes, tests and diagrams were committed and pushed in [fdcfcd7](https://github.com/jj990405/EECS3311/commit/fdcfcd7) on Nov14 after owner approval. A subsequent documentation clarification separates the development subscription fee from the application's API usage.
+Supporting records prepared before writing `stage2-report`. The verified implementation fixes, tests and diagrams were committed and pushed in [fdcfcd7](https://github.com/jj990405/EECS3311/commit/fdcfcd7) on Nov14 after owner approval. A subsequent documentation clarification separates the development subscription fee from the application's API usage. The Nov14 follow-up adds full-document classification, neutral gray row shades, a new quiz workspace, timer-status navigation and expanded CLI quiz settings; the owner approved committing and pushing this follow-up on Nov14.
 
 - [Feature inventory and verification](feature-matrix.md): every Stage 1 feature F01–F15, additions, entry points, collaboration, and practical limits.
 - [Patterns and design changes](patterns-and-changes.md): six distinct GoF patterns, Simple Factory, and explicit Stage 1 differences.

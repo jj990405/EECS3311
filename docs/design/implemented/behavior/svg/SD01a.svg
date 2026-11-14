@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1417" viewBox="0 0 1680 1417">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1680" height="1417" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD01a - Upload and organize original materials</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F01 / UC01 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1648" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="267.66666666666663" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="366.66666666666663" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow / CLI</text>
+<line x1="366.66666666666663" y1="191" x2="366.66666666666663" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="504.33333333333326" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="603.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="603.3333333333333" y1="191" x2="603.3333333333333" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="741.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="840.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
+<line x1="840.0" y1="191" x2="840.0" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="977.6666666666665" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1076.6666666666665" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DocumentReaderFactory</text>
+<line x1="1076.6666666666665" y1="191" x2="1076.6666666666665" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1214.3333333333333" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1313.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DocumentReader</text>
+<line x1="1313.3333333333333" y1="191" x2="1313.3333333333333" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1451.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1550.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Local files</text>
+<line x1="1550.0" y1="191" x2="1550.0" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="263" x2="366.66666666666663" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="69.03333333333333" y="215" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Create semester/course; choose files and</text>
+<rect x="200.23333333333332" y="235" width="96.19999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="250" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">destination</text>
+<line x1="366.66666666666663" y1="341" x2="603.3333333333333" y2="341" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="309.79999999999995" y="293" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. createSemester(...); createCourse(...);</text>
+<rect x="404.09999999999997" y="313" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="328" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">uploadMaterial(...)</text>
+<line x1="603.3333333333333" y1="419" x2="840.0" y2="419" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="546.4666666666667" y="371" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="386" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. createSemester(...); createCourse(...);</text>
+<rect x="640.7666666666667" y="391" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="406" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">uploadMaterial(...)</text>
+<line x1="840.0" y1="477" x2="1550.0" y2="477" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="974.7" y="449" width="440.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1195.0" y="464" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. Copy original into files/; write entity properties</text>
+<line x1="840.0" y1="542" x2="1076.6666666666665" y2="542" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="848.7333333333332" y="514" width="219.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="529" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. getReader(originalName)</text>
+<line x1="1076.6666666666665" y1="627" x2="840.0" y2="627" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="783.1333333333332" y="579" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="594" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Optional&lt;DocumentReader&gt; for PDF / PPTX</text>
+<rect x="906.1333333333332" y="599" width="104.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="614" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">/ DOCX / TXT</text>
+<line x1="840.0" y1="685" x2="1313.3333333333333" y2="685" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="880.9666666666665" y="657" width="391.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1076.6666666666665" y="672" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. extractText(path) [if a reader is available]</text>
+<line x1="1313.3333333333333" y1="750" x2="840.0" y2="750" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="885.0666666666665" y="722" width="383.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1076.6666666666665" y="737" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. List&lt;String&gt; page text / extraction warning</text>
+<line x1="840.0" y1="815" x2="1550.0" y2="815" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="978.8" y="787" width="432.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1195.0" y="802" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Persist extracted pages and MaterialFile metadata</text>
+<line x1="840.0" y1="900" x2="366.66666666666663" y2="900" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="391.23333333333323" y="852" width="424.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="603.3333333333333" y="867" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. changed() -&gt; registered refresh callback (Swing</text>
+<rect x="551.1333333333332" y="872" width="104.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="603.3333333333333" y="887" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">invokeLater)</text>
+<line x1="366.66666666666663" y1="958" x2="603.3333333333333" y2="958" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="363.09999999999997" y="930" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="945" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. workspace() / materials()</text>
+<line x1="603.3333333333333" y1="1043" x2="366.66666666666663" y2="1043" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="354.9" y="995" width="260.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1010" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. WorkspaceTree.build(store);</text>
+<rect x="395.9" y="1015" width="178.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1030" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">course/material views</text>
+<line x1="130.0" y1="1101" x2="366.66666666666663" y2="1101" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="85.43333333333334" y="1073" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="1088" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. Select original PDF / Open original</text>
+<line x1="366.66666666666663" y1="1166" x2="603.3333333333333" y2="1166" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="399.99999999999994" y="1138" width="170.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. materialPath(id)</text>
+<line x1="366.66666666666663" y1="1251" x2="130.0" y2="1251" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="73.13333333333333" y="1203" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="1218" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. PdfPreviewPanel original-page render /</text>
+<rect x="171.5333333333333" y="1223" width="153.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="1238" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Desktop.open(file)</text>
+<rect x="32" y="1303" width="1616" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1329" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1354" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Upload does not call the LLM. Unsupported/scanned content remains stored; AI text features require readable text. Duplicate-name replacement is confirmed by the boundary. Lecture-week matching</text>
+<text x="48" y="1377" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">is a separate action (SD01b).</text>
+</svg>

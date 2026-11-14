@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="05-document-readers" name="Document reader factory">
+    <mxGraphModel dx="1600" dy="1080" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1080">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Document reader factory" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="Simple Factory chooses a reader by extension; no OCR is performed on scanned PDFs." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="store" value="DataStore" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="160" width="440" height="161" />
+        </mxCell>
+        <mxCell id="store-body" value="- readers: DocumentReaderFactory&lt;hr&gt;+ uploadMaterial(...)&lt;br&gt;+ materialPages(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="store">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="117" />
+        </mxCell>
+        <mxCell id="factory" value="DocumentReaderFactory  &amp;lt;&amp;lt;Simple Factory&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="580" y="160" width="440" height="118" />
+        </mxCell>
+        <mxCell id="factory-body" value="+ getReader(fileName)&lt;br&gt;  : Optional&amp;lt;DocumentReader&amp;gt;" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="factory">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="74" />
+        </mxCell>
+        <mxCell id="reader" value="DocumentReader  &amp;lt;&amp;lt;interface&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1115" y="160" width="440" height="95" />
+        </mxCell>
+        <mxCell id="reader-body" value="+ extractText(Path): List&amp;lt;String&amp;gt;" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="reader">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="51" />
+        </mxCell>
+        <mxCell id="pdf" value="PdfReader" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="535" width="350" height="150" />
+        </mxCell>
+        <mxCell id="pdf-body" value="+ extractText(Path)&lt;br&gt;Uses Apache PDFBox for page text." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="pdf">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="106" />
+        </mxCell>
+        <mxCell id="ppt" value="PptxReader" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="430" y="535" width="350" height="150" />
+        </mxCell>
+        <mxCell id="ppt-body" value="+ extractText(Path)&lt;br&gt;Reads slide XML in numerical order." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="ppt">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="106" />
+        </mxCell>
+        <mxCell id="doc" value="DocxReader" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="815" y="535" width="350" height="150" />
+        </mxCell>
+        <mxCell id="doc-body" value="+ extractText(Path)&lt;br&gt;Reads word/document.xml." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="doc">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="106" />
+        </mxCell>
+        <mxCell id="txt" value="TxtReader" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1200" y="535" width="350" height="150" />
+        </mxCell>
+        <mxCell id="txt-body" value="+ extractText(Path)&lt;br&gt;Reads UTF-8 text." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="txt">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="106" />
+        </mxCell>
+        <mxCell id="xml" value="OfficeXmlReader  &amp;lt;&amp;lt;package utility&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="590" y="840" width="440" height="125" />
+        </mxCell>
+        <mxCell id="xml-body" value="~ paragraphs(InputStream): String&lt;br&gt;Secure XML parsing; extracts visible text." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="xml">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="81" />
+        </mxCell>
+        <mxCell id="edge0" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.3416149068322981;entryX=0.0;entryY=0.4661016949152542;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="store" target="factory">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="returns selected implementation" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.4661016949152542;entryX=0.0;entryY=0.5789473684210527;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="factory" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="pdf" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="220" y="430" />
+              <mxPoint x="1335" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="ppt" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="605" y="430" />
+              <mxPoint x="1335" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="doc" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="990" y="430" />
+              <mxPoint x="1335" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="implements" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="txt" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1375" y="430" />
+              <mxPoint x="1335" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="uses" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.25;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="ppt" target="xml">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="605" y="750" />
+              <mxPoint x="700" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="uses" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.75;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="doc" target="xml">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="990" y="750" />
+              <mxPoint x="920" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Unsupported formats remain stored and openable; they have no document reader and cannot provide AI text evidence." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1005" width="1515" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

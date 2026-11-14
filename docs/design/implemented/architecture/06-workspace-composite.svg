@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1030" viewBox="0 0 1600 1030">
+<rect width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#334155" stroke-width="1.5"/></marker><marker id="triangle" markerWidth="14" markerHeight="12" refX="13" refY="6" orient="auto"><path d="M0,0 L13,6 L0,12 Z" fill="white" stroke="#334155"/></marker></defs>
+<text x="45" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#0f172a">Workspace tree and Composite</text>
+<text x="45" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" fill="#475569">One node interface represents semester, course, category branches and material-file leaves.</text>
+<path d="M445,215 L560,215" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="507.5" y="209.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">calls build</text>
+<path d="M1000,215 L1110,215" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="1060.0" y="209.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">returns roots</text>
+<path d="M385,590 L385,440 L1250,440 L1250,278" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<text x="390.0" y="509.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">implements</text>
+<path d="M1215,590 L1215,510 L1415,510 L1415,278" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<text x="1220.0" y="544.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">implements</text>
+<path d="M650,675 L800,675 L800,365 L1330,365 L1330,278" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<polygon points="650,675 657.0,671.0 664.0,675.0 657.0,679.0" fill="#334155"/>
+<text x="730.0" y="669.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">children: 0..*</text>
+<rect x="45" y="160" width="400" height="95" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="161" width="398" height="43" fill="#dbeafe"/>
+<path d="M45,204 H445" stroke="#64748b"/>
+<text x="57" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">AgentController</text>
+<text x="57" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ workspace(): List&lt;WorkspaceNode&gt;</text>
+<rect x="560" y="160" width="440" height="118" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="561" y="161" width="438" height="43" fill="#f3f4f6"/>
+<path d="M560,204 H1000" stroke="#64748b"/>
+<text x="572" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">WorkspaceTree</text>
+<text x="572" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ build(DataStore): List&lt;WorkspaceNode&gt;</text>
+<text x="572" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Builds semester -&gt; course -&gt; category -&gt; file.</text>
+<rect x="1110" y="160" width="440" height="118" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1111" y="161" width="438" height="43" fill="#f3f4f6"/>
+<path d="M1110,204 H1550" stroke="#64748b"/>
+<text x="1122" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">WorkspaceNode  &lt;&lt;sealed interface&gt;&gt;</text>
+<text x="1122" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ label(): String</text>
+<text x="1122" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ children(): List&lt;WorkspaceNode&gt;</text>
+<rect x="120" y="590" width="530" height="184" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="121" y="591" width="528" height="43" fill="#edf4ed"/>
+<path d="M120,634 H650" stroke="#64748b"/>
+<text x="132" y="618" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">WorkspaceBranch  &lt;&lt;record / Composite&gt;&gt;</text>
+<text x="132" y="663" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">label: String; kind: Kind; id: UUID</text>
+<text x="132" y="686" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">children: List&lt;WorkspaceNode&gt;</text>
+<text x="132" y="709" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Kind = SEMESTER | COURSE | CATEGORY</text>
+<path d="M120,721 H650" stroke="#cbd5e1"/>
+<text x="132" y="752" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ label() / children()</text>
+<rect x="950" y="590" width="530" height="161" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="951" y="591" width="528" height="43" fill="#edf4ed"/>
+<path d="M950,634 H1480" stroke="#64748b"/>
+<text x="962" y="618" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">WorkspaceLeaf  &lt;&lt;record / Leaf&gt;&gt;</text>
+<text x="962" y="663" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">file: MaterialFile</text>
+<path d="M950,675 H1480" stroke="#cbd5e1"/>
+<text x="962" y="706" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ label(): String</text>
+<text x="962" y="729" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ children(): List&lt;WorkspaceNode&gt; = empty</text>
+<text x="120" y="941" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">Branches copy their children list. A category branch is a WorkspaceBranch value, not a separate CategoryFolder class.</text>
+<text x="120" y="966" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">WorkspaceTree is a view projection of DataStore records; the persisted domain model itself is not this tree.</text>
+<text x="45" y="1013" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#64748b">EECS3311 / Implementation diagrams / 2026-11-13 / Selected members; consult source for full signatures.</text>
+</svg>

@@ -60,7 +60,8 @@ final class StudyNotesPanel extends JPanel {
         DefaultStyledDocument document = new DefaultStyledDocument();
         Style body = document.addStyle("body", null);
         StyleConstants.setFontFamily(body, AppTheme.BODY.getFamily());
-        StyleConstants.setFontSize(body, 14);
+        StyleConstants.setFontSize(body, 15);
+        StyleConstants.setLineSpacing(body, 0.12f);
         StyleConstants.setForeground(body, AppTheme.TEXT);
         StyleConstants.setSpaceBelow(body, 8);
         Style page = document.addStyle("page", body);
@@ -95,7 +96,20 @@ final class StudyNotesPanel extends JPanel {
     }
 
     private void append(DefaultStyledDocument document, String line, Style style) {
-        try { document.insertString(document.getLength(), line + "\n", style); }
+        try {
+            int start = document.getLength();
+            var matcher = java.util.regex.Pattern.compile("\\*\\*(.+?)\\*\\*").matcher(line);
+            int previous = 0;
+            while (matcher.find()) {
+                document.insertString(document.getLength(), line.substring(previous, matcher.start()), style);
+                var bold = new javax.swing.text.SimpleAttributeSet(style);
+                StyleConstants.setBold(bold, true);
+                document.insertString(document.getLength(), matcher.group(1), bold);
+                previous = matcher.end();
+            }
+            document.insertString(document.getLength(), line.substring(previous) + "\n", style);
+            document.setParagraphAttributes(start, document.getLength() - start, style, true);
+        }
         catch (BadLocationException ex) { throw new IllegalStateException(ex); }
     }
 }

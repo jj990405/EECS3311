@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="2028" viewBox="0 0 1440 2028">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1440" height="2028" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD14 - Bulk calendar import and daily missing-date reminders</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">New / UC19; extends F02, F07 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1408" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1892" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="267.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="366.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow</text>
+<line x1="366.0" y1="191" x2="366.0" y2="1892" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="503.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="602.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="602.0" y1="191" x2="602.0" y2="1892" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="739.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="838.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">CommandInvoker /</text>
+<text x="838.0" y="175" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentCommand</text>
+<line x1="838.0" y1="191" x2="838.0" y2="1892" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="975.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1074.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
+<line x1="1074.0" y1="191" x2="1074.0" y2="1892" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1211.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1310.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Notification marker</text>
+<line x1="1310.0" y1="191" x2="1310.0" y2="1892" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="263" x2="366.0" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="101.5" y="215" width="293.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Analyze files for calendar after</text>
+<rect x="183.5" y="235" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="250" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">uploading files</text>
+<line x1="366.0" y1="321" x2="602.0" y2="321" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="362.1" y="293" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. suggestCalendarFromFiles()</text>
+<line x1="602.0" y1="370" x2="672.0" y2="370" stroke="#395b7b" stroke-width="2"/>
+<line x1="672.0" y1="370" x2="672.0" y2="392" stroke="#395b7b" stroke-width="2"/>
+<line x1="672.0" y1="392" x2="602.0" y2="392" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="679.0" y="358" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="682.0" y="373" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. For readable syllabus/assignment files:</text>
+<rect x="679.0" y="378" width="202.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="682.0" y="393" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">extraction pipeline SD02</text>
+<line x1="602.0" y1="484" x2="366.0" y2="484" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="329.3" y="436" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="451" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. CalendarSuggestions(filesAnalyzed,</text>
+<rect x="440.0" y="456" width="88.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="471" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">proposals)</text>
+<line x1="366.0" y1="562" x2="130.0" y2="562" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="72.80000000000001" y="514" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="529" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. Review first selected row, evidence and</text>
+<rect x="212.2" y="534" width="71.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="549" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">warnings</text>
+<line x1="130.0" y1="620" x2="366.0" y2="620" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="146.60000000000002" y="592" width="202.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="607" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Add all / Add checked</text>
+<line x1="366.0" y1="705" x2="130.0" y2="705" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="68.70000000000002" y="657" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="672" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. For each missing date: Enter date / Keep</text>
+<rect x="204.0" y="677" width="88.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="692" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">TBD / Skip</text>
+<line x1="130.0" y1="763" x2="366.0" y2="763" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="68.70000000000002" y="735" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="750" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Choose date or Keep TBD (daily reminder)</text>
+<line x1="366.0" y1="848" x2="602.0" y2="848" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="358.0" y="800" width="251.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="815" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. reviseSyllabusCandidate(id,</text>
+<rect x="353.9" y="820" width="260.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="835" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">revisedDraft) [if date entered]</text>
+<line x1="366.0" y1="926" x2="602.0" y2="926" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="341.6" y="878" width="284.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="893" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. hasSyllabusDuplicate(id); skip</text>
+<rect x="382.6" y="898" width="202.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="913" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">existing/batch duplicate</text>
+<line x1="366.0" y1="1004" x2="602.0" y2="1004" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="325.20000000000005" y="956" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="971" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. approveProposal(id) [each accepted</text>
+<rect x="460.5" y="976" width="47.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="991" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">item]</text>
+<line x1="602.0" y1="1082" x2="838.0" y2="1082" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="643.2" y="1034" width="153.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="1049" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. approve(id) -&gt;</text>
+<rect x="602.2" y="1054" width="235.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="1069" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">AddDeadlineCommand.execute()</text>
+<line x1="838.0" y1="1140" x2="1074.0" y2="1140" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="776.7" y="1112" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="1127" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. createDeadline(...); persist; changed()</text>
+<line x1="366.0" y1="1225" x2="602.0" y2="1225" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="312.9" y="1177" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1192" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. markUndatedRemindersShown(newUndated,</text>
+<rect x="456.4" y="1197" width="55.199999999999996" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1212" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">today)</text>
+<line x1="602.0" y1="1283" x2="1310.0" y2="1283" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="793.1" y="1255" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="1270" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. Persist TBD/today/deadlineId marker</text>
+<line x1="366.0" y1="1368" x2="602.0" y2="1368" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="308.8" y="1320" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1335" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">16. unseenUndatedReminders(today) [startup</text>
+<rect x="407.2" y="1340" width="153.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1355" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">/ each GUI minute]</text>
+<line x1="602.0" y1="1446" x2="366.0" y2="1446" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="317.0" y="1398" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1413" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">17. Incomplete TBD entries not yet shown</text>
+<rect x="460.5" y="1418" width="47.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1433" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">today</text>
+<line x1="366.0" y1="1524" x2="602.0" y2="1524" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="317.0" y="1476" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1491" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">18. markUndatedRemindersShown(remaining,</text>
+<rect x="399.0" y="1496" width="170.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1511" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">today) before prompt</text>
+<line x1="602.0" y1="1582" x2="1310.0" y2="1582" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="748.0" y="1554" width="415.99999999999994" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="1569" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">19. Append today&#x27;s keys; next reminder is tomorrow</text>
+<line x1="366.0" y1="1647" x2="130.0" y2="1647" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="85.10000000000002" y="1619" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="1634" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">20. Set selected date / Remind tomorrow</text>
+<line x1="130.0" y1="1712" x2="366.0" y2="1712" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="105.60000000000002" y="1684" width="284.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="1699" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">21. Choose due date / keep unknown</text>
+<line x1="366.0" y1="1797" x2="602.0" y2="1797" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="321.1" y="1749" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1764" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">22. editDeadline(id, title, type, date,</text>
+<rect x="378.5" y="1769" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1784" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">scope) [if a date is set]</text>
+<line x1="602.0" y1="1855" x2="1074.0" y2="1855" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="679.2" y="1827" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="838.0" y="1842" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">23. Validate date, persist and refresh</text>
+<rect x="32" y="1914" width="1376" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1940" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1965" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Date inputs are validated against the semester. Duplicate import entries are skipped. Daily reminders run only while the GUI is open or at next launch; there is no</text>
+<text x="48" y="1988" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">OS background reminder service.</text>
+</svg>

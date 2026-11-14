@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1508" viewBox="0 0 1440 1508">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1440" height="1508" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD04 - Study timer and weekly records</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F05 / UC05, UC06 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1408" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1372" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="267.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="366.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">TimerPanel /</text>
+<text x="366.0" y="175" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow</text>
+<line x1="366.0" y1="191" x2="366.0" y2="1372" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="503.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="602.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="602.0" y1="191" x2="602.0" y2="1372" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="739.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="838.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">StudyTimer</text>
+<line x1="838.0" y1="191" x2="838.0" y2="1372" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="975.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1074.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
+<line x1="1074.0" y1="191" x2="1074.0" y2="1372" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1211.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1310.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">TimerRecordPanel / CLI</text>
+<line x1="1310.0" y1="191" x2="1310.0" y2="1372" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="243" x2="366.0" y2="243" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="122.00000000000001" y="215" width="251.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Choose 15 / 30 / 60 minutes</text>
+<line x1="366.0" y1="308" x2="602.0" y2="308" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="390.8" y="280" width="186.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="295" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. startStudy(minutes)</text>
+<line x1="602.0" y1="373" x2="838.0" y2="373" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="565.3" y="345" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="360" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. start(null, &quot;Study&quot;, minutes * 60)</text>
+<line x1="366.0" y1="458" x2="602.0" y2="458" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="308.8" y="410" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="425" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. remainingStudySeconds() [GUI tick every</text>
+<rect x="452.3" y="430" width="63.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="445" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">second]</text>
+<line x1="602.0" y1="516" x2="838.0" y2="516" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="630.9" y="488" width="178.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="503" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. remainingSeconds()</text>
+<line x1="838.0" y1="581" x2="602.0" y2="581" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="635.0" y="553" width="170.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="568" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Remaining seconds</text>
+<line x1="602.0" y1="646" x2="366.0" y2="646" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="312.9" y="618" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="633" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. Remaining seconds -&gt; display countdown</text>
+<line x1="130.0" y1="711" x2="366.0" y2="711" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="130.20000000000002" y="683" width="235.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="698" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Pause / resume [optional]</text>
+<line x1="366.0" y1="796" x2="602.0" y2="796" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="341.6" y="748" width="284.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="763" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. pauseStudy() / resumeStudy() -&gt;</text>
+<rect x="382.6" y="768" width="202.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="783" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">timer.pause() / resume()</text>
+<line x1="366.0" y1="838" x2="436.0" y2="838" stroke="#395b7b" stroke-width="2"/>
+<line x1="436.0" y1="838" x2="436.0" y2="860" stroke="#395b7b" stroke-width="2"/>
+<line x1="436.0" y1="860" x2="366.0" y2="860" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="443.0" y="826" width="276.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="446.0" y="841" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. At zero: Toolkit.beep(); show</text>
+<rect x="443.0" y="846" width="293.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="446.0" y="861" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">completion [or student stops early]</text>
+<line x1="366.0" y1="932" x2="602.0" y2="932" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="419.5" y="904" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="919" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. stopStudy()</text>
+<line x1="602.0" y1="997" x2="838.0" y2="997" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="676.0" y="969" width="88.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="984" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. stop()</text>
+<line x1="838.0" y1="1082" x2="602.0" y2="1082" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="561.2" y="1034" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="1049" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. StudySession with measured seconds</text>
+<rect x="630.9" y="1054" width="178.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="1069" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">(pause time excluded)</text>
+<line x1="602.0" y1="1140" x2="1074.0" y2="1140" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="625.9" y="1112" width="424.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="838.0" y="1127" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. recordStudySession(session); persist; changed()</text>
+<line x1="130.0" y1="1205" x2="1310.0" y2="1205" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="557.1" y="1177" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="1192" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. Choose record week / CLI study week</text>
+<line x1="1310.0" y1="1270" x2="602.0" y2="1270" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="727.5" y="1242" width="456.99999999999994" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="1257" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">16. studySessions(); weeklyStudySeconds(null, weekDate)</text>
+<line x1="602.0" y1="1335" x2="1310.0" y2="1335" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="825.9" y="1307" width="260.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="1322" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">17. Daily totals and weekly sum</text>
+<rect x="32" y="1394" width="1376" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1420" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1445" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Timer execution is GUI-only and stops with the app. Default sessions are deliberately unlinked to a course, as Stage 1 specifies. The CLI reads persisted records;</text>
+<text x="48" y="1468" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">it does not run the countdown.</text>
+</svg>

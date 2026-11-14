@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1417" viewBox="0 0 1680 1417">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1680" height="1417" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD07 - Plan an approved natural-language schedule change</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F08 / UC09, UC17 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1648" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="267.66666666666663" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="366.66666666666663" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">ChatPanel / CLI</text>
+<line x1="366.66666666666663" y1="191" x2="366.66666666666663" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="504.33333333333326" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="603.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="603.3333333333333" y1="191" x2="603.3333333333333" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="741.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="840.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">SchedulePlanner</text>
+<line x1="840.0" y1="191" x2="840.0" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="977.6666666666665" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1076.6666666666665" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
+<line x1="1076.6666666666665" y1="191" x2="1076.6666666666665" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1214.3333333333333" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1313.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">CommandInvoker /</text>
+<text x="1313.3333333333333" y="175" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentCommand</text>
+<line x1="1313.3333333333333" y1="191" x2="1313.3333333333333" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1451.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1550.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
+<line x1="1550.0" y1="191" x2="1550.0" y2="1281" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="243" x2="366.66666666666663" y2="243" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="69.03333333333333" y="215" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Describe one add / edit / delete request</text>
+<line x1="366.66666666666663" y1="308" x2="603.3333333333333" y2="308" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="317.99999999999994" y="280" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="295" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. planScheduleChange(courseId, request)</text>
+<line x1="603.3333333333333" y1="393" x2="840.0" y2="393" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="571.0666666666666" y="345" width="301.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="360" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. plan(store, llm, prompts, parser,</text>
+<rect x="607.9666666666667" y="365" width="227.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="380" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">invoker, courseId, request)</text>
+<line x1="840.0" y1="451" x2="1550.0" y2="451" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="929.6" y="423" width="530.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1195.0" y="438" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. course(); deadlines() -&gt; existing IDs, dates, types and scope</text>
+<line x1="840.0" y1="536" x2="1076.6666666666665" y2="536" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="791.3333333333333" y="488" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="503" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. SCHEDULE_PLAN prompt -&gt; complete() -&gt;</text>
+<rect x="914.3333333333333" y="508" width="88.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="523" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">parse JSON</text>
+<line x1="1076.6666666666665" y1="614" x2="840.0" y2="614" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="795.4333333333333" y="566" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="581" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Action, target ID, proposed fields /</text>
+<rect x="902.0333333333333" y="586" width="112.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="601" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">clarification</text>
+<line x1="840.0" y1="656" x2="910.0" y2="656" stroke="#395b7b" stroke-width="2"/>
+<line x1="910.0" y1="656" x2="910.0" y2="678" stroke="#395b7b" stroke-width="2"/>
+<line x1="910.0" y1="678" x2="840.0" y2="678" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="917.0" y="644" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="920.0" y="659" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. Check course; preserve omitted text</text>
+<rect x="917.0" y="664" width="178.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="920.0" y="679" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">fields; validate date</text>
+<line x1="840.0" y1="750" x2="1313.3333333333333" y2="750" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="844.0666666666666" y="722" width="465.19999999999993" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1076.6666666666665" y="737" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. propose(before/after, Add/Edit/DeleteDeadlineCommand)</text>
+<line x1="603.3333333333333" y1="835" x2="366.66666666666663" y2="835" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="330.29999999999995" y="787" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="802" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Proposal; history records schedule</text>
+<rect x="449.19999999999993" y="807" width="71.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="822" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">proposal</text>
+<line x1="366.66666666666663" y1="913" x2="130.0" y2="913" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="110.03333333333333" y="865" width="276.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="880" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. Display before and after; ask</text>
+<rect x="187.93333333333334" y="885" width="120.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="900" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">approve/reject</text>
+<line x1="130.0" y1="971" x2="366.66666666666663" y2="971" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="200.23333333333332" y="943" width="96.19999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="958" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. Approve</text>
+<line x1="366.66666666666663" y1="1036" x2="603.3333333333333" y2="1036" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="387.69999999999993" y="1008" width="194.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1023" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. approveProposal(id)</text>
+<line x1="603.3333333333333" y1="1101" x2="1313.3333333333333" y2="1101" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="787.2333333333332" y="1073" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="1088" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. approve(id) -&gt; AgentCommand.execute()</text>
+<line x1="1313.3333333333333" y1="1186" x2="1550.0" y2="1186" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1289.2666666666664" y="1138" width="284.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1431.6666666666665" y="1153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. Command calls createDeadline /</text>
+<rect x="1309.7666666666664" y="1158" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1431.6666666666665" y="1173" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">editDeadline / deleteDeadline</text>
+<line x1="1550.0" y1="1244" x2="366.66666666666663" y2="1244" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="766.7333333333332" y="1216" width="383.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="1231" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. Persist -&gt; changed() -&gt; refreshed schedule</text>
+<rect x="32" y="1303" width="1616" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1329" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1354" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Ambiguous action -&gt; a clarification error instead of a mutation. A request produces one deadline action. Rejection discards the command and records the decision; no persistent schedule change</text>
+<text x="48" y="1377" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">occurs.</text>
+</svg>

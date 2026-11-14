@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1170" viewBox="0 0 1440 1170">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1440" height="1170" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD05 - Find uploaded reference files for a deadline</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F06 / UC07 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1408" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1034" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="267.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="366.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow / CLI</text>
+<line x1="366.0" y1="191" x2="366.0" y2="1034" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="503.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="602.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="602.0" y1="191" x2="602.0" y2="1034" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="739.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="838.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
+<line x1="838.0" y1="191" x2="838.0" y2="1034" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="975.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1074.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">ReferenceSelector</text>
+<line x1="1074.0" y1="191" x2="1074.0" y2="1034" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1211.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1310.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
+<line x1="1310.0" y1="191" x2="1310.0" y2="1034" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="263" x2="366.0" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="72.80000000000001" y="215" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Select a deadline and request reference</text>
+<rect x="224.5" y="235" width="47.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="250" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">files</text>
+<line x1="366.0" y1="321" x2="602.0" y2="321" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="349.8" y="293" width="268.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. suggestReferences(deadlineId)</text>
+<line x1="602.0" y1="406" x2="838.0" y2="406" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="540.7" y="358" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="373" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. deadline(); readable lecture candidates;</text>
+<rect x="614.5" y="378" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="393" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">syllabus/assignment files</text>
+<line x1="602.0" y1="484" x2="838.0" y2="484" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="540.7" y="436" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="451" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. materialPages() [first-page snippets for</text>
+<rect x="684.2" y="456" width="71.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="471" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">context]</text>
+<line x1="602.0" y1="562" x2="1074.0" y2="562" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="621.8" y="514" width="432.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="838.0" y="529" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. select(llm, prompts, parser, request, candidates,</text>
+<rect x="814.5" y="534" width="47.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="838.0" y="549" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">true)</text>
+<line x1="1074.0" y1="640" x2="1310.0" y2="640" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1029.1" y="592" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1192.0" y="607" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. REFERENCE_SELECTION -&gt; complete() -&gt;</text>
+<rect x="1127.5" y="612" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1192.0" y="627" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">parse fileNames</text>
+<line x1="1310.0" y1="698" x2="1074.0" y2="698" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="1070.1" y="670" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1192.0" y="685" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. Proposed source file names</text>
+<line x1="1074.0" y1="747" x2="1144.0" y2="747" stroke="#395b7b" stroke-width="2"/>
+<line x1="1144.0" y1="747" x2="1144.0" y2="769" stroke="#395b7b" stroke-width="2"/>
+<line x1="1144.0" y1="769" x2="1074.0" y2="769" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1151.0" y="735" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1154.0" y="750" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Keep only exact uploaded lecture names;</text>
+<rect x="1151.0" y="755" width="96.19999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1154.0" y="770" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">deduplicate</text>
+<line x1="1074.0" y1="841" x2="602.0" y2="841" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="716.1" y="813" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="838.0" y="828" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Existing MaterialFile list</text>
+<line x1="602.0" y1="926" x2="366.0" y2="926" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="329.3" y="878" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="893" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. Reference files; no schedule data</text>
+<rect x="452.3" y="898" width="63.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="913" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">changed</text>
+<line x1="366.0" y1="1004" x2="130.0" y2="1004" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="85.10000000000002" y="956" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="971" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. List files; originals can be opened</text>
+<rect x="187.60000000000002" y="976" width="120.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="991" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">from workspace</text>
+<rect x="32" y="1056" width="1376" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1082" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1107" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">No readable lecture candidates -&gt; explicit error. For this workflow unavailable LLM file names are ignored. Source Q&amp;A uses the stricter selector and passage</text>
+<text x="48" y="1130" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">citation checks (SD09a).</text>
+</svg>

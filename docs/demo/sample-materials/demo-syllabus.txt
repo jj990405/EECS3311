@@ -1,0 +1,9 @@
+SYNTHETIC DEMONSTRATION MATERIAL — not an official university syllabus.
+Course: EECS3311 Demo
+Semester: Fall 2026, September 1 to December 31, 2026.
+
+Week 3: SOLID principles, Facade, Command and Observer.
+Quiz 1: due November 20, 2026; weight 10%; scope SOLID principles.
+Design Review: due November 21, 2026; weight 20%; scope Command and Observer.
+Final Exam: date to be announced (TBD); weight 40%; scope all course topics.
+The remaining 30% is participation; no separate deadline is specified here.

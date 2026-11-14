@@ -1,0 +1,815 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device" version="24.7.17">
+  <diagram id="01-architecture" name="Implemented architecture">
+    <mxGraphModel dx="1600" dy="1160" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1160">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Implemented architecture" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="One controller serves Swing and CLI; AI proposals cross an explicit approval boundary." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="gui" value="MainWindow + Swing components" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#eaf0f8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="160" width="620" height="135" />
+        </mxCell>
+        <mxCell id="gui-body" value="Workspace tree, timeline, calendar and PDF tabs&lt;br&gt;Chat, study notes, quiz dialogs and study timer" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="gui">
+          <mxGeometry as="geometry" x="0" y="44" width="620" height="91" />
+        </mxCell>
+        <mxCell id="cli" value="CommandLineInterface" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#eaf0f8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="920" y="160" width="620" height="135" />
+        </mxCell>
+        <mxCell id="cli-body" value="run() dispatches text commands&lt;br&gt;Setup, materials, schedule and study workflows" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="cli">
+          <mxGeometry as="geometry" x="0" y="44" width="620" height="91" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController  &amp;lt;&amp;lt;Facade&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="490" y="390" width="620" height="170" />
+        </mxCell>
+        <mxCell id="controller-body" value="DataStore, LlmClient, CommandInvoker, StudyArtifacts&lt;hr&gt;Coordinates retrieval, generation, validation and approval&lt;br&gt;Shared domain operations for both interfaces" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="620" height="126" />
+        </mxCell>
+        <mxCell id="ai" value="LLM collaboration" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="675" width="470" height="170" />
+        </mxCell>
+        <mxCell id="ai-body" value="PromptBuilder + ResponseParser&lt;br&gt;LlmClient -&amp;gt; HttpLlmClient&lt;br&gt;SchedulePlanner / ReferenceSelector / MaterialSearcher" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="ai">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="126" />
+        </mxCell>
+        <mxCell id="persist" value="Local state and history" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="565" y="675" width="470" height="170" />
+        </mxCell>
+        <mxCell id="persist-body" value="DataStore: entities, original files, extracted text&lt;br&gt;StudyArtifacts: notes, quizzes, scores, self-assessments&lt;br&gt;InteractionHistory: records and prompt context" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="persist">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="126" />
+        </mxCell>
+        <mxCell id="services" value="Deterministic services" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1085" y="675" width="470" height="170" />
+        </mxCell>
+        <mxCell id="services-body" value="DocumentReaderFactory and readers&lt;br&gt;DeadlineValidator / PriorityRecommender&lt;br&gt;StudyTimer / ReminderService / WeakTopicAnalyzer" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="services">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="126" />
+        </mxCell>
+        <mxCell id="api" value="External HTTPS chat-completions API" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="960" width="470" height="100" />
+        </mxCell>
+        <mxCell id="api-body" value="Model / endpoint configured locally in .env" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="api">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="56" />
+        </mxCell>
+        <mxCell id="disk" value="Local data/ directory" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="565" y="960" width="470" height="100" />
+        </mxCell>
+        <mxCell id="disk-body" value="Properties, JSON, JSONL, text, original files" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="disk">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="56" />
+        </mxCell>
+        <mxCell id="edge0" value="user actions" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.27419354838709675;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="gui" target="controller">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="370" y="345" />
+              <mxPoint x="660" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="user actions" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.7258064516129032;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="cli" target="controller">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1230" y="345" />
+              <mxPoint x="940" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="ai">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="800" y="610" />
+              <mxPoint x="280" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="coordinates" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="persist">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="800" y="610" />
+              <mxPoint x="800" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="services">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="800" y="610" />
+              <mxPoint x="1320" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="HTTPS" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="ai" target="api">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="read / write" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="persist" target="disk">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Approval boundary: CommandInvoker stores transient" style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1085" y="955" width="475" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="AgentCommand objects. Only approve() executes them." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1085" y="980" width="475" height="25" />
+        </mxCell>
+        <mxCell id="note2" value="Dependency arrows describe calls. Files are local; the LLM does not access DataStore directly." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="1105" width="1500" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="02-core-and-domain" name="Controller and domain records">
+    <mxGraphModel dx="1600" dy="1200" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1200">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Controller and domain records" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="Selected members are shown. UUID fields are logical references, not Java object associations." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController  &amp;lt;&amp;lt;Facade&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="160" width="475" height="253" />
+        </mxCell>
+        <mxCell id="controller-body" value="- store: DataStore&lt;br&gt;- recommender: PriorityStrategy&lt;hr&gt;+ createSemester(...): Semester&lt;br&gt;+ createCourse(...): Course&lt;br&gt;+ schedule(...): List&amp;lt;Deadline&amp;gt;&lt;br&gt;+ progress(...): Progress&lt;br&gt;+ addChangeListener(Runnable)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="475" height="209" />
+        </mxCell>
+        <mxCell id="store" value="DataStore" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="610" y="160" width="590" height="276" />
+        </mxCell>
+        <mxCell id="store-body" value="- semesters: Map&amp;lt;UUID, Semester&amp;gt;&lt;br&gt;- courses: Map&amp;lt;UUID, Course&amp;gt;&lt;br&gt;- deadlines: Map&amp;lt;UUID, Deadline&amp;gt;&lt;br&gt;- materials: Map&amp;lt;UUID, MaterialFile&amp;gt;&lt;br&gt;- sessions: Map&amp;lt;UUID, StudySession&amp;gt;&lt;hr&gt;+ createDeadline(...) / editDeadline(...)&lt;br&gt;+ uploadMaterial(...) / materialPages(...)&lt;br&gt;+ addChangeListener(Runnable)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="store">
+          <mxGeometry as="geometry" x="0" y="44" width="590" height="232" />
+        </mxCell>
+        <mxCell id="semester" value="Semester  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="575" width="420" height="161" />
+        </mxCell>
+        <mxCell id="semester-body" value="id: UUID; name: String&lt;br&gt;startDate, endDate: LocalDate&lt;hr&gt;+ contains(LocalDate): boolean" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="semester">
+          <mxGeometry as="geometry" x="0" y="44" width="420" height="117" />
+        </mxCell>
+        <mxCell id="course" value="Course  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="575" width="420" height="118" />
+        </mxCell>
+        <mxCell id="course-body" value="id, semesterId: UUID; name: String&lt;br&gt;colorHex: String; difficulty: Difficulty" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="course">
+          <mxGeometry as="geometry" x="0" y="44" width="420" height="74" />
+        </mxCell>
+        <mxCell id="deadline" value="Deadline  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1120" y="575" width="435" height="253" />
+        </mxCell>
+        <mxCell id="deadline-body" value="id, courseId: UUID; title, type, scope&lt;br&gt;dueDate: LocalDate (nullable)&lt;br&gt;completed: boolean; dueTime: LocalTime&lt;br&gt;notifyBeforeMinutes: int; weight: Double&lt;br&gt;sourceText: String&lt;hr&gt;+ withCompleted(boolean): Deadline&lt;br&gt;+ withNotification(...): Deadline" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="deadline">
+          <mxGeometry as="geometry" x="0" y="44" width="435" height="209" />
+        </mxCell>
+        <mxCell id="session" value="StudySession  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="940" width="420" height="141" />
+        </mxCell>
+        <mxCell id="session-body" value="id, courseId: UUID (courseId nullable)&lt;br&gt;topic: String; startedAt: LocalDateTime&lt;br&gt;seconds: long" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="session">
+          <mxGeometry as="geometry" x="0" y="44" width="420" height="97" />
+        </mxCell>
+        <mxCell id="material" value="MaterialFile  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="940" width="465" height="207" />
+        </mxCell>
+        <mxCell id="material-body" value="id, courseId: UUID; category: Category&lt;br&gt;originalName, storedName: String&lt;br&gt;textAvailable: boolean; extractionWarning&lt;br&gt;lectureWeek: Integer&lt;hr&gt;+ withLectureWeek(...) / withCategory(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="material">
+          <mxGeometry as="geometry" x="0" y="44" width="465" height="163" />
+        </mxCell>
+        <mxCell id="difficulty" value="Difficulty  &amp;lt;&amp;lt;enum&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1140" y="1000" width="385" height="138" />
+        </mxCell>
+        <mxCell id="difficulty-body" value="HIGH, MEDIUM, LOW&lt;hr&gt;+ priority(): int" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="difficulty">
+          <mxGeometry as="geometry" x="0" y="44" width="385" height="94" />
+        </mxCell>
+        <mxCell id="edge0" value="delegates" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.37549407114624506;entryX=0.0;entryY=0.3442028985507246;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="store">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="semesterId" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.0;exitY=0.5084745762711864;entryX=1.0;entryY=0.37267080745341613;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="course" target="semester">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="courseId" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.0;exitY=0.23715415019762845;entryX=1.0;entryY=0.5084745762711864;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="deadline" target="course">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="courseId" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5053763440860215;exitY=0.0;entryX=0.5595238095238095;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="material" target="course">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="optional courseId" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.425531914893617;entryX=0.23809523809523808;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="session" target="course">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="535" y="1000" />
+              <mxPoint x="535" y="735" />
+              <mxPoint x="700" y="735" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="difficulty" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.8898305084745762;entryX=0.0;entryY=0.43478260869565216;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="course" target="difficulty">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1085" y="680" />
+              <mxPoint x="1085" y="1060" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="DataStore maps retain 0..* instances of each record. Category is an enum: Syllabus, Lecture Materials, Assignment Specifications, Other." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1148" width="1515" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="03-llm-and-retrieval" name="LLM adapter and grounded retrieval">
+    <mxGraphModel dx="1600" dy="1210" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1210">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="LLM adapter and grounded retrieval" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="External model access is replaceable; source selection and citation checks remain deterministic." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="150" width="430" height="207" />
+        </mxCell>
+        <mxCell id="controller-body" value="- llm: LlmClient; - prompts: PromptBuilder&lt;br&gt;- parser: ResponseParser; - history: InteractionHistory&lt;hr&gt;+ answerQuestion(...)&lt;br&gt;+ suggestReferences(...)&lt;br&gt;+ generateSummary(...) / generateQuiz(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="430" height="163" />
+        </mxCell>
+        <mxCell id="llm" value="LlmClient  &amp;lt;&amp;lt;interface&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="180" width="450" height="95" />
+        </mxCell>
+        <mxCell id="llm-body" value="+ complete(systemPrompt, userPrompt): String" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="llm">
+          <mxGeometry as="geometry" x="0" y="44" width="450" height="51" />
+        </mxCell>
+        <mxCell id="prompts" value="PromptBuilder" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1125" y="160" width="430" height="118" />
+        </mxCell>
+        <mxCell id="prompts-body" value="+ system(Task): String&lt;br&gt;+ user(Task, context, request): String" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="prompts">
+          <mxGeometry as="geometry" x="0" y="44" width="430" height="74" />
+        </mxCell>
+        <mxCell id="http" value="HttpLlmClient  &amp;lt;&amp;lt;Adapter&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="500" width="450" height="161" />
+        </mxCell>
+        <mxCell id="http-body" value="- key: String; - endpoint: URI; - model: String&lt;hr&gt;+ HttpLlmClient(projectRoot: Path)&lt;br&gt;+ complete(...): String" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="http">
+          <mxGeometry as="geometry" x="0" y="44" width="450" height="117" />
+        </mxCell>
+        <mxCell id="search" value="MaterialSearcher" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="530" width="430" height="165" />
+        </mxCell>
+        <mxCell id="search-body" value="+ search(store, files, query, limit)&lt;br&gt;  : List&amp;lt;Passage&amp;gt;&lt;br&gt;Passage(fileName, page, text, score)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="search">
+          <mxGeometry as="geometry" x="0" y="44" width="430" height="121" />
+        </mxCell>
+        <mxCell id="parser" value="ResponseParser" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1125" y="500" width="430" height="141" />
+        </mxCell>
+        <mxCell id="parser-body" value="+ parse(response): Map&amp;lt;String,Object&amp;gt;&lt;br&gt;+ deadlines(response): List&amp;lt;DeadlineDraft&amp;gt;&lt;br&gt;+ week(response): Integer" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="parser">
+          <mxGeometry as="geometry" x="0" y="44" width="430" height="97" />
+        </mxCell>
+        <mxCell id="selector" value="ReferenceSelector" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="850" width="450" height="165" />
+        </mxCell>
+        <mxCell id="selector-body" value="+ select(llm, prompts, parser, request, files, ...)&lt;br&gt;  : List&amp;lt;MaterialFile&amp;gt;&lt;br&gt;Only supplied readable names are accepted." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="selector">
+          <mxGeometry as="geometry" x="0" y="44" width="450" height="121" />
+        </mxCell>
+        <mxCell id="history" value="InteractionHistory" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="850" width="430" height="141" />
+        </mxCell>
+        <mxCell id="history-body" value="+ add(event, detail)&lt;br&gt;+ list() / recent(count) / delete(entry)&lt;br&gt;Entry(time, event, detail)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="history">
+          <mxGeometry as="geometry" x="0" y="44" width="430" height="97" />
+        </mxCell>
+        <mxCell id="explain" value="ExplanationStrategy  &amp;lt;&amp;lt;interface&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1125" y="850" width="430" height="165" />
+        </mxCell>
+        <mxCell id="explain-body" value="+ instruction(): String&lt;br&gt;+ forDifficulty(Difficulty): ExplanationStrategy&lt;br&gt;Returns HIGH / MEDIUM / LOW lambdas." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="explain">
+          <mxGeometry as="geometry" x="0" y="44" width="430" height="121" />
+        </mxCell>
+        <mxCell id="edge0" value="uses" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.0;exitY=0.3140096618357488;entryX=1.0;entryY=0.3684210526315789;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="llm">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="implements" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="http" target="llm">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.2898550724637681;entryX=0.0;entryY=0.423728813559322;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="prompts">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.5797101449275363;entryX=0.0;entryY=0.3900709219858156;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="parser">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1080" y="270" />
+              <mxPoint x="1080" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="creates / calls" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="search">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="creates / calls" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.0;exitY=0.8454106280193237;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="selector">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="550" y="325" />
+              <mxPoint x="550" y="790" />
+              <mxPoint x="270" y="790" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="records / reads context" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.8454106280193237;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="history">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1065" y="325" />
+              <mxPoint x="1065" y="795" />
+              <mxPoint x="815" y="795" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="selects style" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.9420289855072463;entryX=0.0;entryY=0.45454545454545453;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="explain">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1095" y="345" />
+              <mxPoint x="1095" y="925" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="HttpLlmClient adapts the application interface to an OpenAI-compatible HTTPS endpoint; .env remains local and ignored by Git." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1100" width="1515" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="answerQuestion() checks cited file/page pairs against supplied passages. Notes track source pages in the controller." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1125" width="1515" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="04-command-approval" name="Commands and explicit approval">
+    <mxGraphModel dx="1600" dy="1110" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1110">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Commands and explicit approval" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="Pending proposals are transient. Direct manual edits use DataStore; AI data-changing proposals use commands." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="160" width="390" height="164" />
+        </mxCell>
+        <mxCell id="controller-body" value="+ approveProposal(id)&lt;br&gt;+ rejectProposal(id)&lt;br&gt;+ reviseSyllabusCandidate(...)&lt;br&gt;+ planScheduleChange(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="390" height="120" />
+        </mxCell>
+        <mxCell id="invoker" value="CommandInvoker" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="555" y="160" width="440" height="207" />
+        </mxCell>
+        <mxCell id="invoker-body" value="- commands: Map&amp;lt;UUID, AgentCommand&amp;gt;&lt;br&gt;- descriptions: Map&amp;lt;UUID, Proposal&amp;gt;&lt;hr&gt;+ propose(description, command): Proposal&lt;br&gt;+ replace(...) / pending() / clear()&lt;br&gt;+ approve(id) / reject(id)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="invoker">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="163" />
+        </mxCell>
+        <mxCell id="command" value="AgentCommand  &amp;lt;&amp;lt;interface&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1115" y="160" width="440" height="95" />
+        </mxCell>
+        <mxCell id="command-body" value="+ execute(): void  throws IOException" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="command">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="51" />
+        </mxCell>
+        <mxCell id="planner" value="SchedulePlanner" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="455" width="440" height="165" />
+        </mxCell>
+        <mxCell id="planner-body" value="+ plan(store, llm, prompts, parser, invoker,&lt;br&gt;       courseId, request): Proposal&lt;br&gt;Validates target course and requested action." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="planner">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="121" />
+        </mxCell>
+        <mxCell id="add" value="AddDeadlineCommand  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="760" width="350" height="161" />
+        </mxCell>
+        <mxCell id="add-body" value="store: DataStore; courseId: UUID&lt;br&gt;draft: DeadlineDraft&lt;hr&gt;+ execute() -&amp;gt; createDeadline(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="add">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="117" />
+        </mxCell>
+        <mxCell id="edit" value="EditDeadlineCommand  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="430" y="760" width="350" height="161" />
+        </mxCell>
+        <mxCell id="edit-body" value="store: DataStore; id: UUID&lt;br&gt;draft: DeadlineDraft&lt;hr&gt;+ execute() -&amp;gt; editDeadline(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="edit">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="117" />
+        </mxCell>
+        <mxCell id="delete" value="DeleteDeadlineCommand  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="815" y="760" width="350" height="138" />
+        </mxCell>
+        <mxCell id="delete-body" value="store: DataStore; id: UUID&lt;hr&gt;+ execute() -&amp;gt; deleteDeadline(id)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="delete">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="94" />
+        </mxCell>
+        <mxCell id="week" value="AssignWeekCommand  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1200" y="760" width="350" height="161" />
+        </mxCell>
+        <mxCell id="week-body" value="store: DataStore; materialId: UUID&lt;br&gt;week: int&lt;hr&gt;+ execute() -&amp;gt; assignLectureWeek(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="week">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="117" />
+        </mxCell>
+        <mxCell id="edge0" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.3353658536585366;entryX=0.0;entryY=0.26570048309178745;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="invoker">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="stores 0..* / executes" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.3864734299516908;entryX=0.0;entryY=0.8421052631578947;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="invoker" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="propose(...)" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.3939393939393939;entryX=0.4659090909090909;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="planner" target="invoker">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="760" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="add" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="220" y="670" />
+              <mxPoint x="1335" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="edit" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="605" y="670" />
+              <mxPoint x="1335" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="delete" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="990" y="670" />
+              <mxPoint x="1335" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="implements" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="week" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1375" y="670" />
+              <mxPoint x="1335" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Proposal is CommandInvoker.Proposal(id, description), a nested record; command objects live in a separate map." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1030" width="1515" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="Essay-score approval uses an AgentCommand lambda in AgentController.proposeEssayGrade(); no UpdateGradeCommand class exists." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1055" width="1515" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="05-document-readers" name="Document reader factory">
+    <mxGraphModel dx="1600" dy="1080" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1080">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Document reader factory" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="Simple Factory chooses a reader by extension; no OCR is performed on scanned PDFs." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="store" value="DataStore" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="160" width="440" height="161" />
+        </mxCell>
+        <mxCell id="store-body" value="- readers: DocumentReaderFactory&lt;hr&gt;+ uploadMaterial(...)&lt;br&gt;+ materialPages(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="store">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="117" />
+        </mxCell>
+        <mxCell id="factory" value="DocumentReaderFactory  &amp;lt;&amp;lt;Simple Factory&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="580" y="160" width="440" height="118" />
+        </mxCell>
+        <mxCell id="factory-body" value="+ getReader(fileName)&lt;br&gt;  : Optional&amp;lt;DocumentReader&amp;gt;" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="factory">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="74" />
+        </mxCell>
+        <mxCell id="reader" value="DocumentReader  &amp;lt;&amp;lt;interface&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1115" y="160" width="440" height="95" />
+        </mxCell>
+        <mxCell id="reader-body" value="+ extractText(Path): List&amp;lt;String&amp;gt;" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="reader">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="51" />
+        </mxCell>
+        <mxCell id="pdf" value="PdfReader" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="535" width="350" height="150" />
+        </mxCell>
+        <mxCell id="pdf-body" value="+ extractText(Path)&lt;br&gt;Uses Apache PDFBox for page text." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="pdf">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="106" />
+        </mxCell>
+        <mxCell id="ppt" value="PptxReader" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="430" y="535" width="350" height="150" />
+        </mxCell>
+        <mxCell id="ppt-body" value="+ extractText(Path)&lt;br&gt;Reads slide XML in numerical order." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="ppt">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="106" />
+        </mxCell>
+        <mxCell id="doc" value="DocxReader" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="815" y="535" width="350" height="150" />
+        </mxCell>
+        <mxCell id="doc-body" value="+ extractText(Path)&lt;br&gt;Reads word/document.xml." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="doc">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="106" />
+        </mxCell>
+        <mxCell id="txt" value="TxtReader" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1200" y="535" width="350" height="150" />
+        </mxCell>
+        <mxCell id="txt-body" value="+ extractText(Path)&lt;br&gt;Reads UTF-8 text." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="txt">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="106" />
+        </mxCell>
+        <mxCell id="xml" value="OfficeXmlReader  &amp;lt;&amp;lt;package utility&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="590" y="840" width="440" height="125" />
+        </mxCell>
+        <mxCell id="xml-body" value="~ paragraphs(InputStream): String&lt;br&gt;Secure XML parsing; extracts visible text." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="xml">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="81" />
+        </mxCell>
+        <mxCell id="edge0" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.3416149068322981;entryX=0.0;entryY=0.4661016949152542;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="store" target="factory">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="returns selected implementation" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.4661016949152542;entryX=0.0;entryY=0.5789473684210527;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="factory" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="pdf" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="220" y="430" />
+              <mxPoint x="1335" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="ppt" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="605" y="430" />
+              <mxPoint x="1335" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="doc" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="990" y="430" />
+              <mxPoint x="1335" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="implements" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="txt" target="reader">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1375" y="430" />
+              <mxPoint x="1335" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="uses" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.25;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="ppt" target="xml">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="605" y="750" />
+              <mxPoint x="700" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="uses" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.75;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="doc" target="xml">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="990" y="750" />
+              <mxPoint x="920" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Unsupported formats remain stored and openable; they have no document reader and cannot provide AI text evidence." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1005" width="1515" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="06-workspace-composite" name="Workspace tree and Composite">
+    <mxGraphModel dx="1600" dy="1030" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1030">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Workspace tree and Composite" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="One node interface represents semester, course, category branches and material-file leaves." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="160" width="400" height="95" />
+        </mxCell>
+        <mxCell id="controller-body" value="+ workspace(): List&amp;lt;WorkspaceNode&amp;gt;" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="400" height="51" />
+        </mxCell>
+        <mxCell id="builder" value="WorkspaceTree" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="560" y="160" width="440" height="118" />
+        </mxCell>
+        <mxCell id="builder-body" value="+ build(DataStore): List&amp;lt;WorkspaceNode&amp;gt;&lt;br&gt;Builds semester -&amp;gt; course -&amp;gt; category -&amp;gt; file." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="builder">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="74" />
+        </mxCell>
+        <mxCell id="node" value="WorkspaceNode  &amp;lt;&amp;lt;sealed interface&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1110" y="160" width="440" height="118" />
+        </mxCell>
+        <mxCell id="node-body" value="+ label(): String&lt;br&gt;+ children(): List&amp;lt;WorkspaceNode&amp;gt;" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="node">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="74" />
+        </mxCell>
+        <mxCell id="branch" value="WorkspaceBranch  &amp;lt;&amp;lt;record / Composite&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="120" y="590" width="530" height="184" />
+        </mxCell>
+        <mxCell id="branch-body" value="label: String; kind: Kind; id: UUID&lt;br&gt;children: List&amp;lt;WorkspaceNode&amp;gt;&lt;br&gt;Kind = SEMESTER | COURSE | CATEGORY&lt;hr&gt;+ label() / children()" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="branch">
+          <mxGeometry as="geometry" x="0" y="44" width="530" height="140" />
+        </mxCell>
+        <mxCell id="leaf" value="WorkspaceLeaf  &amp;lt;&amp;lt;record / Leaf&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="950" y="590" width="530" height="161" />
+        </mxCell>
+        <mxCell id="leaf-body" value="file: MaterialFile&lt;hr&gt;+ label(): String&lt;br&gt;+ children(): List&amp;lt;WorkspaceNode&amp;gt; = empty" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="leaf">
+          <mxGeometry as="geometry" x="0" y="44" width="530" height="117" />
+        </mxCell>
+        <mxCell id="edge0" value="calls build" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.5789473684210527;entryX=0.0;entryY=0.4661016949152542;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="builder">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="returns roots" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.4661016949152542;entryX=0.0;entryY=0.4661016949152542;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="builder" target="node">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="implements" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.3181818181818182;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="branch" target="node">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="385" y="440" />
+              <mxPoint x="1250" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="implements" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.6931818181818182;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="leaf" target="node">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1215" y="510" />
+              <mxPoint x="1415" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="children: 0..*" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;startArrow=diamond;startFill=1;exitX=1.0;exitY=0.46195652173913043;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="branch" target="node">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="800" y="675" />
+              <mxPoint x="800" y="365" />
+              <mxPoint x="1330" y="365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Branches copy their children list. A category branch is a WorkspaceBranch value, not a separate CategoryFolder class." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="120" y="925" width="1440" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="WorkspaceTree is a view projection of DataStore records; the persisted domain model itself is not this tree." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="120" y="950" width="1440" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="07-study-and-observer" name="Study services and observer refresh">
+    <mxGraphModel dx="1600" dy="1250" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1250">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Study services and observer refresh" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="The actual observer subject is DataStore. The GUI timer polls StudyTimer through a Swing timer." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="main" value="MainWindow  &amp;lt;&amp;lt;JFrame&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#eaf0f8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="160" width="470" height="207" />
+        </mxCell>
+        <mxCell id="main-body" value="- controller: AgentController&lt;br&gt;- studyDisplayTimer: javax.swing.Timer&lt;hr&gt;- refresh()&lt;br&gt;- startStudy(int) / stopStudy()&lt;br&gt;- showDueNotifications()" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="main">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="163" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="160" width="460" height="164" />
+        </mxCell>
+        <mxCell id="controller-body" value="+ addChangeListener(Runnable)&lt;br&gt;+ startStudy(int) / stopStudy()&lt;br&gt;+ topicStatistics(...) / weakTopicAdvice(...)&lt;br&gt;+ weeklyBriefing(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="460" height="120" />
+        </mxCell>
+        <mxCell id="store" value="DataStore  &amp;lt;&amp;lt;Observer subject&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1155" y="160" width="400" height="161" />
+        </mxCell>
+        <mxCell id="store-body" value="- listeners: List&amp;lt;Runnable&amp;gt;&lt;hr&gt;+ addChangeListener(Runnable)&lt;br&gt;- changed(): notify listeners" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="store">
+          <mxGeometry as="geometry" x="0" y="44" width="400" height="117" />
+        </mxCell>
+        <mxCell id="callback" value="Runnable  &amp;lt;&amp;lt;JDK callback&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1155" y="535" width="400" height="165" />
+        </mxCell>
+        <mxCell id="callback-body" value="+ run()&lt;br&gt;Registered lambda schedules MainWindow.refresh()&lt;br&gt;using SwingUtilities.invokeLater()." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="callback">
+          <mxGeometry as="geometry" x="0" y="44" width="400" height="121" />
+        </mxCell>
+        <mxCell id="timer" value="StudyTimer" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="610" width="470" height="207" />
+        </mxCell>
+        <mxCell id="timer-body" value="targetSeconds, accumulatedNanos: long&lt;br&gt;active, running: boolean&lt;hr&gt;+ start(...) / pause() / resume()&lt;br&gt;+ remainingSeconds(): long&lt;br&gt;+ stop(): StudySession" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="timer">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="163" />
+        </mxCell>
+        <mxCell id="artifacts" value="StudyArtifacts" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="610" width="460" height="164" />
+        </mxCell>
+        <mxCell id="artifacts-body" value="+ saveSummary(...) / summaries(...)&lt;br&gt;+ saveQuiz(...) / grade(...) / attempts(...)&lt;br&gt;+ saveEssayGrade(...) / saveEssayPrompt(...)&lt;br&gt;+ saveAssessment(...) / assessments(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="artifacts">
+          <mxGeometry as="geometry" x="0" y="44" width="460" height="120" />
+        </mxCell>
+        <mxCell id="weak" value="WeakTopicAnalyzer" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1155" y="900" width="400" height="140" />
+        </mxCell>
+        <mxCell id="weak-body" value="+ statistics(artifacts, courseId)&lt;br&gt;+ analyze(artifacts, courseId)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="weak">
+          <mxGeometry as="geometry" x="0" y="44" width="400" height="96" />
+        </mxCell>
+        <mxCell id="reminders" value="ReminderService" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1015" width="470" height="125" />
+        </mxCell>
+        <mxCell id="reminders-body" value="+ upcoming(deadlines, today, daysAhead)&lt;br&gt;+ dueNotifications(deadlines, now)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="reminders">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="81" />
+        </mxCell>
+        <mxCell id="edge0" value="calls / registers" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.36231884057971014;entryX=0.0;entryY=0.4573170731707317;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="main" target="controller">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="delegates listener" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.4573170731707317;entryX=0.0;entryY=0.4658385093167702;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="store">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="notifies run()" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="store" target="callback">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="callback registration" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.7971014492753623;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="main" target="callback">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="550" y="325" />
+              <mxPoint x="550" y="480" />
+              <mxPoint x="1355" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.21739130434782608;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="timer">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="700" y="440" />
+              <mxPoint x="280" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="artifacts">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="creates / calls" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=1.0;entryX=0.0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="weak">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1105" y="325" />
+              <mxPoint x="1105" y="970" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="reads attempts + self-assessments" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.0;exitY=0.9285714285714286;entryX=1.0;entryY=0.8841463414634146;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="weak" target="artifacts">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1095" y="1030" />
+              <mxPoint x="1095" y="755" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge8" value="creates / calls" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.0;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="reminders">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="565" y="325" />
+              <mxPoint x="565" y="970" />
+              <mxPoint x="280" y="970" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Nested artifact records: Summary, Question, Quiz, Attempt," style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1110" width="960" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="EssayPrompt, EssayGrade, SelfAssessment." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1135" width="960" height="25" />
+        </mxCell>
+        <mxCell id="note2" value="MCQ grading is deterministic in StudyArtifacts.grade()." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1160" width="960" height="25" />
+        </mxCell>
+        <mxCell id="note3" value="AI essay scores become saved grades only after approval." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1185" width="960" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

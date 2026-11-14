@@ -1,0 +1,16 @@
+SYNTHETIC DEMONSTRATION MATERIAL — Week 3 lecture notes.
+
+SOLID principles
+Single Responsibility: a class should have one reason to change.
+Open/Closed: software should be open for extension and closed for modification.
+Dependency Inversion: depend on abstractions rather than concrete details.
+
+Design patterns
+Facade provides a unified interface to a subsystem.
+Command encapsulates a request as an object. An invoker can hold a command
+until the user approves execution; the command then calls its receiver.
+Observer notifies registered listeners when the subject's state changes.
+
+Example: a study application proposes a deadline change. It stores a Command
+without executing it. Approval executes that command and updates the store.
+The store then notifies the GUI's registered listener to refresh the view.

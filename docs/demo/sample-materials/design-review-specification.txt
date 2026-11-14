@@ -1,0 +1,11 @@
+SYNTHETIC DEMONSTRATION MATERIAL — Assignment specification.
+Course: EECS3311 Demo
+Assessment: Design Review
+Due: November 21, 2026
+Weight: 20%
+Scope: Command and Observer design patterns.
+
+Implement one proposed schedule edit that remains pending until approval.
+Explain the command's receiver and the observer notification after persistence.
+This describes the same Design Review assessment as demo-syllabus.txt;
+importing both documents should not require two identical calendar deadlines.

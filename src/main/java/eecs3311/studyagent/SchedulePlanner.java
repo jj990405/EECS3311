@@ -14,7 +14,8 @@ public final class SchedulePlanner {
         StringBuilder context = new StringBuilder("Course: " + course.name() + "\nExisting deadlines:\n");
         for (Deadline deadline : store.deadlines()) if (deadline.courseId().equals(courseId))
             context.append(deadline.id()).append(" | ").append(deadline.title()).append(" | ")
-                    .append(deadline.dueDate()).append('\n');
+                    .append(deadline.dueDate()).append(" | type: ").append(deadline.type())
+                    .append(" | scope: ").append(deadline.scope()).append('\n');
         Map<String, Object> plan = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.SCHEDULE_PLAN),
                 prompts.user(PromptBuilder.Task.SCHEDULE_PLAN, context.toString(), request)));
         String action = Json.string(plan, "action");
@@ -33,9 +34,12 @@ public final class SchedulePlanner {
         if (!action.equals("add") && !action.equals("edit")) throw new IllegalArgumentException("Unsupported schedule action.");
         Object rawDate = plan.get("dueDate");
         LocalDate date = rawDate == null ? null : LocalDate.parse(rawDate.toString());
+        Deadline existing = action.equals("edit") ? store.deadline(deadlineId) : null;
         ResponseParser.DeadlineDraft draft = new ResponseParser.DeadlineDraft(
-                Json.string(plan, "title"), Json.string(plan, "type"), date,
-                Json.string(plan, "scope"), "User request: " + request);
+                textOrExisting(plan, "title", existing == null ? null : existing.title()),
+                textOrExisting(plan, "type", existing == null ? null : existing.type()), date,
+                textOrExisting(plan, "scope", existing == null ? "" : existing.scope()),
+                "User request: " + request);
         new DeadlineValidator().validate(draft, store.semester(course.semesterId()));
         AgentCommand command = action.equals("add") ? new AddDeadlineCommand(store, courseId, draft)
                 : new EditDeadlineCommand(store, deadlineId, draft);
@@ -47,5 +51,12 @@ public final class SchedulePlanner {
     private String describe(Deadline deadline) {
         return deadline.title() + " / " + (deadline.dueDate() == null ? "TBD" : deadline.dueDate())
                 + " / " + deadline.scope();
+    }
+
+    private String textOrExisting(Map<String, Object> plan, String field, String existing) {
+        Object value = plan.get(field);
+        if (value instanceof String text && (!text.isBlank() || field.equals("scope"))) return text;
+        if (existing != null) return existing;
+        throw new IllegalArgumentException("Please specify the deadline " + field + ".");
     }
 }

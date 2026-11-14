@@ -4,6 +4,8 @@ One Java 17 project with a Swing desktop app and a CLI. The source, tests, Maven
 
 ## Run
 
+On the prepared Windows desktop package, double-click **Study Agent.exe** for the GUI or **Study Agent CLI.exe** for the console. Keep both launchers alongside `app/` and `runtime/`; the EXE alone is not the complete application. The bundled runtime means the prepared package does not need a separately installed Java. Generated launchers remain local; a fresh source clone must be built as below.
+
 Build from a clone with JDK 17 or newer. Maven downloads dependencies on the first run. From this directory:
 
 ```powershell
@@ -16,14 +18,16 @@ On macOS/Linux, use `./mvnw clean package` and `java -jar ./codex/build/target/s
 
 For a local Windows desktop package, set `JAVA_HOME` to a JDK with `jpackage` and run `powershell -File packaging/build-windows.ps1`. It creates `Study Agent.exe`, `Study Agent CLI.exe`, and their `app/` and `runtime/` folders for one-click use. Generated binaries and the ZIP stay local and are excluded from Git; GitHub contains the buildable source.
 
+The portable Java artifact is the JAR. The EXEs are Windows launchers around the same Java application. A JAR needs a compatible Java runtime; the Windows app image supplies its own. When passing custom arguments to the CLI EXE, include `--cli` explicitly, for example `& '.\Study Agent CLI.exe' --cli --data codex/demo-data`, because explicit launcher arguments replace its default arguments.
+
 To use AI features, copy `.env.example` to `.env` and supply `LLM_API_KEY` locally. OpenAI GPT-6 Luna is the default; `LLM_BASE_URL` and `LLM_MODEL` are configurable. Do not commit `.env`.
 
 ## Workflow
 
 1. Create a semester and course, then upload syllabus and study files (PDF, PPTX, DOCX, or TXT). Right-click a course or category in the workspace to upload several files at once. Before saving, check the destination folder shown for each file; file-name suggestions are editable in the review table. **AI sort files** runs only when clicked and proposes folder moves from short extracted-text samples; review and apply the checked moves. Right-click a file to move it manually. Selecting a PDF opens its original pages in an on-demand right-side tab; pages fit the pane width by default. Calendar and file tabs can be closed with ×, leaving the full workspace visible. Other files can be opened in their normal applications. Previewing a PDF does not need an AI key. Scanned PDFs without selectable text are stored, but their contents cannot feed AI features.
-2. Add/edit/delete deadlines, view the timeline or month calendar, configure due time and notification lead time, and inspect due-soon reminders. Course difficulty breaks same-date priority ties.
+2. Add/edit/delete deadlines, view the timeline or month calendar, configure due time and notification lead time, and inspect due-soon reminders. The top **Calendar** button is always available. Filter the calendar to all courses or one course; every week shows `[course] title` entries. Click a dated cell, including an empty one, to add or edit work for that day. Course difficulty breaks same-date priority ties.
 3. After uploading files, click **Analyze files for calendar** to use the AI API on readable syllabi and assignment specifications. It shows proposed dates, source files, evidence, and warnings in a review table. Select the entries to add; no proposed deadline enters the calendar before approval. A date released with a 24-hour submission window is proposed for the following day, with a reminder to confirm the exact cutoff time. Dates without enough evidence remain TBD. The separate **Extract syllabus deadlines** and **Suggest lecture week** actions remain available for individual review. In the CLI, use `ai syllabus`, `ai week`, `proposals`, `approve`, or `reject`.
-4. Use the GUI's 15-, 30-, or 60-minute study timer. It sounds an alarm and saves the session when time ends. Use `study week` in the CLI to inspect daily and weekly records.
+4. Use the GUI's 15-, 30-, or 60-minute study timer. Pause is visibly labeled; Resume continues active time. It sounds an alarm and saves the session when time ends, or saves elapsed time on Stop. Records combine sessions into daily and weekly totals, including seconds. Use `study week` in the CLI to inspect the same persisted records. The timer is not linked to a course.
 5. Use `ai references`, `ask`, `summary create`, `quiz create`, `quiz take`, `weak topics`, and `weekly brief` for material-based study assistance. The GUI presents one multiple-choice question at a time and shows a separate answer review after submission.
 6. Use `ai schedule` for a natural-language schedule edit; review the before-and-after change before approval. `essay create` generates a question; `essay take` proposes a grade and saves it only after approval. In the GUI, the proposed score can be corrected before approval. `self assess` and `weak advice` add confidence-based review guidance. `history` displays saved AI interactions; `history delete` removes a selected record.
 
@@ -51,4 +55,6 @@ The red **Delete all local data...** button in the workspace requires confirmati
 | F14 / SD11 | Per-topic quiz accuracy and self-assessments produce ranked weak topics; AI guidance names only uploaded lecture files. | Essay scores are kept separately from multiple-choice accuracy. |
 | F15 / SD12 | Local interaction history records questions and answers, quiz results, proposal descriptions and decisions, and generated items; recent entries inform later Q&A and individual records can be deleted. | Manual UI actions are not all stored as conversation records. |
 
-Implemented patterns: Facade (`AgentController`), Composite (`WorkspaceNode` hierarchy), Factory (`DocumentReaderFactory`), Adapter (`HttpLlmClient` behind `LlmClient`), Observer (`DataStore` listeners), Command (`AgentCommand` and `CommandInvoker`), and Strategy (`PriorityStrategy`, `ExplanationStrategy`).
+Implemented distinct GoF patterns: Facade (`AgentController`), Composite (`WorkspaceNode` hierarchy), Adapter (`HttpLlmClient` behind `LlmClient`), Observer (`DataStore` listeners), Command (`AgentCommand` and `CommandInvoker`), and Strategy (`PriorityStrategy`, `ExplanationStrategy`). `DocumentReaderFactory` additionally uses Simple Factory; it is not a GoF Factory Method hierarchy.
+
+The [current diagram index](docs/design/implemented/README.md) contains editable architecture, class, use-case and sequence diagrams. The [development audit](docs/development/README.md) maps every original and added feature to code, checks and known limits. The [recording guide](docs/demo/recording-guide.ko.md) provides a GUI/CLI demonstration plan for the later report.

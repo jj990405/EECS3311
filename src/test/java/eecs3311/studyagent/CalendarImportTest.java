@@ -62,6 +62,11 @@ class CalendarImportTest {
         var file = agent.uploadMaterial(course.id(), Category.SYLLABUS, syllabus);
         var candidate = agent.suggestSyllabusDeadlines(file.id()).get(0);
         assertTrue(agent.hasSyllabusDuplicate(candidate.id()));
+        agent.mergeSyllabusCandidate(candidate.id());
+        agent.approveProposal(candidate.id());
+        assertEquals(1, agent.schedule(AgentController.Period.ALL, course.id(), "", LocalDate.now()).size());
+        assertEquals("Project Deliverable 2 (Implemtaion)",
+                agent.schedule(AgentController.Period.ALL, course.id(), "", LocalDate.now()).get(0).title());
         assertFalse(DeadlineTitleMatcher.same("Quiz 1", "Quiz 2"));
         assertFalse(DeadlineTitleMatcher.same("Assignment 1 Part A", "Assignment 1 Part B"));
         assertFalse(DeadlineTitleMatcher.same("Project Deliverable 2 (Implementation)",

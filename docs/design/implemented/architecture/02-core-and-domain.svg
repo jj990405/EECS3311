@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+<rect width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#334155" stroke-width="1.5"/></marker><marker id="triangle" markerWidth="14" markerHeight="12" refX="13" refY="6" orient="auto"><path d="M0,0 L13,6 L0,12 Z" fill="white" stroke="#334155"/></marker></defs>
+<text x="45" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#0f172a">Controller and domain records</text>
+<text x="45" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" fill="#475569">Selected members are shown. UUID fields are logical references, not Java object associations.</text>
+<path d="M520,255 L610,255" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="570.0" y="249.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">delegates</text>
+<path d="M600,635 L465,635" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="537.5" y="629.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">semesterId</text>
+<path d="M1120,635 L1020,635" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="1075.0" y="629.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">courseId</text>
+<path d="M835,940 L835,693" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="840.0" y="810.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">courseId</text>
+<path d="M465,1000 L535,1000 L535,735 L700,735 L700,693" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="475" y="854" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">optional courseId</text>
+<path d="M1020,680 L1085,680 L1085,1060 L1140,1060" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="1035" y="749" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">difficulty</text>
+<rect x="45" y="160" width="475" height="253" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="161" width="473" height="43" fill="#dbeafe"/>
+<path d="M45,204 H520" stroke="#64748b"/>
+<text x="57" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">AgentController  &lt;&lt;Facade&gt;&gt;</text>
+<text x="57" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- store: DataStore</text>
+<text x="57" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- recommender: PriorityStrategy</text>
+<path d="M45,268 H520" stroke="#cbd5e1"/>
+<text x="57" y="299" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ createSemester(...): Semester</text>
+<text x="57" y="322" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ createCourse(...): Course</text>
+<text x="57" y="345" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ schedule(...): List&lt;Deadline&gt;</text>
+<text x="57" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ progress(...): Progress</text>
+<text x="57" y="391" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ addChangeListener(Runnable)</text>
+<rect x="610" y="160" width="590" height="276" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="611" y="161" width="588" height="43" fill="#edf4ed"/>
+<path d="M610,204 H1200" stroke="#64748b"/>
+<text x="622" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">DataStore</text>
+<text x="622" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- semesters: Map&lt;UUID, Semester&gt;</text>
+<text x="622" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- courses: Map&lt;UUID, Course&gt;</text>
+<text x="622" y="279" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- deadlines: Map&lt;UUID, Deadline&gt;</text>
+<text x="622" y="302" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- materials: Map&lt;UUID, MaterialFile&gt;</text>
+<text x="622" y="325" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- sessions: Map&lt;UUID, StudySession&gt;</text>
+<path d="M610,337 H1200" stroke="#cbd5e1"/>
+<text x="622" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ createDeadline(...) / editDeadline(...)</text>
+<text x="622" y="391" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ uploadMaterial(...) / materialPages(...)</text>
+<text x="622" y="414" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ addChangeListener(Runnable)</text>
+<rect x="45" y="575" width="420" height="161" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="576" width="418" height="43" fill="#edf4ed"/>
+<path d="M45,619 H465" stroke="#64748b"/>
+<text x="57" y="603" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Semester  &lt;&lt;record&gt;&gt;</text>
+<text x="57" y="648" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">id: UUID; name: String</text>
+<text x="57" y="671" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">startDate, endDate: LocalDate</text>
+<path d="M45,683 H465" stroke="#cbd5e1"/>
+<text x="57" y="714" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ contains(LocalDate): boolean</text>
+<rect x="600" y="575" width="420" height="118" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="601" y="576" width="418" height="43" fill="#edf4ed"/>
+<path d="M600,619 H1020" stroke="#64748b"/>
+<text x="612" y="603" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Course  &lt;&lt;record&gt;&gt;</text>
+<text x="612" y="648" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">id, semesterId: UUID; name: String</text>
+<text x="612" y="671" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">colorHex: String; difficulty: Difficulty</text>
+<rect x="1120" y="575" width="435" height="253" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1121" y="576" width="433" height="43" fill="#edf4ed"/>
+<path d="M1120,619 H1555" stroke="#64748b"/>
+<text x="1132" y="603" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Deadline  &lt;&lt;record&gt;&gt;</text>
+<text x="1132" y="648" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">id, courseId: UUID; title, type, scope</text>
+<text x="1132" y="671" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">dueDate: LocalDate (nullable)</text>
+<text x="1132" y="694" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">completed: boolean; dueTime: LocalTime</text>
+<text x="1132" y="717" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">notifyBeforeMinutes: int; weight: Double</text>
+<text x="1132" y="740" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">sourceText: String</text>
+<path d="M1120,752 H1555" stroke="#cbd5e1"/>
+<text x="1132" y="783" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ withCompleted(boolean): Deadline</text>
+<text x="1132" y="806" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ withNotification(...): Deadline</text>
+<rect x="45" y="940" width="420" height="141" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="941" width="418" height="43" fill="#edf4ed"/>
+<path d="M45,984 H465" stroke="#64748b"/>
+<text x="57" y="968" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">StudySession  &lt;&lt;record&gt;&gt;</text>
+<text x="57" y="1013" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">id, courseId: UUID (courseId nullable)</text>
+<text x="57" y="1036" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">topic: String; startedAt: LocalDateTime</text>
+<text x="57" y="1059" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">seconds: long</text>
+<rect x="600" y="940" width="465" height="207" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="601" y="941" width="463" height="43" fill="#edf4ed"/>
+<path d="M600,984 H1065" stroke="#64748b"/>
+<text x="612" y="968" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">MaterialFile  &lt;&lt;record&gt;&gt;</text>
+<text x="612" y="1013" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">id, courseId: UUID; category: Category</text>
+<text x="612" y="1036" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">originalName, storedName: String</text>
+<text x="612" y="1059" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">textAvailable: boolean; extractionWarning</text>
+<text x="612" y="1082" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">lectureWeek: Integer</text>
+<path d="M600,1094 H1065" stroke="#cbd5e1"/>
+<text x="612" y="1125" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ withLectureWeek(...) / withCategory(...)</text>
+<rect x="1140" y="1000" width="385" height="138" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1141" y="1001" width="383" height="43" fill="#f3f4f6"/>
+<path d="M1140,1044 H1525" stroke="#64748b"/>
+<text x="1152" y="1028" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Difficulty  &lt;&lt;enum&gt;&gt;</text>
+<text x="1152" y="1073" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">HIGH, MEDIUM, LOW</text>
+<path d="M1140,1085 H1525" stroke="#cbd5e1"/>
+<text x="1152" y="1116" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ priority(): int</text>
+<text x="45" y="1164" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">DataStore maps retain 0..* instances of each record. Category is an enum: Syllabus, Lecture Materials, Assignment Specifications, Other.</text>
+<text x="45" y="1183" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#64748b">EECS3311 / Implementation diagrams / 2026-11-13 / Selected members; consult source for full signatures.</text>
+</svg>

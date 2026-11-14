@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="07-study-and-observer" name="Study services and observer refresh">
+    <mxGraphModel dx="1600" dy="1250" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1250">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Study services and observer refresh" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="The actual observer subject is DataStore. The GUI timer polls StudyTimer through a Swing timer." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="main" value="MainWindow  &amp;lt;&amp;lt;JFrame&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#eaf0f8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="160" width="470" height="207" />
+        </mxCell>
+        <mxCell id="main-body" value="- controller: AgentController&lt;br&gt;- studyDisplayTimer: javax.swing.Timer&lt;hr&gt;- refresh()&lt;br&gt;- startStudy(int) / stopStudy()&lt;br&gt;- showDueNotifications()" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="main">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="163" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="160" width="460" height="164" />
+        </mxCell>
+        <mxCell id="controller-body" value="+ addChangeListener(Runnable)&lt;br&gt;+ startStudy(int) / stopStudy()&lt;br&gt;+ topicStatistics(...) / weakTopicAdvice(...)&lt;br&gt;+ weeklyBriefing(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="460" height="120" />
+        </mxCell>
+        <mxCell id="store" value="DataStore  &amp;lt;&amp;lt;Observer subject&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1155" y="160" width="400" height="161" />
+        </mxCell>
+        <mxCell id="store-body" value="- listeners: List&amp;lt;Runnable&amp;gt;&lt;hr&gt;+ addChangeListener(Runnable)&lt;br&gt;- changed(): notify listeners" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="store">
+          <mxGeometry as="geometry" x="0" y="44" width="400" height="117" />
+        </mxCell>
+        <mxCell id="callback" value="Runnable  &amp;lt;&amp;lt;JDK callback&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1155" y="535" width="400" height="165" />
+        </mxCell>
+        <mxCell id="callback-body" value="+ run()&lt;br&gt;Registered lambda schedules MainWindow.refresh()&lt;br&gt;using SwingUtilities.invokeLater()." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="callback">
+          <mxGeometry as="geometry" x="0" y="44" width="400" height="121" />
+        </mxCell>
+        <mxCell id="timer" value="StudyTimer" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="610" width="470" height="207" />
+        </mxCell>
+        <mxCell id="timer-body" value="targetSeconds, accumulatedNanos: long&lt;br&gt;active, running: boolean&lt;hr&gt;+ start(...) / pause() / resume()&lt;br&gt;+ remainingSeconds(): long&lt;br&gt;+ stop(): StudySession" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="timer">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="163" />
+        </mxCell>
+        <mxCell id="artifacts" value="StudyArtifacts" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="610" width="460" height="164" />
+        </mxCell>
+        <mxCell id="artifacts-body" value="+ saveSummary(...) / summaries(...)&lt;br&gt;+ saveQuiz(...) / grade(...) / attempts(...)&lt;br&gt;+ saveEssayGrade(...) / saveEssayPrompt(...)&lt;br&gt;+ saveAssessment(...) / assessments(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="artifacts">
+          <mxGeometry as="geometry" x="0" y="44" width="460" height="120" />
+        </mxCell>
+        <mxCell id="weak" value="WeakTopicAnalyzer" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1155" y="900" width="400" height="140" />
+        </mxCell>
+        <mxCell id="weak-body" value="+ statistics(artifacts, courseId)&lt;br&gt;+ analyze(artifacts, courseId)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="weak">
+          <mxGeometry as="geometry" x="0" y="44" width="400" height="96" />
+        </mxCell>
+        <mxCell id="reminders" value="ReminderService" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1015" width="470" height="125" />
+        </mxCell>
+        <mxCell id="reminders-body" value="+ upcoming(deadlines, today, daysAhead)&lt;br&gt;+ dueNotifications(deadlines, now)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="reminders">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="81" />
+        </mxCell>
+        <mxCell id="edge0" value="calls / registers" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.36231884057971014;entryX=0.0;entryY=0.4573170731707317;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="main" target="controller">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="delegates listener" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.4573170731707317;entryX=0.0;entryY=0.4658385093167702;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="store">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="notifies run()" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="store" target="callback">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="callback registration" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.7971014492753623;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="main" target="callback">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="550" y="325" />
+              <mxPoint x="550" y="480" />
+              <mxPoint x="1355" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.21739130434782608;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="timer">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="700" y="440" />
+              <mxPoint x="280" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="artifacts">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="creates / calls" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=1.0;entryX=0.0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="weak">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1105" y="325" />
+              <mxPoint x="1105" y="970" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="reads attempts + self-assessments" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.0;exitY=0.9285714285714286;entryX=1.0;entryY=0.8841463414634146;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="weak" target="artifacts">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1095" y="1030" />
+              <mxPoint x="1095" y="755" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge8" value="creates / calls" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.0;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="reminders">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="565" y="325" />
+              <mxPoint x="565" y="970" />
+              <mxPoint x="280" y="970" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Nested artifact records: Summary, Question, Quiz, Attempt," style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1110" width="960" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="EssayPrompt, EssayGrade, SelfAssessment." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1135" width="960" height="25" />
+        </mxCell>
+        <mxCell id="note2" value="MCQ grading is deterministic in StudyArtifacts.grade()." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1160" width="960" height="25" />
+        </mxCell>
+        <mxCell id="note3" value="AI essay scores become saved grades only after approval." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1185" width="960" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

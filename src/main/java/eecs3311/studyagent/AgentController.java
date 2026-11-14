@@ -166,7 +166,7 @@ public final class AgentController {
         var draft = candidate.draft();
         Deadline existing = store.deadlines().stream()
                 .filter(d -> d.courseId().equals(candidate.courseId())
-                        && d.title().equalsIgnoreCase(draft.title())
+                        && DeadlineTitleMatcher.same(d.title(), draft.title())
                         && java.util.Objects.equals(d.dueDate(), draft.dueDate()))
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("No matching deadline to merge."));
         return invoker.replace(proposalId, "Merge into existing deadline: " + draft.title(),
@@ -228,11 +228,11 @@ public final class AgentController {
             ResponseParser.DeadlineDraft draft = validator.resolveRelativeDate(raw, semester);
             List<String> warnings = new java.util.ArrayList<>(validator.warnings(draft, semester, sourceText));
             if (store.deadlines().stream().anyMatch(d -> d.courseId().equals(course.id())
-                    && d.title().equalsIgnoreCase(draft.title())
+                    && DeadlineTitleMatcher.same(d.title(), draft.title())
                     && java.util.Objects.equals(d.dueDate(), draft.dueDate())))
                 warnings.add("A deadline with the same title and date already exists; review before approval.");
             if (syllabusCandidates.values().stream().anyMatch(c -> c.courseId().equals(course.id())
-                    && c.draft().title().equalsIgnoreCase(draft.title())
+                    && DeadlineTitleMatcher.same(c.draft().title(), draft.title())
                     && java.util.Objects.equals(c.draft().dueDate(), draft.dueDate())))
                 warnings.add("Another pending proposal has the same title and date; apply only one.");
             SyllabusCandidate candidate = new SyllabusCandidate(materialId, course.id(), draft, warnings);
@@ -640,7 +640,8 @@ public final class AgentController {
         for (Deadline deadline : schedule(Period.THIS_WEEK, courseId, "", today))
             context.append(deadline.dueDate()).append(" ").append(deadline.title())
                     .append(deadline.completed() ? " completed" : " pending").append('\n');
-        context.append("Study seconds this week: ").append(weeklyStudySeconds(courseId, today));
+        context.append("All study seconds this week (timer is not course-linked): ")
+                .append(weeklyStudySeconds(null, today));
         context.append("\nWeak topics: ").append(weakTopics(courseId));
         String briefing;
         try {

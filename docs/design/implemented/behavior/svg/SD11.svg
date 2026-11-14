@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1313" viewBox="0 0 1440 1313">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1440" height="1313" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD11 - Analyze weak topics from results and confidence</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F14 / UC15 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1408" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="267.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="366.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow / CLI</text>
+<line x1="366.0" y1="191" x2="366.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="503.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="602.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="602.0" y1="191" x2="602.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="739.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="838.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">StudyArtifacts</text>
+<line x1="838.0" y1="191" x2="838.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="975.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1074.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">WeakTopicAnalyzer</text>
+<line x1="1074.0" y1="191" x2="1074.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1211.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1310.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
+<line x1="1310.0" y1="191" x2="1310.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="263" x2="366.0" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="85.10000000000002" y="215" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Take quiz / optionally self-assess a</text>
+<rect x="199.9" y="235" width="96.19999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="250" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">topic (1-5)</text>
+<line x1="366.0" y1="341" x2="602.0" y2="341" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="325.20000000000005" y="293" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. saveSelfAssessment(courseId, topic,</text>
+<rect x="390.8" y="313" width="186.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="328" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">confidence) [optional]</text>
+<line x1="602.0" y1="419" x2="838.0" y2="419" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="557.1" y="371" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="386" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. saveAssessment(...); history records</text>
+<rect x="655.5" y="391" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="720.0" y="406" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">self assessment</text>
+<line x1="130.0" y1="477" x2="366.0" y2="477" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="76.9" y="449" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.0" y="464" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. Request weak topics / AI review advice</text>
+<line x1="366.0" y1="562" x2="602.0" y2="562" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="362.1" y="514" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="529" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. topicStatistics(courseId);</text>
+<rect x="399.0" y="534" width="170.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="549" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">weakTopics(courseId)</text>
+<line x1="602.0" y1="640" x2="1074.0" y2="640" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="613.6" y="592" width="448.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="838.0" y="607" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. statistics(artifacts, courseId); analyze(artifacts,</text>
+<rect x="798.1" y="612" width="79.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="838.0" y="627" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">courseId)</text>
+<line x1="1074.0" y1="718" x2="838.0" y2="718" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="793.1" y="670" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="685" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. quizzes(courseId); attempts(quizId);</text>
+<rect x="866.9" y="690" width="178.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="705" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">assessments(courseId)</text>
+<line x1="1074.0" y1="760" x2="1144.0" y2="760" stroke="#395b7b" stroke-width="2"/>
+<line x1="1144.0" y1="760" x2="1144.0" y2="782" stroke="#395b7b" stroke-width="2"/>
+<line x1="1144.0" y1="782" x2="1074.0" y2="782" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1151.0" y="748" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1154.0" y="763" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Per-topic accuracy; latest confidence;</text>
+<rect x="1151.0" y="768" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1154.0" y="783" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">rank weakness score</text>
+<line x1="1074.0" y1="854" x2="602.0" y2="854" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="687.4" y="826" width="301.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="838.0" y="841" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. TopicStats and ranked weak topics</text>
+<line x1="602.0" y1="919" x2="1310.0" y2="919" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="682.4000000000001" y="891" width="547.1999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="906" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. WEAK_TOPICS prompt [weakTopicAdvice; only if ranking nonempty]</text>
+<line x1="1310.0" y1="984" x2="602.0" y2="984" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="805.4" y="956" width="301.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="956.0" y="971" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. Explanation + lecture file names</text>
+<line x1="602.0" y1="1033" x2="672.0" y2="1033" stroke="#395b7b" stroke-width="2"/>
+<line x1="672.0" y1="1033" x2="672.0" y2="1055" stroke="#395b7b" stroke-width="2"/>
+<line x1="672.0" y1="1055" x2="602.0" y2="1055" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="679.0" y="1021" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="682.0" y="1036" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. Keep recommendations matching uploaded</text>
+<rect x="679.0" y="1041" width="153.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="682.0" y="1056" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">lecture names only</text>
+<line x1="602.0" y1="1147" x2="366.0" y2="1147" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="312.9" y="1099" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1114" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. Deterministic statistics and optional</text>
+<rect x="444.1" y="1119" width="79.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.0" y="1134" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">AI advice</text>
+<rect x="32" y="1199" width="1376" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1225" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1250" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">No misses/confidence data -&gt; informative empty result, not invented analysis. MCQ attempts and confidence feed ranking; separately stored essay scores do not feed</text>
+<text x="48" y="1273" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">MCQ topic accuracy.</text>
+</svg>

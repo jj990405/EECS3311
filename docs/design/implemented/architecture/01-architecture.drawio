@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="01-architecture" name="Implemented architecture">
+    <mxGraphModel dx="1600" dy="1160" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1160">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Implemented architecture" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="One controller serves Swing and CLI; AI proposals cross an explicit approval boundary." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="gui" value="MainWindow + Swing components" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#eaf0f8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="160" width="620" height="135" />
+        </mxCell>
+        <mxCell id="gui-body" value="Workspace tree, timeline, calendar and PDF tabs&lt;br&gt;Chat, study notes, quiz dialogs and study timer" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="gui">
+          <mxGeometry as="geometry" x="0" y="44" width="620" height="91" />
+        </mxCell>
+        <mxCell id="cli" value="CommandLineInterface" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#eaf0f8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="920" y="160" width="620" height="135" />
+        </mxCell>
+        <mxCell id="cli-body" value="run() dispatches text commands&lt;br&gt;Setup, materials, schedule and study workflows" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="cli">
+          <mxGeometry as="geometry" x="0" y="44" width="620" height="91" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController  &amp;lt;&amp;lt;Facade&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="490" y="390" width="620" height="170" />
+        </mxCell>
+        <mxCell id="controller-body" value="DataStore, LlmClient, CommandInvoker, StudyArtifacts&lt;hr&gt;Coordinates retrieval, generation, validation and approval&lt;br&gt;Shared domain operations for both interfaces" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="620" height="126" />
+        </mxCell>
+        <mxCell id="ai" value="LLM collaboration" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="675" width="470" height="170" />
+        </mxCell>
+        <mxCell id="ai-body" value="PromptBuilder + ResponseParser&lt;br&gt;LlmClient -&amp;gt; HttpLlmClient&lt;br&gt;SchedulePlanner / ReferenceSelector / MaterialSearcher" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="ai">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="126" />
+        </mxCell>
+        <mxCell id="persist" value="Local state and history" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="565" y="675" width="470" height="170" />
+        </mxCell>
+        <mxCell id="persist-body" value="DataStore: entities, original files, extracted text&lt;br&gt;StudyArtifacts: notes, quizzes, scores, self-assessments&lt;br&gt;InteractionHistory: records and prompt context" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="persist">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="126" />
+        </mxCell>
+        <mxCell id="services" value="Deterministic services" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1085" y="675" width="470" height="170" />
+        </mxCell>
+        <mxCell id="services-body" value="DocumentReaderFactory and readers&lt;br&gt;DeadlineValidator / PriorityRecommender&lt;br&gt;StudyTimer / ReminderService / WeakTopicAnalyzer" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="services">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="126" />
+        </mxCell>
+        <mxCell id="api" value="External HTTPS chat-completions API" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="960" width="470" height="100" />
+        </mxCell>
+        <mxCell id="api-body" value="Model / endpoint configured locally in .env" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="api">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="56" />
+        </mxCell>
+        <mxCell id="disk" value="Local data/ directory" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="565" y="960" width="470" height="100" />
+        </mxCell>
+        <mxCell id="disk-body" value="Properties, JSON, JSONL, text, original files" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="disk">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="56" />
+        </mxCell>
+        <mxCell id="edge0" value="user actions" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.27419354838709675;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="gui" target="controller">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="370" y="345" />
+              <mxPoint x="660" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="user actions" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.7258064516129032;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="cli" target="controller">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1230" y="345" />
+              <mxPoint x="940" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="ai">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="800" y="610" />
+              <mxPoint x="280" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="coordinates" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="persist">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="800" y="610" />
+              <mxPoint x="800" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="services">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="800" y="610" />
+              <mxPoint x="1320" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="HTTPS" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="ai" target="api">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="read / write" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="persist" target="disk">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Approval boundary: CommandInvoker stores transient" style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1085" y="955" width="475" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="AgentCommand objects. Only approve() executes them." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1085" y="980" width="475" height="25" />
+        </mxCell>
+        <mxCell id="note2" value="Dependency arrows describe calls. Files are local; the LLM does not access DataStore directly." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="1105" width="1500" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

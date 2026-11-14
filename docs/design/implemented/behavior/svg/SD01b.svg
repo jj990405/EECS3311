@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1346" viewBox="0 0 1680 1346">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1680" height="1346" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD01b - Propose and approve a lecture week</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F01 / UC01, UC17 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1648" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1210" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="267.66666666666663" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="366.66666666666663" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow / CLI</text>
+<line x1="366.66666666666663" y1="191" x2="366.66666666666663" y2="1210" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="504.33333333333326" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="603.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="603.3333333333333" y1="191" x2="603.3333333333333" y2="1210" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="741.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="840.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
+<line x1="840.0" y1="191" x2="840.0" y2="1210" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="977.6666666666665" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1076.6666666666665" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
+<line x1="1076.6666666666665" y1="191" x2="1076.6666666666665" y2="1210" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1214.3333333333333" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1313.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">CommandInvoker</text>
+<line x1="1313.3333333333333" y1="191" x2="1313.3333333333333" y2="1210" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1451.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1550.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AssignWeekCommand</text>
+<line x1="1550.0" y1="191" x2="1550.0" y2="1210" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="263" x2="366.66666666666663" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="77.23333333333332" y="215" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Request AI week matching for a lecture</text>
+<rect x="228.9333333333333" y="235" width="38.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="250" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">file</text>
+<line x1="366.66666666666663" y1="321" x2="603.3333333333333" y2="321" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="346.69999999999993" y="293" width="276.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. suggestLectureWeek(materialId)</text>
+<line x1="603.3333333333333" y1="406" x2="840.0" y2="406" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="607.9666666666667" y="358" width="227.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="373" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. material(); materials();</text>
+<rect x="587.4666666666667" y="378" width="268.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="393" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">materialPages(lecture + syllabi)</text>
+<line x1="603.3333333333333" y1="484" x2="1076.6666666666665" y2="484" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="623.8" y="436" width="432.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="839.9999999999999" y="451" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. PromptBuilder WEEK_MATCH -&gt; LlmClient.complete -&gt;</text>
+<rect x="759.0999999999999" y="456" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="839.9999999999999" y="471" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">ResponseParser.week</text>
+<line x1="1076.6666666666665" y1="542" x2="603.3333333333333" y2="542" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="734.4999999999999" y="514" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="839.9999999999999" y="529" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. Supported week or null</text>
+<line x1="603.3333333333333" y1="607" x2="1313.3333333333333" y2="607" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="746.2333333333332" y="579" width="424.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="594" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. propose(description, new AssignWeekCommand(...))</text>
+<line x1="603.3333333333333" y1="672" x2="366.66666666666663" y2="672" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="354.9" y="644" width="260.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="659" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. Proposal (no week saved yet)</text>
+<line x1="366.66666666666663" y1="737" x2="130.0" y2="737" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="114.13333333333333" y="709" width="268.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="724" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Display proposed lecture week</text>
+<line x1="130.0" y1="802" x2="366.66666666666663" y2="802" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="167.43333333333334" y="774" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="789" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Approve / reject</text>
+<line x1="366.66666666666663" y1="887" x2="603.3333333333333" y2="887" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="379.49999999999994" y="839" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="854" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. approveProposal(id) /</text>
+<rect x="408.19999999999993" y="859" width="153.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="874" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">rejectProposal(id)</text>
+<line x1="603.3333333333333" y1="945" x2="1313.3333333333333" y2="945" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="820.0333333333333" y="917" width="276.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="932" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. approve(id) [approval branch]</text>
+<line x1="1313.3333333333333" y1="1010" x2="1550.0" y2="1010" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1375.3666666666666" y="982" width="112.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1431.6666666666665" y="997" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. execute()</text>
+<line x1="1550.0" y1="1075" x2="840.0" y2="1075" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1032.1" y="1047" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1195.0" y="1062" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. assignLectureWeek(materialId, week)</text>
+<line x1="603.3333333333333" y1="1180" x2="366.66666666666663" y2="1180" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="469.69999999999993" y="1112" width="30.599999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1127" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14.</text>
+<rect x="309.79999999999995" y="1132" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1147" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">InteractionHistory.add(approved/rejected);</text>
+<rect x="387.69999999999993" y="1152" width="194.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1167" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">refreshed file metadata</text>
+<rect x="32" y="1232" width="1616" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1258" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1283" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">No syllabus or unsupported week -&gt; explain and permit manual assignLectureWeek. Reject removes only the transient proposal. The diagram groups LlmClient, PromptBuilder and ResponseParser on</text>
+<text x="48" y="1306" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">one helper lifeline for readability; they remain separate classes.</text>
+</svg>

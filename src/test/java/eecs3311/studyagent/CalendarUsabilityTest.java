@@ -40,7 +40,7 @@ class CalendarUsabilityTest {
         SwingUtilities.invokeAndWait(() -> {
             StudyNotesPanel panel = new StudyNotesPanel("lecture.pdf",
                     "Page 2\nDesign patterns define reusable solutions. A Factory creates objects.\n"
-                            + "Sources: lecture.pdf p.2", () -> { });
+                            + "- **Important:** Keep source references.\nSources: lecture.pdf p.2", () -> { });
             JTextPane text = descendants(panel).stream().filter(JTextPane.class::isInstance)
                     .map(JTextPane.class::cast).findFirst().orElseThrow();
             String visible = text.getText();
@@ -49,6 +49,12 @@ class CalendarUsabilityTest {
             assertTrue(visible.contains("• A Factory creates objects."));
             assertFalse(visible.contains("solutions. A Factory"));
             assertTrue(visible.contains("Sources: lecture.pdf p.2"));
+            assertFalse(visible.contains("**"), "Markdown markers should render as emphasis");
+            int emphasis = visible.indexOf("Important:");
+            assertTrue(javax.swing.text.StyleConstants.isBold(text.getStyledDocument()
+                    .getCharacterElement(emphasis).getAttributes()));
+            assertTrue(javax.swing.text.StyleConstants.getSpaceBelow(text.getStyledDocument()
+                    .getParagraphElement(emphasis).getAttributes()) > 0);
         });
     }
 

@@ -1,0 +1,1573 @@
+[
+  {
+    "id": "SD01a",
+    "title": "Upload and organize original materials",
+    "features": "F01 / UC01",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore",
+      "DocumentReaderFactory",
+      "DocumentReader",
+      "Local files"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Create semester/course; choose files and destination"
+      ],
+      [
+        1,
+        2,
+        "createSemester(...); createCourse(...); uploadMaterial(...)"
+      ],
+      [
+        2,
+        3,
+        "createSemester(...); createCourse(...); uploadMaterial(...)"
+      ],
+      [
+        3,
+        6,
+        "Copy original into files/; write entity properties"
+      ],
+      [
+        3,
+        4,
+        "getReader(originalName)"
+      ],
+      [
+        4,
+        3,
+        "Optional<DocumentReader> for PDF / PPTX / DOCX / TXT",
+        true
+      ],
+      [
+        3,
+        5,
+        "extractText(path) [if a reader is available]"
+      ],
+      [
+        5,
+        3,
+        "List<String> page text / extraction warning",
+        true
+      ],
+      [
+        3,
+        6,
+        "Persist extracted pages and MaterialFile metadata"
+      ],
+      [
+        3,
+        1,
+        "changed() -> registered refresh callback (Swing invokeLater)"
+      ],
+      [
+        1,
+        2,
+        "workspace() / materials()"
+      ],
+      [
+        2,
+        1,
+        "WorkspaceTree.build(store); course/material views",
+        true
+      ],
+      [
+        0,
+        1,
+        "Select original PDF / Open original"
+      ],
+      [
+        1,
+        2,
+        "materialPath(id)"
+      ],
+      [
+        1,
+        0,
+        "PdfPreviewPanel original-page render / Desktop.open(file)",
+        true
+      ]
+    ],
+    "note": "Upload does not call the LLM. Unsupported/scanned content remains stored; AI text features require readable text. Duplicate-name replacement is confirmed by the boundary. Lecture-week matching is a separate action (SD01b)."
+  },
+  {
+    "id": "SD01b",
+    "title": "Propose and approve a lecture week",
+    "features": "F01 / UC01, UC17",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore",
+      "LLM + JSON helpers",
+      "CommandInvoker",
+      "AssignWeekCommand"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Request AI week matching for a lecture file"
+      ],
+      [
+        1,
+        2,
+        "suggestLectureWeek(materialId)"
+      ],
+      [
+        2,
+        3,
+        "material(); materials(); materialPages(lecture + syllabi)"
+      ],
+      [
+        2,
+        4,
+        "PromptBuilder WEEK_MATCH -> LlmClient.complete -> ResponseParser.week"
+      ],
+      [
+        4,
+        2,
+        "Supported week or null",
+        true
+      ],
+      [
+        2,
+        5,
+        "propose(description, new AssignWeekCommand(...))"
+      ],
+      [
+        2,
+        1,
+        "Proposal (no week saved yet)",
+        true
+      ],
+      [
+        1,
+        0,
+        "Display proposed lecture week",
+        true
+      ],
+      [
+        0,
+        1,
+        "Approve / reject"
+      ],
+      [
+        1,
+        2,
+        "approveProposal(id) / rejectProposal(id)"
+      ],
+      [
+        2,
+        5,
+        "approve(id) [approval branch]"
+      ],
+      [
+        5,
+        6,
+        "execute()"
+      ],
+      [
+        6,
+        3,
+        "assignLectureWeek(materialId, week)"
+      ],
+      [
+        2,
+        1,
+        "InteractionHistory.add(approved/rejected); refreshed file metadata",
+        true
+      ]
+    ],
+    "note": "No syllabus or unsupported week -> explain and permit manual assignLectureWeek. Reject removes only the transient proposal. The diagram groups LlmClient, PromptBuilder and ResponseParser on one helper lifeline for readability; they remain separate classes."
+  },
+  {
+    "id": "SD02",
+    "title": "Extract, validate and approve deadlines",
+    "features": "F02 / UC02, UC17",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore",
+      "LLM + JSON helpers",
+      "DeadlineValidator",
+      "CommandInvoker",
+      "AddDeadlineCommand"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Request syllabus extraction"
+      ],
+      [
+        1,
+        2,
+        "suggestSyllabusDeadlines(materialId)"
+      ],
+      [
+        2,
+        3,
+        "material(); course(); semester(); materialPages()"
+      ],
+      [
+        2,
+        4,
+        "DEADLINE_EXTRACTION prompt -> complete() -> deadlines(response)"
+      ],
+      [
+        4,
+        2,
+        "List<DeadlineDraft> [retry malformed JSON once]",
+        true
+      ],
+      [
+        2,
+        5,
+        "resolveRelativeDate(draft, semester); warnings(draft, source)"
+      ],
+      [
+        2,
+        6,
+        "propose(description, new AddDeadlineCommand(...)) [each item]"
+      ],
+      [
+        2,
+        1,
+        "Candidates with date, scope, weight, evidence and warnings",
+        true
+      ],
+      [
+        0,
+        1,
+        "Edit / merge / reject / approve a candidate"
+      ],
+      [
+        1,
+        2,
+        "reviseSyllabusCandidate / mergeSyllabusCandidate / rejectProposal"
+      ],
+      [
+        1,
+        2,
+        "approveProposal(id) [approved item]"
+      ],
+      [
+        2,
+        6,
+        "approve(id)"
+      ],
+      [
+        6,
+        7,
+        "execute()"
+      ],
+      [
+        7,
+        3,
+        "createDeadline(courseId, title, type, date, scope, weight, evidence)"
+      ],
+      [
+        3,
+        1,
+        "Persist -> changed() -> refresh; history records decision"
+      ]
+    ],
+    "note": "Dates outside the semester cannot be persisted. Missing dates remain TBD. Source-date/evidence warnings require user confirmation. Duplicate candidates can be merged by individual review; bulk import skips matching entries (SD14)."
+  },
+  {
+    "id": "SD03",
+    "title": "View schedule, edit deadlines and track progress",
+    "features": "F03, F04, F09 / UC03, UC04, UC10",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore",
+      "PriorityRecommender",
+      "CalendarPanel / CoursePage"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Open calendar / timeline; select period, course or search"
+      ],
+      [
+        1,
+        2,
+        "schedule(period, courseId, query, today)"
+      ],
+      [
+        2,
+        3,
+        "deadlines(); courses()"
+      ],
+      [
+        2,
+        2,
+        "Filter by period, course, title/type search"
+      ],
+      [
+        2,
+        4,
+        "order(selected, coursesById)"
+      ],
+      [
+        4,
+        2,
+        "Due date then course difficulty; undated items last",
+        true
+      ],
+      [
+        2,
+        1,
+        "Ordered deadlines",
+        true
+      ],
+      [
+        1,
+        5,
+        "Render every dated event with course and title"
+      ],
+      [
+        0,
+        5,
+        "Click date (including empty day) or deadline"
+      ],
+      [
+        5,
+        1,
+        "Date callback / deadline-details callback"
+      ],
+      [
+        1,
+        2,
+        "addDeadline / editDeadline / deleteDeadline / setCompleted"
+      ],
+      [
+        2,
+        3,
+        "Validate semester date; persist mutation"
+      ],
+      [
+        3,
+        1,
+        "changed() -> refresh schedule/calendar/course"
+      ],
+      [
+        1,
+        2,
+        "progress(courseId, today)"
+      ],
+      [
+        2,
+        1,
+        "completed / total / overdue counts",
+        true
+      ]
+    ],
+    "note": "GUI calendar has an independent All courses / one-course filter; CLI schedule supports course/period filters. Every week has labels instead of the Stage 1 dot-only collapsed weeks. Event edits use dialogs; there is no drag rescheduling."
+  },
+  {
+    "id": "SD04",
+    "title": "Study timer and weekly records",
+    "features": "F05 / UC05, UC06",
+    "actors": [
+      "Student",
+      "TimerPanel / MainWindow",
+      "AgentController",
+      "StudyTimer",
+      "DataStore",
+      "TimerRecordPanel / CLI"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Choose 15 / 30 / 60 minutes"
+      ],
+      [
+        1,
+        2,
+        "startStudy(minutes)"
+      ],
+      [
+        2,
+        3,
+        "start(null, \"Study\", minutes * 60)"
+      ],
+      [
+        1,
+        2,
+        "remainingStudySeconds() [GUI tick every second]"
+      ],
+      [
+        2,
+        3,
+        "remainingSeconds()"
+      ],
+      [
+        3,
+        2,
+        "Remaining seconds",
+        true
+      ],
+      [
+        2,
+        1,
+        "Remaining seconds -> display countdown",
+        true
+      ],
+      [
+        0,
+        1,
+        "Pause / resume [optional]"
+      ],
+      [
+        1,
+        2,
+        "pauseStudy() / resumeStudy() -> timer.pause() / resume()"
+      ],
+      [
+        1,
+        1,
+        "At zero: Toolkit.beep(); show completion [or student stops early]"
+      ],
+      [
+        1,
+        2,
+        "stopStudy()"
+      ],
+      [
+        2,
+        3,
+        "stop()"
+      ],
+      [
+        3,
+        2,
+        "StudySession with measured seconds (pause time excluded)",
+        true
+      ],
+      [
+        2,
+        4,
+        "recordStudySession(session); persist; changed()"
+      ],
+      [
+        0,
+        5,
+        "Choose record week / CLI study week"
+      ],
+      [
+        5,
+        2,
+        "studySessions(); weeklyStudySeconds(null, weekDate)"
+      ],
+      [
+        2,
+        5,
+        "Daily totals and weekly sum",
+        true
+      ]
+    ],
+    "note": "Timer execution is GUI-only and stops with the app. Default sessions are deliberately unlinked to a course, as Stage 1 specifies. The CLI reads persisted records; it does not run the countdown."
+  },
+  {
+    "id": "SD05",
+    "title": "Find uploaded reference files for a deadline",
+    "features": "F06 / UC07",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore",
+      "ReferenceSelector",
+      "LLM + JSON helpers"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Select a deadline and request reference files"
+      ],
+      [
+        1,
+        2,
+        "suggestReferences(deadlineId)"
+      ],
+      [
+        2,
+        3,
+        "deadline(); readable lecture candidates; syllabus/assignment files"
+      ],
+      [
+        2,
+        3,
+        "materialPages() [first-page snippets for context]"
+      ],
+      [
+        2,
+        4,
+        "select(llm, prompts, parser, request, candidates, true)"
+      ],
+      [
+        4,
+        5,
+        "REFERENCE_SELECTION -> complete() -> parse fileNames"
+      ],
+      [
+        5,
+        4,
+        "Proposed source file names",
+        true
+      ],
+      [
+        4,
+        4,
+        "Keep only exact uploaded lecture names; deduplicate"
+      ],
+      [
+        4,
+        2,
+        "Existing MaterialFile list",
+        true
+      ],
+      [
+        2,
+        1,
+        "Reference files; no schedule data changed",
+        true
+      ],
+      [
+        1,
+        0,
+        "List files; originals can be opened from workspace",
+        true
+      ]
+    ],
+    "note": "No readable lecture candidates -> explicit error. For this workflow unavailable LLM file names are ignored. Source Q&A uses the stricter selector and passage citation checks (SD09a)."
+  },
+  {
+    "id": "SD06",
+    "title": "Show deadline notifications once",
+    "features": "F07 / UC08",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore",
+      "Notification marker"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Launch app [GUI also polls every 60 seconds]"
+      ],
+      [
+        1,
+        2,
+        "unseenNotifications(now)"
+      ],
+      [
+        2,
+        3,
+        "deadlines()"
+      ],
+      [
+        2,
+        4,
+        "Read shown-notifications.txt"
+      ],
+      [
+        2,
+        2,
+        "Incomplete dated deadlines: now >= dueDate/time - lead minutes"
+      ],
+      [
+        2,
+        1,
+        "Due notices without a matching persisted marker",
+        true
+      ],
+      [
+        1,
+        0,
+        "Beep and notification dialog (GUI) / print (CLI)",
+        true
+      ],
+      [
+        1,
+        2,
+        "markNotificationShown(deadline) [each displayed notice]"
+      ],
+      [
+        2,
+        4,
+        "Append id/date/time/lead-time key"
+      ],
+      [
+        0,
+        1,
+        "Configure due time and lead minutes [optional]"
+      ],
+      [
+        1,
+        2,
+        "setNotification(deadlineId, time, minutesBefore)"
+      ],
+      [
+        2,
+        3,
+        "setNotification(...); saveDeadline; changed()"
+      ]
+    ],
+    "note": "Missed notices can appear on the next launch. Completed/undated deadlines are excluded. There is no OS background service. Daily TBD-date reminders are shown separately in SD14."
+  },
+  {
+    "id": "SD07",
+    "title": "Plan an approved natural-language schedule change",
+    "features": "F08 / UC09, UC17",
+    "actors": [
+      "Student",
+      "ChatPanel / CLI",
+      "AgentController",
+      "SchedulePlanner",
+      "LLM + JSON helpers",
+      "CommandInvoker / AgentCommand",
+      "DataStore"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Describe one add / edit / delete request"
+      ],
+      [
+        1,
+        2,
+        "planScheduleChange(courseId, request)"
+      ],
+      [
+        2,
+        3,
+        "plan(store, llm, prompts, parser, invoker, courseId, request)"
+      ],
+      [
+        3,
+        6,
+        "course(); deadlines() -> existing IDs, dates, types and scope"
+      ],
+      [
+        3,
+        4,
+        "SCHEDULE_PLAN prompt -> complete() -> parse JSON"
+      ],
+      [
+        4,
+        3,
+        "Action, target ID, proposed fields / clarification",
+        true
+      ],
+      [
+        3,
+        3,
+        "Check course; preserve omitted text fields; validate date"
+      ],
+      [
+        3,
+        5,
+        "propose(before/after, Add/Edit/DeleteDeadlineCommand)"
+      ],
+      [
+        2,
+        1,
+        "Proposal; history records schedule proposal",
+        true
+      ],
+      [
+        1,
+        0,
+        "Display before and after; ask approve/reject",
+        true
+      ],
+      [
+        0,
+        1,
+        "Approve"
+      ],
+      [
+        1,
+        2,
+        "approveProposal(id)"
+      ],
+      [
+        2,
+        5,
+        "approve(id) -> AgentCommand.execute()"
+      ],
+      [
+        5,
+        6,
+        "Command calls createDeadline / editDeadline / deleteDeadline"
+      ],
+      [
+        6,
+        1,
+        "Persist -> changed() -> refreshed schedule"
+      ]
+    ],
+    "note": "Ambiguous action -> a clarification error instead of a mutation. A request produces one deadline action. Rejection discards the command and records the decision; no persistent schedule change occurs."
+  },
+  {
+    "id": "SD08",
+    "title": "Prepare a weekly briefing",
+    "features": "F10 / UC11",
+    "actors": [
+      "Student / app launch",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore / StudyArtifacts",
+      "WeakTopicAnalyzer",
+      "LLM + JSON helpers",
+      "InteractionHistory"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Request weekly brief / first GUI launch of a new week"
+      ],
+      [
+        1,
+        2,
+        "weeklyBriefDue(today) [automatic GUI path]"
+      ],
+      [
+        1,
+        2,
+        "weeklyBriefing(courseId, today) [each course]"
+      ],
+      [
+        2,
+        2,
+        "schedule(THIS_WEEK, courseId, ...); weeklyStudySeconds(null, today)"
+      ],
+      [
+        2,
+        3,
+        "Load deadlines, course and stored study sessions"
+      ],
+      [
+        2,
+        4,
+        "analyze(artifacts, courseId)"
+      ],
+      [
+        4,
+        3,
+        "quizzes(); attempts(); assessments()"
+      ],
+      [
+        2,
+        5,
+        "WEEKLY_BRIEF prompt with dates, study seconds and weak topics"
+      ],
+      [
+        5,
+        2,
+        "Concise briefing [or deterministic facts if API unavailable]",
+        true
+      ],
+      [
+        2,
+        6,
+        "add(\"weekly briefing\", course.name())"
+      ],
+      [
+        1,
+        2,
+        "markWeeklyBriefShown(today) [automatic GUI path]"
+      ],
+      [
+        1,
+        0,
+        "Display this week's course briefing(s)",
+        true
+      ]
+    ],
+    "note": "Automatic week marker is application-wide. Briefing labels the study total as all study time because the default timer is not course-linked. API unavailability falls back to collected facts. CLI briefing is requested explicitly."
+  },
+  {
+    "id": "SD09a",
+    "title": "Answer questions with retrieved page evidence",
+    "features": "F11 / UC12",
+    "actors": [
+      "Student",
+      "ChatPanel / CLI",
+      "AgentController",
+      "ReferenceSelector",
+      "MaterialSearcher",
+      "DataStore",
+      "LLM + JSON helpers",
+      "InteractionHistory"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Ask a question about uploaded course materials"
+      ],
+      [
+        1,
+        2,
+        "answerQuestion(courseId, question)"
+      ],
+      [
+        2,
+        5,
+        "Readable materials and candidateSnippets()"
+      ],
+      [
+        2,
+        3,
+        "select(llm, prompts, parser, question + snippets, candidates)"
+      ],
+      [
+        3,
+        6,
+        "REFERENCE_SELECTION -> complete() -> validated fileNames"
+      ],
+      [
+        2,
+        4,
+        "search(store, selected, question, 8)"
+      ],
+      [
+        4,
+        5,
+        "materialPages(fileId) [each selected file]"
+      ],
+      [
+        4,
+        2,
+        "Up to 8 ranked passages, each <= 4,500 characters",
+        true
+      ],
+      [
+        2,
+        7,
+        "recent(5) [memory context, explicitly not evidence]"
+      ],
+      [
+        2,
+        6,
+        "QA prompt + passages + ExplanationStrategy instruction"
+      ],
+      [
+        6,
+        2,
+        "JSON answer and file/page citations",
+        true
+      ],
+      [
+        2,
+        2,
+        "Require citations; reject any not in supplied passages"
+      ],
+      [
+        2,
+        7,
+        "add(\"question answered\", question + answer + sources)"
+      ],
+      [
+        2,
+        1,
+        "GroundedAnswer(answer, citations)",
+        true
+      ],
+      [
+        1,
+        0,
+        "Display answer and cited original pages",
+        true
+      ]
+    ],
+    "note": "No selected readable source or invalid citation -> show error. The lexical passage search may include score-zero pages; citations validate provenance, not factual correctness. The LLM never reads local files directly."
+  },
+  {
+    "id": "SD09b",
+    "title": "Create and reopen a concise study guide",
+    "features": "F12 / UC13",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore",
+      "LLM + JSON helpers",
+      "StudyArtifacts",
+      "InteractionHistory"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Select readable material; create study notes"
+      ],
+      [
+        1,
+        2,
+        "generateSummary(materialId)"
+      ],
+      [
+        2,
+        3,
+        "material(); materialPages()"
+      ],
+      [
+        2,
+        4,
+        "SUMMARY request for each nonblank page section (<= 12,000 chars)"
+      ],
+      [
+        4,
+        2,
+        "Concise page-section notes; app records source page",
+        true
+      ],
+      [
+        2,
+        4,
+        "SUMMARY synthesis [if multiple sections]"
+      ],
+      [
+        4,
+        2,
+        "Grouped guide with headings, bullets and page references",
+        true
+      ],
+      [
+        2,
+        5,
+        "saveSummary(materialId, notes + source list)"
+      ],
+      [
+        2,
+        6,
+        "add(\"summary saved\", originalName)"
+      ],
+      [
+        2,
+        1,
+        "Persisted Summary",
+        true
+      ],
+      [
+        1,
+        0,
+        "StudyNotesPanel tab (GUI) / printed notes (CLI)",
+        true
+      ],
+      [
+        0,
+        1,
+        "Reopen saved notes / open source PDF"
+      ],
+      [
+        1,
+        2,
+        "summaries(materialId) / materialPath(id)"
+      ],
+      [
+        2,
+        5,
+        "summaries(materialId)"
+      ],
+      [
+        1,
+        0,
+        "Show saved notes or original-page preview",
+        true
+      ]
+    ],
+    "note": "Summary source list is recorded deterministically from processed PDF/text pages. It is not a claim that model-written inline page references or facts are independently verified. Old saved summaries can be regenerated using Make a study guide."
+  },
+  {
+    "id": "SD10a",
+    "title": "Generate and locally grade a multiple-choice quiz",
+    "features": "F13 / UC14",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "DataStore",
+      "LLM + JSON helpers",
+      "StudyArtifacts",
+      "QuizDialog"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Choose material / lecture week / all lectures; count and difficulty"
+      ],
+      [
+        1,
+        2,
+        "generateQuiz(materialIds, count, difficulty)"
+      ],
+      [
+        2,
+        3,
+        "Validate one-course readable scope; materialPages()"
+      ],
+      [
+        2,
+        4,
+        "QUIZ prompt -> complete() -> parse questions"
+      ],
+      [
+        2,
+        2,
+        "Validate 1-10 count; four choices; answer index; retry malformed output once"
+      ],
+      [
+        2,
+        5,
+        "saveQuiz(courseId, firstMaterialId, questions)"
+      ],
+      [
+        2,
+        1,
+        "Quiz; InteractionHistory.add(\"quiz generated\", ...)",
+        true
+      ],
+      [
+        1,
+        6,
+        "take(quiz) [GUI] / print question prompts [CLI]"
+      ],
+      [
+        0,
+        6,
+        "Select answers and submit; cancel saves no attempt"
+      ],
+      [
+        6,
+        1,
+        "List<Integer> answers",
+        true
+      ],
+      [
+        1,
+        2,
+        "gradeQuiz(quiz, answers)"
+      ],
+      [
+        2,
+        5,
+        "grade(quiz, answers) -> save Attempt"
+      ],
+      [
+        2,
+        1,
+        "Correct count + per-topic result; history entry",
+        true
+      ],
+      [
+        1,
+        0,
+        "Answer review with chosen/correct answer and explanation",
+        true
+      ]
+    ],
+    "note": "Question generation is AI-based. Grading is deterministic equality with the stored answer index; the app cannot prove that an AI-authored answer key is pedagogically correct. Saved MCQ metadata currently records the first material in a multi-file scope."
+  },
+  {
+    "id": "SD10b",
+    "title": "Generate an essay and approve its proposed score",
+    "features": "F13 / UC14, UC17",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "LLM + JSON helpers",
+      "StudyArtifacts",
+      "CommandInvoker"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Choose source scope; generate essay question"
+      ],
+      [
+        1,
+        2,
+        "generateEssayPrompt(materialIds)"
+      ],
+      [
+        2,
+        3,
+        "ESSAY_QUESTION with readable same-course source context"
+      ],
+      [
+        2,
+        4,
+        "saveEssayPrompt(courseId, materialIds, topic, question)"
+      ],
+      [
+        1,
+        0,
+        "Display question; collect student answer",
+        true
+      ],
+      [
+        1,
+        2,
+        "suggestEssayGrade(materialIds, question, answer)"
+      ],
+      [
+        2,
+        3,
+        "ESSAY_GRADE -> complete() -> score + feedback"
+      ],
+      [
+        2,
+        2,
+        "Validate score 0-100 and nonblank feedback"
+      ],
+      [
+        2,
+        1,
+        "EssayGradeDraft; no grade saved yet",
+        true
+      ],
+      [
+        0,
+        1,
+        "Review/correct proposed score (GUI), approve or reject"
+      ],
+      [
+        1,
+        2,
+        "proposeEssayGrade(draft, approvedScore)"
+      ],
+      [
+        2,
+        5,
+        "propose(description, lambda AgentCommand)"
+      ],
+      [
+        1,
+        2,
+        "approveProposal(id)"
+      ],
+      [
+        2,
+        5,
+        "approve(id) -> execute lambda"
+      ],
+      [
+        5,
+        4,
+        "saveEssayGrade(materialId, question, answer, score, feedback)"
+      ]
+    ],
+    "note": "Only approval persists the AI essay grade. CLI essay take/grade proposes the model score and supports approve/reject; GUI additionally edits the score before approval. Mixed mode creates separate MCQ and essay artifacts."
+  },
+  {
+    "id": "SD11",
+    "title": "Analyze weak topics from results and confidence",
+    "features": "F14 / UC15",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "StudyArtifacts",
+      "WeakTopicAnalyzer",
+      "LLM + JSON helpers"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Take quiz / optionally self-assess a topic (1-5)"
+      ],
+      [
+        1,
+        2,
+        "saveSelfAssessment(courseId, topic, confidence) [optional]"
+      ],
+      [
+        2,
+        3,
+        "saveAssessment(...); history records self assessment"
+      ],
+      [
+        0,
+        1,
+        "Request weak topics / AI review advice"
+      ],
+      [
+        1,
+        2,
+        "topicStatistics(courseId); weakTopics(courseId)"
+      ],
+      [
+        2,
+        4,
+        "statistics(artifacts, courseId); analyze(artifacts, courseId)"
+      ],
+      [
+        4,
+        3,
+        "quizzes(courseId); attempts(quizId); assessments(courseId)"
+      ],
+      [
+        4,
+        4,
+        "Per-topic accuracy; latest confidence; rank weakness score"
+      ],
+      [
+        4,
+        2,
+        "TopicStats and ranked weak topics",
+        true
+      ],
+      [
+        2,
+        5,
+        "WEAK_TOPICS prompt [weakTopicAdvice; only if ranking nonempty]"
+      ],
+      [
+        5,
+        2,
+        "Explanation + lecture file names",
+        true
+      ],
+      [
+        2,
+        2,
+        "Keep recommendations matching uploaded lecture names only"
+      ],
+      [
+        2,
+        1,
+        "Deterministic statistics and optional AI advice",
+        true
+      ]
+    ],
+    "note": "No misses/confidence data -> informative empty result, not invented analysis. MCQ attempts and confidence feed ranking; separately stored essay scores do not feed MCQ topic accuracy."
+  },
+  {
+    "id": "SD12",
+    "title": "Persist, reuse and inspect interaction history",
+    "features": "F15 / UC16",
+    "actors": [
+      "Student",
+      "MainWindow / CLI",
+      "AgentController",
+      "InteractionHistory",
+      "Local JSONL file"
+    ],
+    "steps": [
+      [
+        2,
+        3,
+        "add(event, detail) after AI activity / proposal decision / quiz result"
+      ],
+      [
+        3,
+        4,
+        "Append timestamp/event/detail to interaction-history.jsonl"
+      ],
+      [
+        0,
+        1,
+        "Open history"
+      ],
+      [
+        1,
+        2,
+        "history()"
+      ],
+      [
+        2,
+        3,
+        "list()"
+      ],
+      [
+        3,
+        4,
+        "Read JSONL entries"
+      ],
+      [
+        3,
+        2,
+        "List<Entry>",
+        true
+      ],
+      [
+        2,
+        1,
+        "History entries displayed (GUI / CLI)",
+        true
+      ],
+      [
+        0,
+        1,
+        "Select and delete a history record"
+      ],
+      [
+        1,
+        2,
+        "deleteHistory(entry)"
+      ],
+      [
+        2,
+        3,
+        "delete(entry)"
+      ],
+      [
+        3,
+        4,
+        "Rewrite remaining entries"
+      ],
+      [
+        2,
+        3,
+        "recent(5) [when later answerQuestion() runs]"
+      ],
+      [
+        3,
+        2,
+        "Recent context; not cited source evidence",
+        true
+      ]
+    ],
+    "note": "InteractionHistory replaces the Stage 1 MemoryManager. It stores selected agent events, generated artifacts and decisions; not every manual UI action. API keys are not included in the event schema."
+  },
+  {
+    "id": "SD13",
+    "title": "Review AI file classification before moving files",
+    "features": "New / UC18",
+    "actors": [
+      "Student",
+      "MainWindow",
+      "AgentController",
+      "DataStore",
+      "LLM + JSON helpers"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Click AI sort files / Classify files with AI"
+      ],
+      [
+        1,
+        2,
+        "suggestFileCategories() [only on demand]"
+      ],
+      [
+        2,
+        3,
+        "materials(); materialPages(id)"
+      ],
+      [
+        2,
+        2,
+        "Build <=12-file batches; <=1,500 normalized text characters/file"
+      ],
+      [
+        2,
+        4,
+        "complete(classification instructions, JSON samples); parse suggestions"
+      ],
+      [
+        2,
+        2,
+        "Require supplied UUID; valid category; ignore repeated/unknown IDs"
+      ],
+      [
+        2,
+        1,
+        "CategorySuggestion entries that differ from current folders",
+        true
+      ],
+      [
+        1,
+        0,
+        "Review table: file, old/new folder, reason; choose rows",
+        true
+      ],
+      [
+        0,
+        1,
+        "Apply checked moves"
+      ],
+      [
+        1,
+        2,
+        "moveMaterial(id, category) [each checked row]"
+      ],
+      [
+        2,
+        3,
+        "moveMaterial(id, category); persist metadata; changed()"
+      ],
+      [
+        1,
+        0,
+        "Refresh tree and show moved/error counts",
+        true
+      ]
+    ],
+    "note": "Classification is a review table rather than CommandInvoker proposals. No files move until Apply is clicked. Original bytes and extracted text remain; only category metadata changes. Unknown-purpose files remain reviewable."
+  },
+  {
+    "id": "SD14",
+    "title": "Bulk calendar import and daily missing-date reminders",
+    "features": "New / UC19; extends F02, F07",
+    "actors": [
+      "Student",
+      "MainWindow",
+      "AgentController",
+      "CommandInvoker / AgentCommand",
+      "DataStore",
+      "Notification marker"
+    ],
+    "steps": [
+      [
+        0,
+        1,
+        "Analyze files for calendar after uploading files"
+      ],
+      [
+        1,
+        2,
+        "suggestCalendarFromFiles()"
+      ],
+      [
+        2,
+        2,
+        "For readable syllabus/assignment files: extraction pipeline SD02"
+      ],
+      [
+        2,
+        1,
+        "CalendarSuggestions(filesAnalyzed, proposals)",
+        true
+      ],
+      [
+        1,
+        0,
+        "Review first selected row, evidence and warnings",
+        true
+      ],
+      [
+        0,
+        1,
+        "Add all / Add checked"
+      ],
+      [
+        1,
+        0,
+        "For each missing date: Enter date / Keep TBD / Skip",
+        true
+      ],
+      [
+        0,
+        1,
+        "Choose date or Keep TBD (daily reminder)"
+      ],
+      [
+        1,
+        2,
+        "reviseSyllabusCandidate(id, revisedDraft) [if date entered]"
+      ],
+      [
+        1,
+        2,
+        "hasSyllabusDuplicate(id); skip existing/batch duplicate"
+      ],
+      [
+        1,
+        2,
+        "approveProposal(id) [each accepted item]"
+      ],
+      [
+        2,
+        3,
+        "approve(id) -> AddDeadlineCommand.execute()"
+      ],
+      [
+        3,
+        4,
+        "createDeadline(...); persist; changed()"
+      ],
+      [
+        1,
+        2,
+        "markUndatedRemindersShown(newUndated, today)"
+      ],
+      [
+        2,
+        5,
+        "Persist TBD/today/deadlineId marker"
+      ],
+      [
+        1,
+        2,
+        "unseenUndatedReminders(today) [startup / each GUI minute]"
+      ],
+      [
+        2,
+        1,
+        "Incomplete TBD entries not yet shown today",
+        true
+      ],
+      [
+        1,
+        2,
+        "markUndatedRemindersShown(remaining, today) before prompt"
+      ],
+      [
+        2,
+        5,
+        "Append today's keys; next reminder is tomorrow"
+      ],
+      [
+        1,
+        0,
+        "Set selected date / Remind tomorrow",
+        true
+      ],
+      [
+        0,
+        1,
+        "Choose due date / keep unknown"
+      ],
+      [
+        1,
+        2,
+        "editDeadline(id, title, type, date, scope) [if a date is set]"
+      ],
+      [
+        2,
+        4,
+        "Validate date, persist and refresh"
+      ]
+    ],
+    "note": "Date inputs are validated against the semester. Duplicate import entries are skipped. Daily reminders run only while the GUI is open or at next launch; there is no OS background reminder service."
+  }
+]

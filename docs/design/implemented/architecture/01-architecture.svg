@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1160" viewBox="0 0 1600 1160">
+<rect width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#334155" stroke-width="1.5"/></marker><marker id="triangle" markerWidth="14" markerHeight="12" refX="13" refY="6" orient="auto"><path d="M0,0 L13,6 L0,12 Z" fill="white" stroke="#334155"/></marker></defs>
+<text x="45" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#0f172a">Implemented architecture</text>
+<text x="45" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" fill="#475569">One controller serves Swing and CLI; AI proposals cross an explicit approval boundary.</text>
+<path d="M370,295 L370,345 L660,345 L660,390" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="375.0" y="314.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">user actions</text>
+<path d="M1230,295 L1230,345 L940,345 L940,390" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="1235.0" y="314.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">user actions</text>
+<path d="M800,560 L800,610 L280,610 L280,675" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<path d="M800,560 L800,610 L800,610 L800,675" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="805.0" y="579.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">coordinates</text>
+<path d="M800,560 L800,610 L1320,610 L1320,675" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<path d="M280,845 L280,960" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="285.0" y="896.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">HTTPS</text>
+<path d="M800,845 L800,960" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="805.0" y="896.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">read / write</text>
+<rect x="60" y="160" width="620" height="135" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="61" y="161" width="618" height="43" fill="#eaf0f8"/>
+<path d="M60,204 H680" stroke="#64748b"/>
+<text x="72" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">MainWindow + Swing components</text>
+<text x="72" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Workspace tree, timeline, calendar and PDF tabs</text>
+<text x="72" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Chat, study notes, quiz dialogs and study timer</text>
+<rect x="920" y="160" width="620" height="135" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="921" y="161" width="618" height="43" fill="#eaf0f8"/>
+<path d="M920,204 H1540" stroke="#64748b"/>
+<text x="932" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">CommandLineInterface</text>
+<text x="932" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">run() dispatches text commands</text>
+<text x="932" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Setup, materials, schedule and study workflows</text>
+<rect x="490" y="390" width="620" height="170" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="491" y="391" width="618" height="43" fill="#dbeafe"/>
+<path d="M490,434 H1110" stroke="#64748b"/>
+<text x="502" y="418" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">AgentController  &lt;&lt;Facade&gt;&gt;</text>
+<text x="502" y="463" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">DataStore, LlmClient, CommandInvoker, StudyArtifacts</text>
+<path d="M490,475 H1110" stroke="#cbd5e1"/>
+<text x="502" y="506" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Coordinates retrieval, generation, validation and approval</text>
+<text x="502" y="529" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Shared domain operations for both interfaces</text>
+<rect x="45" y="675" width="470" height="170" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="676" width="468" height="43" fill="#f1edf8"/>
+<path d="M45,719 H515" stroke="#64748b"/>
+<text x="57" y="703" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">LLM collaboration</text>
+<text x="57" y="748" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">PromptBuilder + ResponseParser</text>
+<text x="57" y="771" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">LlmClient -&gt; HttpLlmClient</text>
+<text x="57" y="794" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">SchedulePlanner / ReferenceSelector / MaterialSearcher</text>
+<rect x="565" y="675" width="470" height="170" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="566" y="676" width="468" height="43" fill="#edf4ed"/>
+<path d="M565,719 H1035" stroke="#64748b"/>
+<text x="577" y="703" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Local state and history</text>
+<text x="577" y="748" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">DataStore: entities, original files, extracted text</text>
+<text x="577" y="771" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">StudyArtifacts: notes, quizzes, scores, self-assessments</text>
+<text x="577" y="794" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">InteractionHistory: records and prompt context</text>
+<rect x="1085" y="675" width="470" height="170" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1086" y="676" width="468" height="43" fill="#f3f4f6"/>
+<path d="M1085,719 H1555" stroke="#64748b"/>
+<text x="1097" y="703" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Deterministic services</text>
+<text x="1097" y="748" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">DocumentReaderFactory and readers</text>
+<text x="1097" y="771" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">DeadlineValidator / PriorityRecommender</text>
+<text x="1097" y="794" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">StudyTimer / ReminderService / WeakTopicAnalyzer</text>
+<rect x="45" y="960" width="470" height="100" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="961" width="468" height="43" fill="#f1edf8"/>
+<path d="M45,1004 H515" stroke="#64748b"/>
+<text x="57" y="988" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">External HTTPS chat-completions API</text>
+<text x="57" y="1033" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Model / endpoint configured locally in .env</text>
+<rect x="565" y="960" width="470" height="100" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="566" y="961" width="468" height="43" fill="#edf4ed"/>
+<path d="M565,1004 H1035" stroke="#64748b"/>
+<text x="577" y="988" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Local data/ directory</text>
+<text x="577" y="1033" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Properties, JSON, JSONL, text, original files</text>
+<text x="1085" y="971" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">Approval boundary: CommandInvoker stores transient</text>
+<text x="1085" y="996" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">AgentCommand objects. Only approve() executes them.</text>
+<text x="60" y="1121" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">Dependency arrows describe calls. Files are local; the LLM does not access DataStore directly.</text>
+<text x="45" y="1143" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#64748b">EECS3311 / Implementation diagrams / 2026-11-13 / Selected members; consult source for full signatures.</text>
+</svg>

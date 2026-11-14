@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="1313" viewBox="0 0 1250 1313">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1250" height="1313" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD12 - Persist, reuse and inspect interaction history</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F15 / UC16 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1218" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="278.5" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="377.5" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow / CLI</text>
+<line x1="377.5" y1="191" x2="377.5" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="526.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="625.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="625.0" y1="191" x2="625.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="773.5" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="872.5" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">InteractionHistory</text>
+<line x1="872.5" y1="191" x2="872.5" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1021.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1120.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Local JSONL file</text>
+<line x1="1120.0" y1="191" x2="1120.0" y2="1177" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="625.0" y1="263" x2="872.5" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="577.65" y="215" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. add(event, detail) after AI activity /</text>
+<rect x="618.65" y="235" width="260.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="250" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">proposal decision / quiz result</text>
+<line x1="872.5" y1="341" x2="1120.0" y2="341" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="849.75" y="293" width="293.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="996.25" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. Append timestamp/event/detail to</text>
+<rect x="890.75" y="313" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="996.25" y="328" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">interaction-history.jsonl</text>
+<line x1="130.0" y1="399" x2="377.5" y2="399" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="189.25" y="371" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="386" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. Open history</text>
+<line x1="377.5" y1="464" x2="625.0" y2="464" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="449.05" y="436" width="104.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="501.25" y="451" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. history()</text>
+<line x1="625.0" y1="529" x2="872.5" y2="529" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="708.85" y="501" width="79.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="516" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. list()</text>
+<line x1="872.5" y1="594" x2="1120.0" y2="594" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="907.15" y="566" width="178.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="996.25" y="581" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Read JSONL entries</text>
+<line x1="872.5" y1="659" x2="625.0" y2="659" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="688.35" y="631" width="120.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="646" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. List&lt;Entry&gt;</text>
+<line x1="625.0" y1="724" x2="377.5" y2="724" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="334.25" y="696" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="501.25" y="711" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. History entries displayed (GUI / CLI)</text>
+<line x1="130.0" y1="789" x2="377.5" y2="789" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="99.05000000000001" y="761" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="776" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Select and delete a history record</text>
+<line x1="377.5" y1="854" x2="625.0" y2="854" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="399.85" y="826" width="202.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="501.25" y="841" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. deleteHistory(entry)</text>
+<line x1="625.0" y1="919" x2="872.5" y2="919" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="676.05" y="891" width="145.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="906" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. delete(entry)</text>
+<line x1="872.5" y1="984" x2="1120.0" y2="984" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="874.35" y="956" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="996.25" y="971" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. Rewrite remaining entries</text>
+<line x1="625.0" y1="1069" x2="872.5" y2="1069" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="573.55" y="1021" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="1036" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. recent(5) [when later answerQuestion()</text>
+<rect x="725.25" y="1041" width="47.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="1056" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">runs]</text>
+<line x1="872.5" y1="1147" x2="625.0" y2="1147" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="598.15" y="1099" width="301.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="1114" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. Recent context; not cited source</text>
+<rect x="712.95" y="1119" width="71.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="1134" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">evidence</text>
+<rect x="32" y="1199" width="1186" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1225" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1250" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">InteractionHistory replaces the Stage 1 MemoryManager. It stores selected agent events, generated artifacts and decisions; not every manual</text>
+<text x="48" y="1273" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">UI action. API keys are not included in the event schema.</text>
+</svg>

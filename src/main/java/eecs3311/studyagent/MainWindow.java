@@ -87,16 +87,26 @@ public final class MainWindow extends JFrame {
     private final List<UUID> rowIds = new ArrayList<>();
     private javax.swing.Timer studyDisplayTimer;
     private UUID selectedCourseId;
+    private record CalendarCourseChoice(UUID id, String label) {
+        @Override public String toString() { return label; }
+    }
+    private final JComboBox<CalendarCourseChoice> calendarCourseFilter = new JComboBox<>();
+    private boolean updatingCalendarCourses;
+    private UUID calendarCourseId;
     private boolean aiBusy;
+    private boolean rebuildingWorkspace;
 
     public MainWindow(AgentController controller) {
         super("Semester Study and Deadline Management Agent");
         this.controller = controller;
-        this.coursePage = new CoursePage(controller, () -> perform(this::showCalendar),
+        this.coursePage = new CoursePage(controller, () -> perform(() -> {
+                    calendarCourseId = selectedCourseId;
+                    showCalendar();
+                }),
                 () -> perform(this::showReferences), () -> perform(this::summarizeFile),
                 () -> perform(this::generateQuiz), () -> perform(this::showWeakTopics));
         this.timerPanel = new TimerPanel(minutes -> perform(() -> startStudy(minutes)),
-                () -> perform(controller::pauseStudy), () -> perform(controller::resumeStudy),
+                () -> perform(this::pauseStudyTimer), () -> perform(this::resumeStudyTimer),
                 () -> perform(this::stopStudy), () -> perform(this::showTimerRecords));
         this.timerRecords = new TimerRecordPanel(controller);
         this.chatPanel = new ChatPanel(question -> perform(() -> askSources(question)),
@@ -183,6 +193,14 @@ public final class MainWindow extends JFrame {
         button(monthActions, "Previous month", () -> changeMonth(-1));
         button(monthActions, "Today", () -> { visibleMonth = YearMonth.now(); refreshCalendar(); });
         button(monthActions, "Next month", () -> changeMonth(1));
+        calendarCourseFilter.setToolTipText("Show all courses or one course");
+        calendarCourseFilter.addActionListener(event -> {
+            if (updatingCalendarCourses) return;
+            CalendarCourseChoice choice = (CalendarCourseChoice) calendarCourseFilter.getSelectedItem();
+            calendarCourseId = choice == null ? null : choice.id();
+            refreshCalendar();
+        });
+        monthActions.add(calendarCourseFilter);
         button(monthActions, "Expand / restore", this::toggleViewer);
         calendarTab.add(monthActions, BorderLayout.NORTH);
         calendarTab.add(calendarHost, BorderLayout.CENTER);
@@ -463,11 +481,27 @@ public final class MainWindow extends JFrame {
     }
 
     private void refreshCalendar() {
+        updatingCalendarCourses = true;
+        try {
+            calendarCourseFilter.removeAllItems();
+            calendarCourseFilter.addItem(new CalendarCourseChoice(null, "All courses"));
+            for (Course course : controller.courses())
+                calendarCourseFilter.addItem(new CalendarCourseChoice(course.id(), course.name() + " · "
+                        + controller.semester(course.semesterId()).name()));
+            boolean found = false;
+            for (int index = 0; index < calendarCourseFilter.getItemCount(); index++)
+                if (java.util.Objects.equals(calendarCourseFilter.getItemAt(index).id(), calendarCourseId)) {
+                    calendarCourseFilter.setSelectedIndex(index);
+                    found = true;
+                    break;
+                }
+            if (!found) { calendarCourseId = null; calendarCourseFilter.setSelectedIndex(0); }
+        } finally { updatingCalendarCourses = false; }
         Map<UUID, Course> courses = controller.courses().stream()
                 .collect(java.util.stream.Collectors.toMap(Course::id, c -> c));
         calendarHost.removeAll();
         calendarHost.add(new CalendarPanel(visibleMonth, LocalDate.now(),
-                controller.schedule(AgentController.Period.ALL, null, "", LocalDate.now()), courses,
+                controller.schedule(AgentController.Period.ALL, calendarCourseId, "", LocalDate.now()), courses,
                 this::showDeadlineDetails, date -> perform(() -> showCalendarDay(date))),
                 BorderLayout.CENTER);
         calendarHost.revalidate();
@@ -618,6 +652,14 @@ public final class MainWindow extends JFrame {
         if (value instanceof Semester semester) return semester.name();
         if (value instanceof Course course) return course.name();
         if (value instanceof CommandInvoker.Proposal proposal) return proposal.description();
+        if (value instanceof Deadline deadline)
+            return "[" + controller.course(deadline.courseId()).name() + "] " + deadline.title()
+                    + " · " + (deadline.dueDate() == null ? "TBD" : deadline.dueDate());
+        if (value instanceof StudyArtifacts.EssayPrompt prompt)
+            return prompt.topic() + " · " + prompt.question();
+        if (value instanceof InteractionHistory.Entry entry)
+            return java.time.format.DateTimeFormatter.ofPattern("MMM d HH:mm")
+                    .withZone(java.time.ZoneId.systemDefault()).format(entry.time()) + " · " + entry.event();
         return String.valueOf(value);
     }
 
@@ -907,7 +949,7 @@ public final class MainWindow extends JFrame {
     }
 
     private void showCalendarDay(LocalDate day) {
-        List<Deadline> items = controller.schedule(AgentController.Period.ALL, null, "",
+        List<Deadline> items = controller.schedule(AgentController.Period.ALL, calendarCourseId, "",
                 LocalDate.now()).stream().filter(d -> day.equals(d.dueDate())).toList();
         JPanel panel = new JPanel(new BorderLayout(0, 10));
         panel.add(new JLabel(items.isEmpty() ? "No deadlines on " + day : "Deadlines on " + day),
@@ -930,7 +972,7 @@ public final class MainWindow extends JFrame {
         int action = JOptionPane.showOptionDialog(this, panel, day.toString(), JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
         if (action == 0) {
-            Course course = chooseCourse();
+            Course course = calendarCourseId == null ? chooseCourse() : controller.course(calendarCourseId);
             try {
                 controller.addDeadline(course.id(), ask("Deadline title", ""),
                         ask("Type (e.g. Assignment)", ""), day, ask("Covered topics / scope", ""));
@@ -1013,8 +1055,12 @@ public final class MainWindow extends JFrame {
         startStudy(minutes);
     }
 
+    private void pauseStudyTimer() { controller.pauseStudy(); timerPanel.setPaused(true); }
+    private void resumeStudyTimer() { controller.resumeStudy(); timerPanel.setPaused(false); }
+
     private void startStudy(int minutes) {
         controller.startStudy(minutes);
+        timerPanel.setPaused(false);
         status.setText("Study timer running · " + minutes + " minutes");
         timerPanel.showRemaining(minutes * 60L);
         contentTabs.setSelectedComponent(timerPanel);
@@ -1653,6 +1699,7 @@ public final class MainWindow extends JFrame {
     }
 
     private void selectionChanged(TreeSelectionEvent event) {
+        if (rebuildingWorkspace) return;
         Object value = selectedTreeValue();
         if (value instanceof WorkspaceBranch branch && branch.kind() == WorkspaceBranch.Kind.COURSE) {
             selectedCourseId = branch.id();
@@ -1779,6 +1826,8 @@ public final class MainWindow extends JFrame {
         UUID selectedMaterial = before instanceof WorkspaceLeaf leaf ? leaf.file().id() : null;
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Workspace");
         for (WorkspaceNode node : controller.workspace()) root.add(toSwingNode(node));
+        rebuildingWorkspace = true;
+        try {
         tree.setModel(new DefaultTreeModel(root));
         tree.setRootVisible(false);
         for (int i = 0; i < tree.getRowCount(); i++) tree.expandRow(i);
@@ -1796,6 +1845,7 @@ public final class MainWindow extends JFrame {
                 }
             }
         }
+        } finally { rebuildingWorkspace = false; }
         refreshSchedule();
         refreshCalendar();
         if (selectedCourseId != null) coursePage.showCourse(controller.course(selectedCourseId));

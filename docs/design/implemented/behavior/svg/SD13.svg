@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="1248" viewBox="0 0 1250 1248">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1250" height="1248" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD13 - Review AI file classification before moving files</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">New / UC18 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1218" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1112" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="278.5" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="377.5" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow</text>
+<line x1="377.5" y1="191" x2="377.5" y2="1112" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="526.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="625.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="625.0" y1="191" x2="625.0" y2="1112" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="773.5" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="872.5" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
+<line x1="872.5" y1="191" x2="872.5" y2="1112" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1021.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1120.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
+<line x1="1120.0" y1="191" x2="1120.0" y2="1112" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="263" x2="377.5" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="90.85000000000002" y="215" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Click AI sort files / Classify files</text>
+<rect x="222.05" y="235" width="63.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="250" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">with AI</text>
+<line x1="377.5" y1="321" x2="625.0" y2="321" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="321.95000000000005" y="293" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="501.25" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. suggestFileCategories() [only on demand]</text>
+<line x1="625.0" y1="386" x2="872.5" y2="386" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="610.45" y="358" width="276.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="373" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. materials(); materialPages(id)</text>
+<line x1="625.0" y1="435" x2="695.0" y2="435" stroke="#395b7b" stroke-width="2"/>
+<line x1="695.0" y1="435" x2="695.0" y2="457" stroke="#395b7b" stroke-width="2"/>
+<line x1="695.0" y1="457" x2="625.0" y2="457" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="702.0" y="423" width="293.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="705.0" y="438" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. Build &lt;=12-file batches; &lt;=1,500</text>
+<rect x="702.0" y="443" width="260.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="705.0" y="458" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">normalized text characters/file</text>
+<line x1="625.0" y1="549" x2="1120.0" y2="549" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="644.0" y="501" width="456.99999999999994" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="872.5" y="516" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. complete(classification instructions, JSON samples);</text>
+<rect x="799.8" y="521" width="145.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="872.5" y="536" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">parse suggestions</text>
+<line x1="625.0" y1="591" x2="695.0" y2="591" stroke="#395b7b" stroke-width="2"/>
+<line x1="695.0" y1="591" x2="695.0" y2="613" stroke="#395b7b" stroke-width="2"/>
+<line x1="695.0" y1="613" x2="625.0" y2="613" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="702.0" y="579" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="705.0" y="594" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Require supplied UUID; valid category;</text>
+<rect x="702.0" y="599" width="227.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="705.0" y="614" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">ignore repeated/unknown IDs</text>
+<line x1="625.0" y1="705" x2="377.5" y2="705" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="330.15" y="657" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="501.25" y="672" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. CategorySuggestion entries that differ</text>
+<rect x="416.25" y="677" width="170.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="501.25" y="692" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">from current folders</text>
+<line x1="377.5" y1="783" x2="130.0" y2="783" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="94.95000000000002" y="735" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="750" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Review table: file, old/new folder,</text>
+<rect x="172.85000000000002" y="755" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="770" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">reason; choose rows</text>
+<line x1="130.0" y1="841" x2="377.5" y2="841" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="160.55" y="813" width="186.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="828" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Apply checked moves</text>
+<line x1="377.5" y1="926" x2="625.0" y2="926" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="350.65" y="878" width="301.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="501.25" y="893" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. moveMaterial(id, category) [each</text>
+<rect x="449.05" y="898" width="104.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="501.25" y="913" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">checked row]</text>
+<line x1="625.0" y1="1004" x2="872.5" y2="1004" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="585.85" y="956" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="971" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. moveMaterial(id, category); persist</text>
+<rect x="667.85" y="976" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="748.75" y="991" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">metadata; changed()</text>
+<line x1="377.5" y1="1082" x2="130.0" y2="1082" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="99.05000000000001" y="1034" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="1049" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. Refresh tree and show moved/error</text>
+<rect x="226.15" y="1054" width="55.199999999999996" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="253.75" y="1069" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">counts</text>
+<rect x="32" y="1134" width="1186" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1160" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1185" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Classification is a review table rather than CommandInvoker proposals. No files move until Apply is clicked. Original bytes and extracted</text>
+<text x="48" y="1208" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">text remain; only category metadata changes. Unknown-purpose files remain reviewable.</text>
+</svg>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1250" viewBox="0 0 1600 1250">
+<rect width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#334155" stroke-width="1.5"/></marker><marker id="triangle" markerWidth="14" markerHeight="12" refX="13" refY="6" orient="auto"><path d="M0,0 L13,6 L0,12 Z" fill="white" stroke="#334155"/></marker></defs>
+<text x="45" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#0f172a">Study services and observer refresh</text>
+<text x="45" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" fill="#475569">The actual observer subject is DataStore. The GUI timer polls StudyTimer through a Swing timer.</text>
+<path d="M515,235 L600,235" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="562.5" y="229.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">calls / registers</text>
+<path d="M1060,235 L1155,235" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="1112.5" y="229.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">delegates listener</text>
+<path d="M1355,321 L1355,535" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="1360.0" y="422.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">notifies run()</text>
+<path d="M515,325 L550,325 L550,480 L1355,480 L1355,535" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="610" y="509" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">callback registration</text>
+<path d="M700,324 L700,440 L280,440 L280,610" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="705.0" y="376.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">owns</text>
+<path d="M830,324 L830,610" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="835.0" y="461.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">owns</text>
+<path d="M1060,324 L1105,325 L1105,970 L1155,970" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="1110" y="819" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">creates / calls</text>
+<path d="M1155,1030 L1095,1030 L1095,755 L1060,755" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="1110" y="849" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">reads attempts + self-assessments</text>
+<path d="M600,324 L565,325 L565,970 L280,970 L280,1015" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="310" y="959" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">creates / calls</text>
+<rect x="45" y="160" width="470" height="207" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="161" width="468" height="43" fill="#eaf0f8"/>
+<path d="M45,204 H515" stroke="#64748b"/>
+<text x="57" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">MainWindow  &lt;&lt;JFrame&gt;&gt;</text>
+<text x="57" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- controller: AgentController</text>
+<text x="57" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- studyDisplayTimer: javax.swing.Timer</text>
+<path d="M45,268 H515" stroke="#cbd5e1"/>
+<text x="57" y="299" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- refresh()</text>
+<text x="57" y="322" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- startStudy(int) / stopStudy()</text>
+<text x="57" y="345" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- showDueNotifications()</text>
+<rect x="600" y="160" width="460" height="164" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="601" y="161" width="458" height="43" fill="#dbeafe"/>
+<path d="M600,204 H1060" stroke="#64748b"/>
+<text x="612" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">AgentController</text>
+<text x="612" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ addChangeListener(Runnable)</text>
+<text x="612" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ startStudy(int) / stopStudy()</text>
+<text x="612" y="279" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ topicStatistics(...) / weakTopicAdvice(...)</text>
+<text x="612" y="302" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ weeklyBriefing(...)</text>
+<rect x="1155" y="160" width="400" height="161" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1156" y="161" width="398" height="43" fill="#edf4ed"/>
+<path d="M1155,204 H1555" stroke="#64748b"/>
+<text x="1167" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">DataStore  &lt;&lt;Observer subject&gt;&gt;</text>
+<text x="1167" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- listeners: List&lt;Runnable&gt;</text>
+<path d="M1155,245 H1555" stroke="#cbd5e1"/>
+<text x="1167" y="276" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ addChangeListener(Runnable)</text>
+<text x="1167" y="299" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- changed(): notify listeners</text>
+<rect x="1155" y="535" width="400" height="165" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1156" y="536" width="398" height="43" fill="#f3f4f6"/>
+<path d="M1155,579 H1555" stroke="#64748b"/>
+<text x="1167" y="563" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Runnable  &lt;&lt;JDK callback&gt;&gt;</text>
+<text x="1167" y="608" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ run()</text>
+<text x="1167" y="631" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Registered lambda schedules MainWindow.refresh()</text>
+<text x="1167" y="654" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">using SwingUtilities.invokeLater().</text>
+<rect x="45" y="610" width="470" height="207" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="611" width="468" height="43" fill="#f3f4f6"/>
+<path d="M45,654 H515" stroke="#64748b"/>
+<text x="57" y="638" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">StudyTimer</text>
+<text x="57" y="683" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">targetSeconds, accumulatedNanos: long</text>
+<text x="57" y="706" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">active, running: boolean</text>
+<path d="M45,718 H515" stroke="#cbd5e1"/>
+<text x="57" y="749" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ start(...) / pause() / resume()</text>
+<text x="57" y="772" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ remainingSeconds(): long</text>
+<text x="57" y="795" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ stop(): StudySession</text>
+<rect x="600" y="610" width="460" height="164" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="601" y="611" width="458" height="43" fill="#edf4ed"/>
+<path d="M600,654 H1060" stroke="#64748b"/>
+<text x="612" y="638" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">StudyArtifacts</text>
+<text x="612" y="683" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ saveSummary(...) / summaries(...)</text>
+<text x="612" y="706" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ saveQuiz(...) / grade(...) / attempts(...)</text>
+<text x="612" y="729" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ saveEssayGrade(...) / saveEssayPrompt(...)</text>
+<text x="612" y="752" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ saveAssessment(...) / assessments(...)</text>
+<rect x="1155" y="900" width="400" height="140" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1156" y="901" width="398" height="43" fill="#f3f4f6"/>
+<path d="M1155,944 H1555" stroke="#64748b"/>
+<text x="1167" y="928" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">WeakTopicAnalyzer</text>
+<text x="1167" y="973" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ statistics(artifacts, courseId)</text>
+<text x="1167" y="996" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ analyze(artifacts, courseId)</text>
+<rect x="45" y="1015" width="470" height="125" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="1016" width="468" height="43" fill="#f3f4f6"/>
+<path d="M45,1059 H515" stroke="#64748b"/>
+<text x="57" y="1043" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">ReminderService</text>
+<text x="57" y="1088" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ upcoming(deadlines, today, daysAhead)</text>
+<text x="57" y="1111" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ dueNotifications(deadlines, now)</text>
+<text x="600" y="1126" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">Nested artifact records: Summary, Question, Quiz, Attempt,</text>
+<text x="600" y="1151" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">EssayPrompt, EssayGrade, SelfAssessment.</text>
+<text x="600" y="1176" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">MCQ grading is deterministic in StudyArtifacts.grade().</text>
+<text x="600" y="1201" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">AI essay scores become saved grades only after approval.</text>
+<text x="45" y="1233" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#64748b">EECS3311 / Implementation diagrams / 2026-11-13 / Selected members; consult source for full signatures.</text>
+</svg>

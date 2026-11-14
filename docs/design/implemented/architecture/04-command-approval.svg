@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1110" viewBox="0 0 1600 1110">
+<rect width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#334155" stroke-width="1.5"/></marker><marker id="triangle" markerWidth="14" markerHeight="12" refX="13" refY="6" orient="auto"><path d="M0,0 L13,6 L0,12 Z" fill="white" stroke="#334155"/></marker></defs>
+<text x="45" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#0f172a">Commands and explicit approval</text>
+<text x="45" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" fill="#475569">Pending proposals are transient. Direct manual edits use DataStore; AI data-changing proposals use commands.</text>
+<path d="M435,215 L555,215" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="500.0" y="209.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">owns</text>
+<path d="M995,240 L1115,240" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="1060.0" y="234.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">stores 0..* / executes</text>
+<path d="M485,520 L760,520 L760,367" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="627.5" y="514.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">propose(...)</text>
+<path d="M220,760 L220,670 L1335,670 L1335,255" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<path d="M605,760 L605,670 L1335,670 L1335,255" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<path d="M990,760 L990,670 L1335,670 L1335,255" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<path d="M1375,760 L1375,670 L1335,670 L1335,255" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<text x="1380.0" y="709.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">implements</text>
+<rect x="45" y="160" width="390" height="164" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="161" width="388" height="43" fill="#dbeafe"/>
+<path d="M45,204 H435" stroke="#64748b"/>
+<text x="57" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">AgentController</text>
+<text x="57" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ approveProposal(id)</text>
+<text x="57" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ rejectProposal(id)</text>
+<text x="57" y="279" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ reviseSyllabusCandidate(...)</text>
+<text x="57" y="302" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ planScheduleChange(...)</text>
+<rect x="555" y="160" width="440" height="207" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="556" y="161" width="438" height="43" fill="#f3f4f6"/>
+<path d="M555,204 H995" stroke="#64748b"/>
+<text x="567" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">CommandInvoker</text>
+<text x="567" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- commands: Map&lt;UUID, AgentCommand&gt;</text>
+<text x="567" y="256" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- descriptions: Map&lt;UUID, Proposal&gt;</text>
+<path d="M555,268 H995" stroke="#cbd5e1"/>
+<text x="567" y="299" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ propose(description, command): Proposal</text>
+<text x="567" y="322" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ replace(...) / pending() / clear()</text>
+<text x="567" y="345" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ approve(id) / reject(id)</text>
+<rect x="1115" y="160" width="440" height="95" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1116" y="161" width="438" height="43" fill="#f3f4f6"/>
+<path d="M1115,204 H1555" stroke="#64748b"/>
+<text x="1127" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">AgentCommand  &lt;&lt;interface&gt;&gt;</text>
+<text x="1127" y="233" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ execute(): void  throws IOException</text>
+<rect x="45" y="455" width="440" height="165" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="456" width="438" height="43" fill="#f3f4f6"/>
+<path d="M45,499 H485" stroke="#64748b"/>
+<text x="57" y="483" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">SchedulePlanner</text>
+<text x="57" y="528" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ plan(store, llm, prompts, parser, invoker,</text>
+<text x="57" y="551" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">       courseId, request): Proposal</text>
+<text x="57" y="574" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Validates target course and requested action.</text>
+<rect x="45" y="760" width="350" height="161" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="761" width="348" height="43" fill="#f3f4f6"/>
+<path d="M45,804 H395" stroke="#64748b"/>
+<text x="57" y="788" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">AddDeadlineCommand  &lt;&lt;record&gt;&gt;</text>
+<text x="57" y="833" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">store: DataStore; courseId: UUID</text>
+<text x="57" y="856" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">draft: DeadlineDraft</text>
+<path d="M45,868 H395" stroke="#cbd5e1"/>
+<text x="57" y="899" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ execute() -&gt; createDeadline(...)</text>
+<rect x="430" y="760" width="350" height="161" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="431" y="761" width="348" height="43" fill="#f3f4f6"/>
+<path d="M430,804 H780" stroke="#64748b"/>
+<text x="442" y="788" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">EditDeadlineCommand  &lt;&lt;record&gt;&gt;</text>
+<text x="442" y="833" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">store: DataStore; id: UUID</text>
+<text x="442" y="856" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">draft: DeadlineDraft</text>
+<path d="M430,868 H780" stroke="#cbd5e1"/>
+<text x="442" y="899" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ execute() -&gt; editDeadline(...)</text>
+<rect x="815" y="760" width="350" height="138" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="816" y="761" width="348" height="43" fill="#f3f4f6"/>
+<path d="M815,804 H1165" stroke="#64748b"/>
+<text x="827" y="788" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">DeleteDeadlineCommand  &lt;&lt;record&gt;&gt;</text>
+<text x="827" y="833" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">store: DataStore; id: UUID</text>
+<path d="M815,845 H1165" stroke="#cbd5e1"/>
+<text x="827" y="876" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ execute() -&gt; deleteDeadline(id)</text>
+<rect x="1200" y="760" width="350" height="161" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="1201" y="761" width="348" height="43" fill="#f3f4f6"/>
+<path d="M1200,804 H1550" stroke="#64748b"/>
+<text x="1212" y="788" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">AssignWeekCommand  &lt;&lt;record&gt;&gt;</text>
+<text x="1212" y="833" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">store: DataStore; materialId: UUID</text>
+<text x="1212" y="856" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">week: int</text>
+<path d="M1200,868 H1550" stroke="#cbd5e1"/>
+<text x="1212" y="899" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ execute() -&gt; assignLectureWeek(...)</text>
+<text x="45" y="1046" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">Proposal is CommandInvoker.Proposal(id, description), a nested record; command objects live in a separate map.</text>
+<text x="45" y="1071" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">Essay-score approval uses an AgentCommand lambda in AgentController.proposeEssayGrade(); no UpdateGradeCommand class exists.</text>
+<text x="45" y="1093" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#64748b">EECS3311 / Implementation diagrams / 2026-11-13 / Selected members; consult source for full signatures.</text>
+</svg>

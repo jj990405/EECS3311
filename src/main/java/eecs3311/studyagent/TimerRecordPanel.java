@@ -1,7 +1,7 @@
 package eecs3311.studyagent;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -23,12 +23,14 @@ public final class TimerRecordPanel extends JPanel {
         this.controller = controller;
         monday = startOfWeek(LocalDate.now());
         setBorder(javax.swing.BorderFactory.createEmptyBorder(14, 14, 14, 14));
-        JPanel navigation = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel navigation = new JPanel(new GridLayout(1, 3, 8, 0));
         button(navigation, "Previous week", () -> changeWeek(-1));
         button(navigation, "This week", () -> { monday = startOfWeek(LocalDate.now()); refresh(); });
         button(navigation, "Next week", () -> changeWeek(1));
-        navigation.add(weekLabel);
-        add(navigation, BorderLayout.NORTH);
+        JPanel header = new JPanel(new BorderLayout(0, 8));
+        header.add(weekLabel, BorderLayout.NORTH);
+        header.add(navigation, BorderLayout.SOUTH);
+        add(header, BorderLayout.NORTH);
         records.setEditable(false);
         add(new JScrollPane(records), BorderLayout.CENTER);
         refresh();
@@ -50,14 +52,18 @@ public final class TimerRecordPanel extends JPanel {
         weekLabel.setText("Week of " + monday);
         StringBuilder text = new StringBuilder();
         long total = 0;
+        java.util.Map<LocalDate, Long> daily = new java.util.TreeMap<>();
         for (StudySession session : controller.studySessions()) {
             LocalDate day = session.startedAt().toLocalDate();
             if (day.isBefore(monday) || !day.isBefore(monday.plusDays(7))) continue;
-            text.append(day).append(" · ").append(session.seconds() / 60).append(" min\n");
+            daily.merge(day, session.seconds(), Long::sum);
             total += session.seconds();
         }
+        daily.forEach((day, seconds) -> text.append(day).append(" · ")
+                .append(seconds / 60).append(" min ").append(seconds % 60).append(" sec\n"));
         if (text.length() == 0) text.append("No records for this week.\n");
-        text.append("\nWeekly total: ").append(total / 60).append(" min");
+        text.append("\nWeekly total: ").append(total / 60).append(" min ")
+                .append(total % 60).append(" sec");
         records.setText(text.toString());
     }
 }

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1404" viewBox="0 0 1920 1404">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1920" height="1404" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD02 - Extract, validate and approve deadlines</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F02 / UC02, UC17 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1888" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1268" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="268.1428571428571" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="367.1428571428571" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow / CLI</text>
+<line x1="367.1428571428571" y1="191" x2="367.1428571428571" y2="1268" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="505.2857142857142" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="604.2857142857142" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="604.2857142857142" y1="191" x2="604.2857142857142" y2="1268" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="742.4285714285714" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="841.4285714285714" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
+<line x1="841.4285714285714" y1="191" x2="841.4285714285714" y2="1268" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="979.5714285714284" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1078.5714285714284" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
+<line x1="1078.5714285714284" y1="191" x2="1078.5714285714284" y2="1268" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1216.7142857142858" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1315.7142857142858" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DeadlineValidator</text>
+<line x1="1315.7142857142858" y1="191" x2="1315.7142857142858" y2="1268" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1453.857142857143" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1552.857142857143" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">CommandInvoker</text>
+<line x1="1552.857142857143" y1="191" x2="1552.857142857143" y2="1268" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1691.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1790.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AddDeadlineCommand</text>
+<line x1="1790.0" y1="191" x2="1790.0" y2="1268" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="243" x2="367.1428571428571" y2="243" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="122.57142857142857" y="215" width="251.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.57142857142856" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Request syllabus extraction</text>
+<line x1="367.1428571428571" y1="308" x2="604.2857142857142" y2="308" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="322.8142857142857" y="280" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="485.71428571428567" y="295" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. suggestSyllabusDeadlines(materialId)</text>
+<line x1="604.2857142857142" y1="393" x2="841.4285714285714" y2="393" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="572.2571428571429" y="345" width="301.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="722.8571428571429" y="360" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. material(); course(); semester();</text>
+<rect x="658.3571428571429" y="365" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="722.8571428571429" y="380" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">materialPages()</text>
+<line x1="604.2857142857142" y1="471" x2="1078.5714285714284" y2="471" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="649.8285714285713" y="423" width="383.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="841.4285714285713" y="438" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. DEADLINE_EXTRACTION prompt -&gt; complete() -&gt;</text>
+<rect x="760.5285714285714" y="443" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="841.4285714285713" y="458" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">deadlines(response)</text>
+<line x1="1078.5714285714284" y1="529" x2="604.2857142857142" y2="529" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="633.4285714285713" y="501" width="415.99999999999994" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="841.4285714285713" y="516" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. List&lt;DeadlineDraft&gt; [retry malformed JSON once]</text>
+<line x1="604.2857142857142" y1="594" x2="1315.7142857142858" y2="594" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="694.6" y="566" width="530.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="960.0" y="581" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. resolveRelativeDate(draft, semester); warnings(draft, source)</text>
+<line x1="604.2857142857142" y1="659" x2="1552.857142857143" y2="659" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="813.1714285714285" y="631" width="530.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1078.5714285714284" y="646" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. propose(description, new AddDeadlineCommand(...)) [each item]</text>
+<line x1="604.2857142857142" y1="744" x2="367.1428571428571" y2="744" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="322.8142857142857" y="696" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="485.71428571428567" y="711" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Candidates with date, scope, weight,</text>
+<rect x="396.61428571428564" y="716" width="178.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="485.71428571428567" y="731" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">evidence and warnings</text>
+<line x1="130.0" y1="822" x2="367.1428571428571" y2="822" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="97.97142857142856" y="774" width="301.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.57142857142856" y="789" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Edit / merge / reject / approve a</text>
+<rect x="208.67142857142855" y="794" width="79.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.57142857142856" y="809" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">candidate</text>
+<line x1="367.1428571428571" y1="900" x2="604.2857142857142" y2="900" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="363.8142857142857" y="852" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="485.71428571428567" y="867" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. reviseSyllabusCandidate /</text>
+<rect x="322.8142857142857" y="872" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="485.71428571428567" y="887" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">mergeSyllabusCandidate / rejectProposal</text>
+<line x1="367.1428571428571" y1="958" x2="604.2857142857142" y2="958" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="322.8142857142857" y="930" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="485.71428571428567" y="945" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. approveProposal(id) [approved item]</text>
+<line x1="604.2857142857142" y1="1023" x2="1552.857142857143" y2="1023" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1014.0714285714284" y="995" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1078.5714285714284" y="1010" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. approve(id)</text>
+<line x1="1552.857142857143" y1="1088" x2="1790.0" y2="1088" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1615.1285714285716" y="1060" width="112.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1671.4285714285716" y="1075" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. execute()</text>
+<line x1="1790.0" y1="1153" x2="841.4285714285714" y2="1153" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1017.5142857142857" y="1125" width="596.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1315.7142857142858" y="1140" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. createDeadline(courseId, title, type, date, scope, weight, evidence)</text>
+<line x1="841.4285714285714" y1="1238" x2="367.1428571428571" y2="1238" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="388.08571428571423" y="1190" width="432.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="604.2857142857142" y="1205" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. Persist -&gt; changed() -&gt; refresh; history records</text>
+<rect x="568.4857142857143" y="1210" width="71.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="604.2857142857142" y="1225" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">decision</text>
+<rect x="32" y="1290" width="1856" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1316" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1341" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Dates outside the semester cannot be persisted. Missing dates remain TBD. Source-date/evidence warnings require user confirmation. Duplicate candidates can be merged by individual review; bulk import skips matching</text>
+<text x="48" y="1364" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">entries (SD14).</text>
+</svg>

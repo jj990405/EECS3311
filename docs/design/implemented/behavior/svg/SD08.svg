@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1209" viewBox="0 0 1680 1209">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
+<rect x="0" y="0" width="1680" height="1209" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD08 - Prepare a weekly briefing</text>
+<text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F10 / UC11 | Actual Java implementation | 13 November 2026</text>
+<line x1="32" y1="100" x2="1648" y2="100" stroke="#b8c7d7" stroke-width="2"/>
+<rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student / app launch</text>
+<line x1="130.0" y1="191" x2="130.0" y2="1073" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="267.66666666666663" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="366.66666666666663" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow / CLI</text>
+<line x1="366.66666666666663" y1="191" x2="366.66666666666663" y2="1073" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="504.33333333333326" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="603.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
+<line x1="603.3333333333333" y1="191" x2="603.3333333333333" y2="1073" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="741.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="840.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore /</text>
+<text x="840.0" y="175" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">StudyArtifacts</text>
+<line x1="840.0" y1="191" x2="840.0" y2="1073" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="977.6666666666665" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1076.6666666666665" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">WeakTopicAnalyzer</text>
+<line x1="1076.6666666666665" y1="191" x2="1076.6666666666665" y2="1073" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1214.3333333333333" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1313.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
+<line x1="1313.3333333333333" y1="191" x2="1313.3333333333333" y2="1073" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<rect x="1451.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
+<text x="1550.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">InteractionHistory</text>
+<line x1="1550.0" y1="191" x2="1550.0" y2="1073" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="263" x2="366.66666666666663" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="73.13333333333333" y="215" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Request weekly brief / first GUI launch</text>
+<rect x="192.0333333333333" y="235" width="112.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="250" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">of a new week</text>
+<line x1="366.66666666666663" y1="341" x2="603.3333333333333" y2="341" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="322.09999999999997" y="293" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. weeklyBriefDue(today) [automatic GUI</text>
+<rect x="461.49999999999994" y="313" width="47.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="328" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">path]</text>
+<line x1="366.66666666666663" y1="419" x2="603.3333333333333" y2="419" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="317.99999999999994" y="371" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="386" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. weeklyBriefing(courseId, today) [each</text>
+<rect x="453.29999999999995" y="391" width="63.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="406" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">course]</text>
+<line x1="603.3333333333333" y1="461" x2="673.3333333333333" y2="461" stroke="#395b7b" stroke-width="2"/>
+<line x1="673.3333333333333" y1="461" x2="673.3333333333333" y2="483" stroke="#395b7b" stroke-width="2"/>
+<line x1="673.3333333333333" y1="483" x2="603.3333333333333" y2="483" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="680.3333333333333" y="449" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="683.3333333333333" y="464" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. schedule(THIS_WEEK, courseId, ...);</text>
+<rect x="680.3333333333333" y="469" width="260.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="683.3333333333333" y="484" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">weeklyStudySeconds(null, today)</text>
+<line x1="603.3333333333333" y1="575" x2="840.0" y2="575" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="546.4666666666667" y="527" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="542" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. Load deadlines, course and stored study</text>
+<rect x="685.8666666666667" y="547" width="71.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="562" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">sessions</text>
+<line x1="603.3333333333333" y1="633" x2="1076.6666666666665" y2="633" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="709.8999999999999" y="605" width="260.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="839.9999999999999" y="620" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. analyze(artifacts, courseId)</text>
+<line x1="1076.6666666666665" y1="698" x2="840.0" y2="698" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="795.4333333333333" y="670" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="685" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. quizzes(); attempts(); assessments()</text>
+<line x1="603.3333333333333" y1="763" x2="1313.3333333333333" y2="763" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="692.9333333333333" y="735" width="530.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="750" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. WEEKLY_BRIEF prompt with dates, study seconds and weak topics</text>
+<line x1="1313.3333333333333" y1="828" x2="603.3333333333333" y2="828" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="697.0333333333333" y="800" width="522.5999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="815" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Concise briefing [or deterministic facts if API unavailable]</text>
+<line x1="603.3333333333333" y1="893" x2="1550.0" y2="893" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="905.5666666666665" y="865" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1076.6666666666665" y="880" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. add(&quot;weekly briefing&quot;, course.name())</text>
+<line x1="366.66666666666663" y1="978" x2="603.3333333333333" y2="978" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="309.79999999999995" y="930" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="945" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. markWeeklyBriefShown(today) [automatic</text>
+<rect x="445.09999999999997" y="950" width="79.8" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="965" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">GUI path]</text>
+<line x1="366.66666666666663" y1="1036" x2="130.0" y2="1036" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="73.13333333333333" y="1008" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="1023" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. Display this week&#x27;s course briefing(s)</text>
+<rect x="32" y="1095" width="1616" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1121" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1146" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Automatic week marker is application-wide. Briefing labels the study total as all study time because the default timer is not course-linked. API unavailability falls back to collected facts.</text>
+<text x="48" y="1169" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">CLI briefing is requested explicitly.</text>
+</svg>

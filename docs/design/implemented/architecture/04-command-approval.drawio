@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="04-command-approval" name="Commands and explicit approval">
+    <mxGraphModel dx="1600" dy="1110" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1110">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Commands and explicit approval" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="Pending proposals are transient. Direct manual edits use DataStore; AI data-changing proposals use commands." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
+        </mxCell>
+        <mxCell id="controller" value="AgentController" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="160" width="390" height="164" />
+        </mxCell>
+        <mxCell id="controller-body" value="+ approveProposal(id)&lt;br&gt;+ rejectProposal(id)&lt;br&gt;+ reviseSyllabusCandidate(...)&lt;br&gt;+ planScheduleChange(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="controller">
+          <mxGeometry as="geometry" x="0" y="44" width="390" height="120" />
+        </mxCell>
+        <mxCell id="invoker" value="CommandInvoker" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="555" y="160" width="440" height="207" />
+        </mxCell>
+        <mxCell id="invoker-body" value="- commands: Map&amp;lt;UUID, AgentCommand&amp;gt;&lt;br&gt;- descriptions: Map&amp;lt;UUID, Proposal&amp;gt;&lt;hr&gt;+ propose(description, command): Proposal&lt;br&gt;+ replace(...) / pending() / clear()&lt;br&gt;+ approve(id) / reject(id)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="invoker">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="163" />
+        </mxCell>
+        <mxCell id="command" value="AgentCommand  &amp;lt;&amp;lt;interface&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1115" y="160" width="440" height="95" />
+        </mxCell>
+        <mxCell id="command-body" value="+ execute(): void  throws IOException" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="command">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="51" />
+        </mxCell>
+        <mxCell id="planner" value="SchedulePlanner" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="455" width="440" height="165" />
+        </mxCell>
+        <mxCell id="planner-body" value="+ plan(store, llm, prompts, parser, invoker,&lt;br&gt;       courseId, request): Proposal&lt;br&gt;Validates target course and requested action." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="planner">
+          <mxGeometry as="geometry" x="0" y="44" width="440" height="121" />
+        </mxCell>
+        <mxCell id="add" value="AddDeadlineCommand  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="760" width="350" height="161" />
+        </mxCell>
+        <mxCell id="add-body" value="store: DataStore; courseId: UUID&lt;br&gt;draft: DeadlineDraft&lt;hr&gt;+ execute() -&amp;gt; createDeadline(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="add">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="117" />
+        </mxCell>
+        <mxCell id="edit" value="EditDeadlineCommand  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="430" y="760" width="350" height="161" />
+        </mxCell>
+        <mxCell id="edit-body" value="store: DataStore; id: UUID&lt;br&gt;draft: DeadlineDraft&lt;hr&gt;+ execute() -&amp;gt; editDeadline(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="edit">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="117" />
+        </mxCell>
+        <mxCell id="delete" value="DeleteDeadlineCommand  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="815" y="760" width="350" height="138" />
+        </mxCell>
+        <mxCell id="delete-body" value="store: DataStore; id: UUID&lt;hr&gt;+ execute() -&amp;gt; deleteDeadline(id)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="delete">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="94" />
+        </mxCell>
+        <mxCell id="week" value="AssignWeekCommand  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1200" y="760" width="350" height="161" />
+        </mxCell>
+        <mxCell id="week-body" value="store: DataStore; materialId: UUID&lt;br&gt;week: int&lt;hr&gt;+ execute() -&amp;gt; assignLectureWeek(...)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="week">
+          <mxGeometry as="geometry" x="0" y="44" width="350" height="117" />
+        </mxCell>
+        <mxCell id="edge0" value="owns" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.3353658536585366;entryX=0.0;entryY=0.26570048309178745;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="invoker">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="stores 0..* / executes" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.3864734299516908;entryX=0.0;entryY=0.8421052631578947;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="invoker" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="propose(...)" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=1.0;exitY=0.3939393939393939;entryX=0.4659090909090909;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="planner" target="invoker">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="760" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="add" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="220" y="670" />
+              <mxPoint x="1335" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="edit" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="605" y="670" />
+              <mxPoint x="1335" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="delete" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="990" y="670" />
+              <mxPoint x="1335" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="implements" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=block;endFill=0;exitX=0.5;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="week" target="command">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1375" y="670" />
+              <mxPoint x="1335" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Proposal is CommandInvoker.Proposal(id, description), a nested record; command objects live in a separate map." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1030" width="1515" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="Essay-score approval uses an AgentCommand lambda in AgentController.proposeEssayGrade(); no UpdateGradeCommand class exists." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1055" width="1515" height="25" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -389,13 +389,17 @@ public final class CommandLineInterface {
         LocalDate day = date("A date in the week", false);
         LocalDate monday = day.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         long total = 0;
+        java.util.Map<LocalDate, Long> daily = new java.util.TreeMap<>();
         for (StudySession session : controller.studySessions()) {
             LocalDate sessionDay = session.startedAt().toLocalDate();
             if (sessionDay.isBefore(monday) || !sessionDay.isBefore(monday.plusDays(7))) continue;
-            System.out.println(sessionDay + " " + session.seconds() / 60 + " min");
+            daily.merge(sessionDay, session.seconds(), Long::sum);
             total += session.seconds();
         }
-        System.out.println("Week of " + monday + ": " + total / 60 + " min total.");
+        daily.forEach((date, seconds) -> System.out.println(date + " " + seconds / 60
+                + " min " + seconds % 60 + " sec"));
+        if (daily.isEmpty()) System.out.println("No records for this week.");
+        System.out.println("Week of " + monday + ": " + total / 60 + " min " + total % 60 + " sec total.");
     }
 
     private void references() throws IOException {

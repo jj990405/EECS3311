@@ -33,7 +33,7 @@ final class UploadReviewDialog extends JDialog {
         heading.setBorder(AppTheme.padding(20, 24, 18, 24));
         JLabel title = new JLabel("Review " + files.length + " files"); title.setFont(AppTheme.TITLE);
         heading.add(title, BorderLayout.NORTH);
-        heading.add(new JLabel("Check the folders before uploading. Use AI sort for unclear documents."), BorderLayout.SOUTH);
+        heading.add(new JLabel("Upload reads and indexes all pages. Image slides use AI; originals stay unchanged."), BorderLayout.SOUTH);
         add(heading, BorderLayout.NORTH);
         for (File file : files) model.addRow(new Object[]{file.getName(), Category.OTHER, "Reading…"});
         table.setRowHeight(36); table.setAutoCreateRowSorter(true); table.setFillsViewportHeight(true);

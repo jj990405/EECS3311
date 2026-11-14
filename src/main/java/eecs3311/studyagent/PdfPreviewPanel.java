@@ -8,7 +8,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,6 +36,7 @@ final class PdfPreviewPanel extends JPanel {
     private boolean fitWidth = true;
     private int renderedViewportWidth;
     private int request;
+    private SwingWorker<BufferedImage, Void> renderWorker;
     private final Runnable studyNotes;
     private final Runnable wholeFileQuiz;
 
@@ -148,27 +148,41 @@ final class PdfPreviewPanel extends JPanel {
         showPage(page);
     }
 
-    private void showPage(int requestedPage) {
+    void showPage(int requestedPage) {
         if (requestedPage < 1 || requestedPage > pages) return;
+        boolean pageChanged = page != requestedPage;
         page = requestedPage;
         int currentRequest = ++request;
+        if (renderWorker != null) renderWorker.cancel(true);
         int viewportWidth = scroll.getViewport().getWidth();
         renderedViewportWidth = viewportWidth;
         double scale = fitWidth && viewportWidth > 100
                 ? Math.max(0.2, Math.min(2.5, (viewportWidth - 32.0)
                     / (pageWidths[page - 1] * 96.0 / 72.0))) : zoom;
         if (fitWidth) zoom = scale;
+        var graphics = getGraphicsConfiguration();
+        double deviceScale = graphics == null ? 1.0 : graphics.getDefaultTransform().getScaleX();
+        double rasterScale = Math.min(3.0, Math.max(2.0, deviceScale * 1.5));
         pageLabel.setText("Page " + page + " of " + pages);
         zoomLabel.setText((fitWidth ? "Fit · " : "") + Math.round(scale * 100) + "%");
         previous.setEnabled(page > 1);
         next.setEnabled(page < pages);
         imageLabel.setIcon(null);
         imageLabel.setText("Rendering page " + page + "…");
-        new SwingWorker<BufferedImage, Void>() {
+        renderWorker = new SwingWorker<BufferedImage, Void>() {
             @Override protected BufferedImage doInBackground() throws Exception {
                 try (var pdf = Loader.loadPDF(path.toFile())) {
-                    return new PDFRenderer(pdf).renderImageWithDPI(requestedPage - 1,
-                            (float) (96 * scale), ImageType.RGB);
+                    PDFRenderer renderer = new PDFRenderer(pdf);
+                    var hints = new java.awt.RenderingHints(java.awt.RenderingHints.KEY_RENDERING,
+                            java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+                    hints.put(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                    hints.put(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                    hints.put(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                    hints.put(java.awt.RenderingHints.KEY_STROKE_CONTROL, java.awt.RenderingHints.VALUE_STROKE_PURE);
+                    renderer.setRenderingHints(hints);
+                    renderer.setSubsamplingAllowed(false);
+                    return renderer.renderImageWithDPI(requestedPage - 1,
+                            (float) (96 * scale * rasterScale), ImageType.RGB);
                 }
             }
             @Override protected void done() {
@@ -176,9 +190,13 @@ final class PdfPreviewPanel extends JPanel {
                 try {
                     BufferedImage image = get();
                     imageLabel.setText("");
-                    imageLabel.setIcon(new ImageIcon(image));
-                    imageLabel.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+                    PdfPageIcon icon = new PdfPageIcon(image, rasterScale);
+                    imageLabel.setIcon(icon);
+                    imageLabel.setPreferredSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
                     canvas.revalidate();
+                    if (pageChanged) scroll.getViewport().setViewPosition(new java.awt.Point(0, 0));
+                } catch (java.util.concurrent.CancellationException ex) {
+                    // A newer page/zoom request owns the preview now.
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     imageLabel.setText("Rendering interrupted.");
@@ -186,6 +204,28 @@ final class PdfPreviewPanel extends JPanel {
                     imageLabel.setText("Unable to render PDF: " + ex.getCause().getMessage());
                 }
             }
-        }.execute();
+        };
+        renderWorker.execute();
+    }
+
+    /** Retains high-resolution pixels while Swing lays out the page in logical screen units. */
+    static final class PdfPageIcon implements javax.swing.Icon {
+        private final BufferedImage image;
+        private final int width, height;
+        PdfPageIcon(BufferedImage image, double rasterScale) {
+            this.image = image;
+            width = Math.max(1, (int)Math.round(image.getWidth() / rasterScale));
+            height = Math.max(1, (int)Math.round(image.getHeight() / rasterScale));
+        }
+        @Override public int getIconWidth() { return width; }
+        @Override public int getIconHeight() { return height; }
+        @Override public void paintIcon(java.awt.Component c, java.awt.Graphics g, int x, int y) {
+            java.awt.Graphics2D copy = (java.awt.Graphics2D)g.create();
+            try {
+                copy.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION,
+                        java.awt.RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                copy.drawImage(image, x, y, width, height, null);
+            } finally { copy.dispose(); }
+        }
     }
 }

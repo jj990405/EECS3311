@@ -36,10 +36,10 @@
           <mxGeometry as="geometry" x="0" y="44" width="470" height="126" />
         </mxCell>
         <mxCell id="persist" value="Local state and history" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
-          <mxGeometry as="geometry" x="565" y="675" width="470" height="170" />
+          <mxGeometry as="geometry" x="565" y="675" width="470" height="185" />
         </mxCell>
-        <mxCell id="persist-body" value="DataStore: entities, original files, extracted text&lt;br&gt;StudyArtifacts: notes, quizzes, scores, self-assessments&lt;br&gt;InteractionHistory: records and prompt context" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="persist">
-          <mxGeometry as="geometry" x="0" y="44" width="470" height="126" />
+        <mxCell id="persist-body" value="DataStore: entities, original files, extracted text&lt;br&gt;StudyArtifacts: notes, quizzes, scores, self-assessments&lt;br&gt;StudySources + SourceIndex: complete pages and index&lt;br&gt;InteractionHistory: records and prompt context" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="persist">
+          <mxGeometry as="geometry" x="0" y="44" width="470" height="141" />
         </mxCell>
         <mxCell id="services" value="Deterministic services" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="1085" y="675" width="470" height="170" />

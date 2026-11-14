@@ -1,33 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1368" viewBox="0 0 1920 1368">
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1652" viewBox="0 0 1920 1652">
 <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
-<rect x="0" y="0" width="1920" height="1368" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="0" y="0" width="1920" height="1652" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD09a - Answer questions with retrieved page evidence</text>
 <text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F11 / UC12 | Actual Java implementation | 14 November 2026</text>
 <line x1="32" y1="100" x2="1888" y2="100" stroke="#b8c7d7" stroke-width="2"/>
 <rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
-<line x1="130.0" y1="191" x2="130.0" y2="1255" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="191" x2="130.0" y2="1516" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="268.1428571428571" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="367.1428571428571" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">ChatPanel / CLI</text>
-<line x1="367.1428571428571" y1="191" x2="367.1428571428571" y2="1255" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="367.1428571428571" y1="191" x2="367.1428571428571" y2="1516" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="505.2857142857142" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="604.2857142857142" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
-<line x1="604.2857142857142" y1="191" x2="604.2857142857142" y2="1255" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="604.2857142857142" y1="191" x2="604.2857142857142" y2="1516" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="742.4285714285714" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
-<text x="841.4285714285714" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">ReferenceSelector</text>
-<line x1="841.4285714285714" y1="191" x2="841.4285714285714" y2="1255" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<text x="841.4285714285714" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">StudySources /</text>
+<text x="841.4285714285714" y="175" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">SourceIndex</text>
+<line x1="841.4285714285714" y1="191" x2="841.4285714285714" y2="1516" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="979.5714285714284" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="1078.5714285714284" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MaterialSearcher</text>
-<line x1="1078.5714285714284" y1="191" x2="1078.5714285714284" y2="1255" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="1078.5714285714284" y1="191" x2="1078.5714285714284" y2="1516" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="1216.7142857142858" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="1315.7142857142858" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
-<line x1="1315.7142857142858" y1="191" x2="1315.7142857142858" y2="1255" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="1315.7142857142858" y1="191" x2="1315.7142857142858" y2="1516" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="1453.857142857143" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="1552.857142857143" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
-<line x1="1552.857142857143" y1="191" x2="1552.857142857143" y2="1255" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="1552.857142857143" y1="191" x2="1552.857142857143" y2="1516" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="1691.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="1790.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">InteractionHistory</text>
-<line x1="1790.0" y1="191" x2="1790.0" y2="1255" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="1790.0" y1="191" x2="1790.0" y2="1516" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <line x1="130.0" y1="263" x2="367.1428571428571" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
 <rect x="85.67142857142858" y="215" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="248.57142857142856" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Ask a question about uploaded course</text>
@@ -39,53 +40,73 @@
 <rect x="335.11428571428564" y="313" width="301.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="485.71428571428567" y="328" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">answerFromMaterial(fileId, question)</text>
 <line x1="604.2857142857142" y1="399" x2="1315.7142857142858" y2="399" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="772.5" y="371" width="374.99999999999994" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="960.0" y="386" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. Readable materials and candidateSnippets()</text>
-<line x1="604.2857142857142" y1="484" x2="841.4285714285714" y2="484" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="588.6571428571428" y="436" width="268.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="722.8571428571429" y="451" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. select(...) for course scope;</text>
-<rect x="559.9571428571429" y="456" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="722.8571428571429" y="471" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">selected-file scope uses only that file</text>
-<line x1="841.4285714285714" y1="542" x2="1552.857142857143" y2="542" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="952.2428571428571" y="514" width="489.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1197.142857142857" y="529" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. REFERENCE_SELECTION -&gt; complete() -&gt; validated fileNames</text>
-<line x1="604.2857142857142" y1="607" x2="1078.5714285714284" y2="607" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="678.5285714285714" y="579" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="841.4285714285713" y="594" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. search(store, selected, question, 8)</text>
-<line x1="1078.5714285714284" y1="692" x2="1315.7142857142858" y2="692" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="1034.2428571428572" y="644" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1197.142857142857" y="659" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. materialPages(fileId) [each selected</text>
-<rect x="1173.642857142857" y="664" width="47.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1197.142857142857" y="679" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">file]</text>
-<line x1="1078.5714285714284" y1="750" x2="604.2857142857142" y2="750" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
-<rect x="625.2285714285713" y="722" width="432.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="841.4285714285713" y="737" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Up to 8 ranked passages, each &lt;= 4,500 characters</text>
-<line x1="604.2857142857142" y1="815" x2="1790.0" y2="815" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="972.7428571428571" y="787" width="448.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1197.142857142857" y="802" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. recent(5) [memory context, explicitly not evidence]</text>
-<line x1="604.2857142857142" y1="880" x2="1552.857142857143" y2="880" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="837.7714285714285" y="852" width="481.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1078.5714285714284" y="867" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. QA prompt + passages + ExplanationStrategy instruction</text>
-<line x1="1552.857142857143" y1="945" x2="604.2857142857142" y2="945" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
-<rect x="915.6714285714285" y="917" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1078.5714285714284" y="932" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. JSON answer and file/page citations</text>
-<line x1="604.2857142857142" y1="994" x2="674.2857142857142" y2="994" stroke="#395b7b" stroke-width="2"/>
-<line x1="674.2857142857142" y1="994" x2="674.2857142857142" y2="1016" stroke="#395b7b" stroke-width="2"/>
-<line x1="674.2857142857142" y1="1016" x2="604.2857142857142" y2="1016" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="681.2857142857142" y="982" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="684.2857142857142" y="997" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. Require citations; reject any not in</text>
-<rect x="681.2857142857142" y="1002" width="145.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="684.2857142857142" y="1017" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">supplied passages</text>
-<line x1="604.2857142857142" y1="1088" x2="1790.0" y2="1088" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="960.4428571428571" y="1060" width="473.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1197.142857142857" y="1075" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. add(&quot;question answered&quot;, question + answer + sources)</text>
-<line x1="604.2857142857142" y1="1153" x2="367.1428571428571" y2="1153" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
-<rect x="331.0142857142857" y="1125" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="485.71428571428567" y="1140" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. GroundedAnswer(answer, citations)</text>
-<line x1="367.1428571428571" y1="1218" x2="130.0" y2="1218" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
-<rect x="69.27142857142857" y="1190" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="248.57142857142856" y="1205" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. Display answer and cited original pages</text>
-<rect x="32" y="1277" width="1856" height="58" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
-<text x="48" y="1303" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
-<text x="48" y="1328" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">No selected readable source or invalid citation -&gt; show error. The lexical passage search may include score-zero pages; citations validate provenance, not factual correctness. The LLM never reads local files directly.</text>
+<rect x="645.4000000000001" y="371" width="629.1999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="960.0" y="386" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. Readable course materials; explicit selected-file scope remains available</text>
+<line x1="604.2857142857142" y1="464" x2="1078.5714285714284" y2="464" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="629.3285714285713" y="436" width="424.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="841.4285714285713" y="451" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. search(files, question, 12, StudySources::index)</text>
+<line x1="1078.5714285714284" y1="549" x2="841.4285714285714" y2="549" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="780.7" y="501" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="960.0" y="516" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. Read persisted word-to-page postings and</text>
+<rect x="883.2" y="521" width="153.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="960.0" y="536" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">complete page text</text>
+<line x1="1078.5714285714284" y1="607" x2="604.2857142857142" y2="607" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="637.5285714285714" y="579" width="407.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="841.4285714285713" y="594" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Diverse ranked passages with physical page IDs</text>
+<line x1="604.2857142857142" y1="672" x2="1315.7142857142858" y2="672" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="616.7" y="644" width="686.5999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="960.0" y="659" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. For assessment questions: syllabus pages, saved dates/scope and topic statistics</text>
+<line x1="604.2857142857142" y1="737" x2="1552.857142857143" y2="737" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="653.2714285714285" y="709" width="850.5999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1078.5714285714284" y="724" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. For study preparation: AssessmentStudySources selects teaching files using syllabus + all-file index</text>
+<line x1="604.2857142857142" y1="822" x2="841.4285714285714" y2="822" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="551.7571428571429" y="774" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="722.8571428571429" y="789" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. Read every selected lecture page; long</text>
+<rect x="555.8571428571429" y="794" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="722.8571428571429" y="809" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">scopes use validated source-note batches</text>
+<line x1="604.2857142857142" y1="880" x2="1790.0" y2="880" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="837.4428571428571" y="852" width="719.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1197.142857142857" y="867" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. recent(5): previous same-course student questions only; no old AI answers/citations</text>
+<line x1="604.2857142857142" y1="945" x2="1552.857142857143" y2="945" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="796.7714285714285" y="917" width="563.5999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1078.5714285714284" y="932" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. QA prompt + passages + exact allowed physical-page citation list</text>
+<line x1="1552.857142857143" y1="1010" x2="604.2857142857142" y2="1010" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="915.6714285714285" y="982" width="325.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1078.5714285714284" y="997" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. JSON answer and file/page citations</text>
+<line x1="604.2857142857142" y1="1059" x2="674.2857142857142" y2="1059" stroke="#395b7b" stroke-width="2"/>
+<line x1="674.2857142857142" y1="1059" x2="674.2857142857142" y2="1081" stroke="#395b7b" stroke-width="2"/>
+<line x1="674.2857142857142" y1="1081" x2="604.2857142857142" y2="1081" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="681.2857142857142" y="1047" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="684.2857142857142" y="1062" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. Validate physical citations and require</text>
+<rect x="681.2857142857142" y="1067" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="684.2857142857142" y="1082" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">teaching evidence for study plans; retry up</text>
+<rect x="681.2857142857142" y="1087" width="161.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="684.2857142857142" y="1102" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">to 3 total attempts</text>
+<line x1="604.2857142857142" y1="1173" x2="1790.0" y2="1173" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="960.4428571428571" y="1145" width="473.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1197.142857142857" y="1160" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. add(&quot;question answered&quot;, question + answer + sources)</text>
+<line x1="604.2857142857142" y1="1238" x2="367.1428571428571" y2="1238" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="331.0142857142857" y="1210" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="485.71428571428567" y="1225" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. GroundedAnswer(answer, citations)</text>
+<line x1="367.1428571428571" y1="1343" x2="130.0" y2="1343" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="102.07142857142856" y="1275" width="293.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.57142857142856" y="1290" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">16. Render answer once in Chat with</text>
+<rect x="102.07142857142856" y="1295" width="293.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.57142857142856" y="1310" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">clickable exact file/page links; no</text>
+<rect x="184.07142857142856" y="1315" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.57142857142856" y="1330" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">duplicate popup</text>
+<line x1="130.0" y1="1401" x2="367.1428571428571" y2="1401" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="151.27142857142854" y="1373" width="194.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.57142857142856" y="1388" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">17. Click a source link</text>
+<line x1="367.1428571428571" y1="1450" x2="437.1428571428571" y2="1450" stroke="#395b7b" stroke-width="2"/>
+<line x1="437.1428571428571" y1="1450" x2="437.1428571428571" y2="1472" stroke="#395b7b" stroke-width="2"/>
+<line x1="437.1428571428571" y1="1472" x2="367.1428571428571" y2="1472" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="444.1428571428571" y="1438" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="447.1428571428571" y="1453" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">18. Resolve stored course/file; show PDF</text>
+<rect x="444.1428571428571" y="1458" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="447.1428571428571" y="1473" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">tab; PdfPreviewPanel.showPage(cited page)</text>
+<rect x="32" y="1538" width="1856" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1564" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1589" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">GUI chat defaults to course materials even with a PDF tab open. Selected-file scope is explicit. Unknown exam coverage remains unknown. Repeated citation failures save no answer. Index retrieval may include score-zero</text>
+<text x="48" y="1612" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">pages; provenance validation and AI image reading do not prove factual correctness.</text>
 </svg>

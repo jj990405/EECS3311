@@ -35,6 +35,8 @@ public final class CommandLineInterface {
                     case "semester add" -> addSemester();
                     case "course add" -> addCourse();
                     case "material add" -> addMaterial();
+                    case "material index" -> controller.prepareMaterials(controller.materials().stream()
+                            .map(MaterialFile::id).toList(),System.out::println);
                     case "deadline add" -> addDeadline();
                     case "deadline edit" -> editDeadline();
                     case "deadline delete" -> deleteDeadline();
@@ -80,7 +82,7 @@ public final class CommandLineInterface {
     }
 
     private void help() {
-        System.out.println("Get started: setup, material add, tree");
+        System.out.println("Get started: setup, material add, material index, tree");
         System.out.println("Plan: deadline add/edit/delete, timeline, calendar, reminders, complete, progress");
         System.out.println("Study: study week, ask, summary create/list, quiz create/take, weak topics");
         System.out.println("AI: ai syllabus, ai week, ai references, ai schedule, weekly brief, proposals, approve, reject");
@@ -182,7 +184,11 @@ public final class CommandLineInterface {
     }
 
     private MaterialFile chooseReadableMaterial() {
-        List<MaterialFile> items = controller.materials().stream().filter(MaterialFile::textAvailable).toList();
+        return chooseReadableMaterial(false);
+    }
+    private MaterialFile chooseReadableMaterial(boolean lecturesOnly) {
+        List<MaterialFile> items = controller.materials().stream().filter(controller::canStudy)
+                .filter(m -> !lecturesOnly || m.category() == Category.LECTURE_MATERIALS).toList();
         if (items.isEmpty()) throw new IllegalStateException("Upload a readable material first.");
         for (int i = 0; i < items.size(); i++) System.out.printf("%d. %s%n", i + 1, items.get(i).originalName());
         return items.get(number("Material number", items.size()));
@@ -252,6 +258,7 @@ public final class CommandLineInterface {
             Course course = chooseCourse();
             Path source = Path.of(ask("Syllabus file path"));
             MaterialFile file = controller.uploadMaterial(course.id(), Category.SYLLABUS, source);
+            controller.prepareMaterials(List.of(file.id()),System.out::println);
             System.out.println("Uploaded " + file.originalName() + ". Type ai syllabus to review deadline suggestions.");
         }
         System.out.println("Setup complete. Type material add for more files, or help for commands.");
@@ -273,6 +280,7 @@ public final class CommandLineInterface {
             boolean replace = duplicate && ask("File already exists. Replace it? (y/N)").equalsIgnoreCase("y");
             if (duplicate && !replace) continue;
             MaterialFile material = controller.uploadMaterial(course.id(), category, source, replace);
+            controller.prepareMaterials(List.of(material.id()),System.out::println);
             added++;
             System.out.println("Stored: " + material.originalName());
             if (!material.extractionWarning().isBlank()) System.out.println(material.extractionWarning());
@@ -449,20 +457,25 @@ public final class CommandLineInterface {
         quizPages = List.of();
         String scope = askDefault("Quiz scope (file/pages/week/all)", "file").toLowerCase();
         if (scope.equals("pages")) {
-            MaterialFile file = chooseReadableMaterial();
+            MaterialFile file = chooseReadableMaterial(true);
             try {
                 quizPages = StudyPages.parse(ask("Pages / slides (e.g. 3 or 2-5,8)"), controller.materialPages(file.id()).size());
             } catch (IOException ex) { throw new IllegalStateException(ex); }
             return List.of(file.id());
         }
-        if (scope.equals("file")) return List.of(chooseReadableMaterial().id());
+        if (scope.equals("file")) return List.of(chooseReadableMaterial(true).id());
         if (!scope.equals("week") && !scope.equals("all")) throw new IllegalArgumentException("Choose file, pages, week, or all.");
         Course course = chooseCourse();
         List<MaterialFile> materials = controller.materials().stream().filter(file ->
-                file.courseId().equals(course.id()) && file.category() == Category.LECTURE_MATERIALS && file.textAvailable()).toList();
+                file.courseId().equals(course.id()) && file.category() == Category.LECTURE_MATERIALS && controller.canStudy(file)).toList();
         if (scope.equals("week")) {
             int week = number("Lecture week (1-18)", 18) + 1;
-            materials = materials.stream().filter(file -> Integer.valueOf(week).equals(file.lectureWeek())).toList();
+            List<MaterialFile> assigned = materials.stream().filter(file -> Integer.valueOf(week).equals(file.lectureWeek())).toList();
+            if(assigned.isEmpty()) {
+                System.out.println("No lectures are assigned to that week. The uploaded files are still available.");
+                if(!ask("Use all uploaded lectures for this quiz instead? (y/N)").equalsIgnoreCase("y"))
+                    throw new IllegalArgumentException("Use file scope to choose one lecture, or assign weeks in the GUI.");
+            } else materials=assigned;
         }
         if (materials.isEmpty()) throw new IllegalStateException("No readable lectures match this scope. Upload files and assign weeks first.");
         return materials.stream().map(MaterialFile::id).toList();

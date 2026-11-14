@@ -13,6 +13,6 @@ Six distinct GoF patterns are supported by the implementation. Simple Factory is
 
 Runtime evidence and feature coverage are tracked in [the development audit](../../development/README.md). A diagram documents a design; it does not establish that an AI response will always be correct.
 
-The Nov14 follow-up refreshes SD01a, SD10a, SD10b and SD13 for optional pre-upload AI review, the quiz workspace and adaptive full-document classification. Architecture/class sheets show selected relationships from Nov13; the added helper/UI components are identified in their index.
+The latest Nov14 follow-up refreshes architecture sheets 01/03 and SD01a/SD01b/SD09a/SD09b/SD10a/SD13 for complete upload preparation, image input, persistent page/word indexes, full-source quizzes, course-aware retrieval, exact-page citation links and complete classification. Selected helpers/UI components are identified in their index rather than presenting every Swing control as a domain class.
 
 SD15 and UC21 now cover deterministic timeline drag selection and contextual single/bulk actions; total diagram sheets: 28.

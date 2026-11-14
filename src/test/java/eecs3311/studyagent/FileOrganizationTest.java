@@ -43,7 +43,7 @@ class FileOrganizationTest {
             var input = Json.array(Json.parse(user));
             assertEquals(1, input.size());
             var file = Json.object(input.get(0));
-            assertTrue(Json.string(file, "textSample").contains("design patterns"));
+            assertTrue(Json.string(file, "fullPageText").contains("design patterns"));
             return Json.write(Map.of("suggestions", java.util.List.of(Map.of(
                     "id", Json.string(file, "id"), "category", "LECTURE_MATERIALS",
                     "reason", "Lecture slides", "confidence", "HIGH", "needsFullReview", false))));

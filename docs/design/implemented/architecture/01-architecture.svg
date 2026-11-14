@@ -13,8 +13,8 @@
 <path d="M800,560 L800,610 L1320,610 L1320,675" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
 <path d="M280,845 L280,960" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
 <text x="285.0" y="896.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">HTTPS</text>
-<path d="M800,845 L800,960" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
-<text x="805.0" y="896.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">read / write</text>
+<path d="M800,860 L800,960" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="805.0" y="904.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">read / write</text>
 <rect x="60" y="160" width="620" height="135" fill="white" stroke="#64748b" stroke-width="1.5"/>
 <rect x="61" y="161" width="618" height="43" fill="#eaf0f8"/>
 <path d="M60,204 H680" stroke="#64748b"/>
@@ -42,13 +42,14 @@
 <text x="57" y="748" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">PromptBuilder + ResponseParser</text>
 <text x="57" y="771" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">LlmClient -&gt; HttpLlmClient</text>
 <text x="57" y="794" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">SchedulePlanner / ReferenceSelector / MaterialSearcher</text>
-<rect x="565" y="675" width="470" height="170" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="565" y="675" width="470" height="185" fill="white" stroke="#64748b" stroke-width="1.5"/>
 <rect x="566" y="676" width="468" height="43" fill="#edf4ed"/>
 <path d="M565,719 H1035" stroke="#64748b"/>
 <text x="577" y="703" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">Local state and history</text>
 <text x="577" y="748" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">DataStore: entities, original files, extracted text</text>
 <text x="577" y="771" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">StudyArtifacts: notes, quizzes, scores, self-assessments</text>
-<text x="577" y="794" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">InteractionHistory: records and prompt context</text>
+<text x="577" y="794" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">StudySources + SourceIndex: complete pages and index</text>
+<text x="577" y="817" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">InteractionHistory: records and prompt context</text>
 <rect x="1085" y="675" width="470" height="170" fill="white" stroke="#64748b" stroke-width="1.5"/>
 <rect x="1086" y="676" width="468" height="43" fill="#f3f4f6"/>
 <path d="M1085,719 H1555" stroke="#64748b"/>

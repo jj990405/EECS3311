@@ -364,7 +364,7 @@ public final class MainWindow extends JFrame {
         menuItem(ai, "Create study notes", this::summarizeFile);
         menuItem(ai, "Saved study notes", this::showSummaries);
         menuItem(ai, "Generate quiz", this::generateQuiz);
-        menuItem(ai, "Quiz pages / slides", () -> generateSlideQuiz(chooseReadableMaterial(), 0));
+        menuItem(ai, "Quiz pages / slides", () -> generateSlideQuiz(chooseLectureMaterial(), 0));
         menuItem(ai, "Take saved quiz", this::takeQuiz);
         menuItem(ai, "Generate essay question", this::generateEssayQuestion);
         menuItem(ai, "Answer essay question", this::answerEssayQuestion);
@@ -429,12 +429,14 @@ public final class MainWindow extends JFrame {
         JPopupMenu menu = new JPopupMenu();
         popupItem(menu, "Analyze files for calendar", this::analyzeCalendarFiles);
         popupItem(menu, "Classify uploaded files", this::classifyFilesWithAi);
+        popupItem(menu, "Read and index all uploaded files", () -> prepareUploadedFiles(
+                controller.materials().stream().map(MaterialFile::id).toList()));
         menu.addSeparator();
         popupItem(menu, "Ask sources", this::askSources);
         popupItem(menu, "Create study notes", this::summarizeFile);
         popupItem(menu, "Saved study notes", this::showSummaries);
         popupItem(menu, "Practice quiz...", this::generateQuiz);
-        popupItem(menu, "Quiz pages / slides...", () -> generateSlideQuiz(chooseReadableMaterial(), 0));
+        popupItem(menu, "Quiz pages / slides...", () -> generateSlideQuiz(chooseLectureMaterial(), 0));
         popupItem(menu, "Take saved quiz", this::takeQuiz);
         popupItem(menu, "Generate essay question", this::generateEssayQuestion);
         popupItem(menu, "Answer essay question", this::answerEssayQuestion);
@@ -450,7 +452,7 @@ public final class MainWindow extends JFrame {
 
     private void rememberMaterial(MaterialFile file) {
         selectedFileId = file.id(); selectedCourseId = file.courseId();
-        chatPanel.setContext(controller.course(file.courseId()).name() + " · " + file.originalName());
+        chatPanel.setFileContext(controller.course(file.courseId()).name(), file.originalName());
         openFileButton.setEnabled(true);
         fileMeta.setText("Selected: " + file.originalName() + " · right-click for file actions");
     }
@@ -459,13 +461,13 @@ public final class MainWindow extends JFrame {
         JPopupMenu menu = new JPopupMenu();
         popupItem(menu, "Open PDF / file details", () -> { rememberMaterial(file); showMaterial(file); });
         popupItem(menu, "Open original", () -> openOriginal(file));
-        if (file.textAvailable()) {
+        if (controller.canStudy(file)) {
             menu.addSeparator();
             popupItem(menu, "AI: Study notes", () -> summarizeFile(file));
             popupItem(menu, "AI: Quiz this file...", () -> generateQuiz(List.of(file.id())));
             popupItem(menu, "AI: Quiz pages / slides...", () -> generateSlideQuiz(file, 0));
             popupItem(menu, "AI: Ask about this file", () -> {
-                rememberMaterial(file); contentTabs.setSelectedComponent(chatPanel); askSources();
+                rememberMaterial(file); chatPanel.useSelectedFile(); contentTabs.setSelectedComponent(chatPanel); askSources();
             });
         }
         menu.addSeparator();
@@ -832,6 +834,7 @@ public final class MainWindow extends JFrame {
     }
 
     private void uploadFiles(Course course, Category category) {
+        if (aiBusy) throw new IllegalStateException("Wait for the current AI task, or cancel it before uploading.");
         JFileChooser chooser = new JFileChooser(lastUploadDirectory);
         chooser.setDialogTitle("Choose files for " + course.name());
         chooser.setMultiSelectionEnabled(true);
@@ -845,6 +848,7 @@ public final class MainWindow extends JFrame {
         int added = 0;
         MaterialFile last = null;
         List<String> problems = new ArrayList<>();
+        List<UUID> addedIds = new ArrayList<>();
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
             Category destination = destinations.get(i);
@@ -863,6 +867,7 @@ public final class MainWindow extends JFrame {
                 }
                 MaterialFile material = controller.uploadMaterial(course.id(), destination, file.toPath(), replace);
                 added++;
+                addedIds.add(material.id());
                 last = material;
                 if (!material.extractionWarning().isBlank())
                     problems.add(file.getName() + ": " + material.extractionWarning());
@@ -876,6 +881,16 @@ public final class MainWindow extends JFrame {
                 + (problems.isEmpty() ? "" : " | " + problems.size() + " need attention"));
         if (!problems.isEmpty()) JOptionPane.showMessageDialog(this, String.join("\n", problems),
                 "Upload details", JOptionPane.WARNING_MESSAGE);
+        if (!addedIds.isEmpty()) prepareUploadedFiles(addedIds);
+    }
+
+    private void prepareUploadedFiles(List<UUID> files) {
+        if(files.isEmpty()) throw new IllegalStateException("Upload files first.");
+        runAi("Reading and indexing uploaded files", () -> {
+            return controller.prepareMaterials(files,message -> SwingUtilities.invokeLater(() -> {
+                if(aiBusy) status.setText(message);
+            }));
+        }, count -> status.setText(count + " files read and indexed locally. Ready for questions and quizzes."));
     }
 
     private List<Category> reviewUploadDestinations(File[] files, Category selectedFolder) {
@@ -1209,17 +1224,26 @@ public final class MainWindow extends JFrame {
     private MaterialFile chooseReadableMaterial() {
         if (selectedFileId != null) {
             MaterialFile remembered = controller.materials().stream().filter(file -> file.id().equals(selectedFileId)
-                    && file.textAvailable() && (selectedCourseId == null || file.courseId().equals(selectedCourseId)))
+                    && controller.canStudy(file) && (selectedCourseId == null || file.courseId().equals(selectedCourseId)))
                     .findFirst().orElse(null);
             if (remembered != null) return remembered;
         }
         Object selected = selectedTreeValue();
-        if (selected instanceof WorkspaceLeaf leaf && leaf.file().textAvailable()) return leaf.file();
+        if (selected instanceof WorkspaceLeaf leaf && controller.canStudy(leaf.file())) return leaf.file();
         List<MaterialFile> files = controller.materials().stream()
-                .filter(m -> m.textAvailable() && (selectedCourseId == null || m.courseId().equals(selectedCourseId)))
+                .filter(m -> controller.canStudy(m) && (selectedCourseId == null || m.courseId().equals(selectedCourseId)))
                 .toList();
         if (files.isEmpty()) throw new IllegalStateException("Upload a readable PDF, PPTX, DOCX or TXT file first.");
         return choose("Choose a readable file", files);
+    }
+
+    private MaterialFile chooseLectureMaterial() {
+        List<MaterialFile> lectures = controller.materials().stream().filter(m -> controller.canStudy(m)
+                && m.category() == Category.LECTURE_MATERIALS
+                && (selectedCourseId == null || m.courseId().equals(selectedCourseId))).toList();
+        if (lectures.isEmpty()) throw new IllegalStateException("Upload lecture slides to create practice questions.");
+        MaterialFile selected = lectures.stream().filter(m -> m.id().equals(selectedFileId)).findFirst().orElse(null);
+        return selected != null ? selected : choose("Choose lecture slides", lectures);
     }
 
     private void summarizeFile() {
@@ -1270,6 +1294,10 @@ public final class MainWindow extends JFrame {
     }
 
     private void generateSlideQuiz(MaterialFile material, int currentPage) {
+        if (material.category() != Category.LECTURE_MATERIALS) {
+            generateSlideQuiz(chooseLectureMaterial(), 0);
+            return;
+        }
         try {
             int total = controller.materialPages(material.id()).size();
             List<Integer> pages = StudyPages.parse(ask("Pages / slides (1-" + total + ", e.g. 3 or 2-5,8)",
@@ -1282,6 +1310,10 @@ public final class MainWindow extends JFrame {
     }
 
     private void generateQuiz(List<UUID> materials) {
+        materials = materials.stream().filter(id -> controller.materials().stream()
+                .anyMatch(m -> m.id().equals(id) && m.category() == Category.LECTURE_MATERIALS)).toList();
+        if (materials.isEmpty()) materials = List.of(chooseLectureMaterial().id());
+        final List<UUID> selectedMaterials = materials;
         int count = Integer.parseInt(ask("Number of questions (1-10)", "3"));
         if (count < 1 || count > 10) throw new IllegalArgumentException("Choose 1 to 10 questions.");
         Difficulty difficulty = choose("Quiz difficulty", List.of(Difficulty.values()));
@@ -1290,10 +1322,11 @@ public final class MainWindow extends JFrame {
             throw new IllegalArgumentException("Choose at least two questions when including both types.");
         runAi("Generating quiz", () -> {
             StudyArtifacts.Quiz mcq = types.equals("Essay") ? null
-                    : controller.generateQuiz(materials, types.equals("Both") ? count - 1 : count, difficulty);
+                    : controller.generateQuiz(selectedMaterials, types.equals("Both") ? count - 1 : count, difficulty,
+                        message -> SwingUtilities.invokeLater(() -> { if (aiBusy) status.setText(message); }));
             List<StudyArtifacts.EssayPrompt> essays = new ArrayList<>();
             int essayCount = types.equals("Essay") ? count : types.equals("Both") ? 1 : 0;
-            for (int i = 0; i < essayCount; i++) essays.add(controller.generateEssayPrompt(materials, difficulty));
+            for (int i = 0; i < essayCount; i++) essays.add(controller.generateEssayPrompt(selectedMaterials, difficulty));
             return new QuizBuild(mcq, essays);
         }, built -> {
             if (built.multipleChoice() != null) takeQuiz(built.multipleChoice());
@@ -1303,20 +1336,46 @@ public final class MainWindow extends JFrame {
 
     private List<UUID> chooseQuizMaterials() {
         String scope = choose("Quiz scope", List.of("One file", "Lecture week", "All lectures"));
-        if (scope.equals("One file")) return List.of(chooseReadableMaterial().id());
+        if (scope.equals("One file")) return List.of(chooseLectureMaterial().id());
         Course course = selectedCourseId == null ? chooseCourse() : controller.course(selectedCourseId);
         List<MaterialFile> lectures = controller.materials().stream()
                 .filter(m -> m.courseId().equals(course.id()) && m.category() == Category.LECTURE_MATERIALS
-                        && m.textAvailable()).toList();
+                        && controller.canStudy(m)).toList();
         if (lectures.isEmpty()) throw new IllegalStateException("Upload readable lecture materials first.");
         if (scope.equals("Lecture week")) {
             List<Integer> weeks = lectures.stream().map(MaterialFile::lectureWeek)
                     .filter(java.util.Objects::nonNull).distinct().sorted().toList();
-            if (weeks.isEmpty()) throw new IllegalStateException("Assign lecture weeks to files first.");
+            if (weeks.isEmpty()) {
+                return chooseLectureFiles(lectures);
+            }
             Integer week = choose("Lecture week", weeks);
             lectures = lectures.stream().filter(m -> week.equals(m.lectureWeek())).toList();
         }
         return lectures.stream().map(MaterialFile::id).toList();
+    }
+
+    private List<UUID> chooseLectureFiles(List<MaterialFile> lectures) {
+        var model = new DefaultTableModel(new Object[]{"Use", "Lecture file"},0) {
+            @Override public Class<?> getColumnClass(int col) { return col == 0 ? Boolean.class : String.class; }
+            @Override public boolean isCellEditable(int row,int col) { return col == 0; }
+        };
+        for (MaterialFile file : lectures) model.addRow(new Object[]{file.id().equals(selectedFileId),file.originalName()});
+        JTable choices = new JTable(model); choices.setRowHeight(32);
+        choices.getColumnModel().getColumn(0).setMaxWidth(55);
+        JScrollPane scroll = new JScrollPane(choices); scroll.setPreferredSize(new Dimension(650,300));
+        JPanel heading=new JPanel(new BorderLayout(8,8));
+        heading.add(new JLabel("No lecture weeks are assigned. Choose files to continue without assigning a week."),BorderLayout.CENTER);
+        JButton all=AppTheme.button("Select all",false);
+        all.addActionListener(e->{for(int row=0;row<model.getRowCount();row++) model.setValueAt(true,row,0);});
+        heading.add(all,BorderLayout.EAST);
+        int action = JOptionPane.showConfirmDialog(this,new Object[]{
+                heading,scroll},
+                "Choose lecture files",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
+        if (action != JOptionPane.OK_OPTION) throw new CancellationException();
+        List<UUID> selected = new ArrayList<>();
+        for(int row=0; row<model.getRowCount(); row++) if(Boolean.TRUE.equals(model.getValueAt(row,0))) selected.add(lectures.get(row).id());
+        if(selected.isEmpty()) throw new IllegalArgumentException("Select at least one lecture file.");
+        return List.copyOf(selected);
     }
 
     private void takeQuiz() {
@@ -1365,7 +1424,11 @@ public final class MainWindow extends JFrame {
     }
 
     private void showText(String title, String content) {
-        new ResultWindow(this, title, content, null).setVisible(true);
+        ReadableText text = new ReadableText();
+        text.setMarkdown(content);
+        JScrollPane scroll = new JScrollPane(text);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        showViewerTab(title, scroll, () -> { });
     }
 
     private void askSources() {
@@ -1381,26 +1444,32 @@ public final class MainWindow extends JFrame {
                 chatPanel.append("Agent: Opening the interactive quiz settings. Choose the source and question options.");
                 generateQuiz(); return;
             }
-            case SLIDE_QUIZ -> { generateSlideQuiz(chooseReadableMaterial(), 0); return; }
+            case SLIDE_QUIZ -> { generateSlideQuiz(chooseLectureMaterial(), 0); return; }
             case NOTES -> { summarizeFile(); return; }
             case QUESTION -> { }
         }
         Course course = selectedCourseId == null ? chooseCourse() : controller.course(selectedCourseId);
-        UUID fileScope = selectedFileId;
-        runAi("Searching course materials", () -> fileScope == null ? controller.answerQuestion(course.id(), question)
-                : controller.answerFromMaterial(fileScope, question), answer -> {
-            String citations = answer.citations().stream().map(c -> c.fileName() + " p." + c.page())
-                    .collect(java.util.stream.Collectors.joining("\n"));
-            chatPanel.append("Agent: " + answer.answer() + "\nSources: " + citations);
-            new ResultWindow(this, "Material answer", answer.answer() + "\n\nSources:\n" + citations, () -> perform(() -> {
-                List<MaterialFile> files = controller.materials().stream()
-                        .filter(m -> m.courseId().equals(course.id()) && answer.citations().stream()
-                                .anyMatch(c -> c.fileName().equals(m.originalName()))).toList();
-                if (files.isEmpty()) throw new IllegalStateException("No cited source is available in this workspace.");
-                MaterialFile selected = files.size() == 1 ? files.get(0) : choose("Open a cited source", files);
-                rememberMaterial(selected); showMaterial(selected);
-            })).setVisible(true);
+        UUID fileScope = chatPanel.fileOnly() ? selectedFileId : null;
+        Consumer<String> progress = message -> SwingUtilities.invokeLater(() -> { if (aiBusy) status.setText(message); });
+        runAi("Searching course materials", () -> fileScope == null ? controller.answerQuestion(course.id(), question, progress)
+                : controller.answerFromMaterial(fileScope, question, progress), answer -> {
+            java.util.function.Consumer<GroundedAnswer.Citation> openCitation = citation ->
+                    perform(() -> openCitation(course.id(), citation));
+            chatPanel.appendAnswer(answer, openCitation);
+            contentTabs.setSelectedComponent(chatPanel);
         });
+    }
+
+    private void openCitation(UUID courseId, GroundedAnswer.Citation citation) {
+        MaterialFile file = controller.materials().stream()
+                .filter(m -> m.courseId().equals(courseId) && m.originalName().equals(citation.fileName()))
+                .findFirst().orElseThrow(() -> new IllegalStateException("This source is no longer available. Upload it again."));
+        showMaterial(file);
+        if (openDocuments.get(file.id()) instanceof JPanel document)
+            for (Component component : document.getComponents())
+                if (component instanceof PdfPreviewPanel pdf) pdf.showPage(citation.page());
+        toFront(); requestFocus();
+        status.setText(citation.fileName() + " · Source page " + citation.page());
     }
 
     private void weeklyBrief() {

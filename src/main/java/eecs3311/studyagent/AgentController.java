@@ -8,6 +8,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public final class AgentController {
     private final StudyTimer timer = new StudyTimer();
     private final StudyArtifacts artifacts;
     private final InteractionHistory history;
+    private final StudySources studySources;
     private final Path briefingMarker;
     private final Path notificationMarker;
     private final Map<UUID, SyllabusCandidate> syllabusCandidates = new java.util.HashMap<>();
@@ -44,6 +46,7 @@ public final class AgentController {
         this.llm = llm;
         this.artifacts = new StudyArtifacts(dataDirectory);
         this.history = new InteractionHistory(dataDirectory);
+        this.studySources = new StudySources(store, llm, dataDirectory);
         this.briefingMarker = dataDirectory.toAbsolutePath().normalize().resolve("last-weekly-brief.txt");
         this.notificationMarker = dataDirectory.toAbsolutePath().normalize().resolve("shown-notifications.txt");
     }
@@ -58,6 +61,10 @@ public final class AgentController {
     public Deadline deadline(UUID id) { return store.deadline(id); }
     public Path materialPath(UUID id) { return store.materialPath(id); }
     public List<String> materialPages(UUID id) throws IOException { return store.materialPages(id); }
+    public boolean canStudy(MaterialFile file) {
+        return file.textAvailable() || (llm.supportsImages()
+                && file.originalName().toLowerCase(java.util.Locale.ROOT).matches(".*\\.(pdf|pptx)"));
+    }
     public MaterialFile assignLectureWeek(UUID id, Integer week) throws IOException {
         return store.assignLectureWeek(id, week);
     }
@@ -78,7 +85,7 @@ public final class AgentController {
         if (files.isEmpty()) throw new IllegalStateException("Upload files before classifying them.");
         List<DocumentClassification.Source> sources = new java.util.ArrayList<>();
         for (MaterialFile file : files) sources.add(DocumentClassification.source(file.id(),
-                file.originalName(), file.textAvailable() ? store.materialPages(file.id()) : List.of()));
+                file.originalName(), canStudy(file) ? studySources.pages(file,message -> { }) : List.of()));
         return DocumentClassification.classify(sources, llm).stream()
                 .filter(decision -> files.stream().anyMatch(file -> file.id().equals(decision.id())
                         && file.category() != decision.category()))
@@ -165,7 +172,7 @@ public final class AgentController {
 
     public List<CommandInvoker.Proposal> suggestSyllabusDeadlines(UUID materialId) throws IOException {
         MaterialFile file = store.material(materialId);
-        if (file.category() != Category.SYLLABUS || !file.textAvailable())
+        if (file.category() != Category.SYLLABUS || !canStudy(file))
             throw new IllegalArgumentException("Select a syllabus with extractable text.");
         return suggestDocumentDeadlines(file);
     }
@@ -174,7 +181,7 @@ public final class AgentController {
 
     /** Runs only on demand, after files are uploaded; every suggested change still needs approval. */
     public CalendarSuggestions suggestCalendarFromFiles() throws IOException {
-        List<MaterialFile> files = store.materials().stream().filter(m -> m.textAvailable()
+        List<MaterialFile> files = store.materials().stream().filter(m -> canStudy(m)
                 && (m.category() == Category.SYLLABUS
                     || m.category() == Category.ASSIGNMENT_SPECIFICATIONS)).toList();
         if (files.isEmpty()) throw new IllegalStateException(
@@ -188,19 +195,24 @@ public final class AgentController {
         UUID materialId = file.id();
         Course course = store.course(file.courseId());
         Semester semester = store.semester(course.semesterId());
-        String sourceText = String.join("\n", store.materialPages(materialId));
-        String context = "Semester " + semester.startDate() + " to " + semester.endDate()
-                + "; course " + course.name() + "; source " + file.originalName() + "\n"
-                + prompts.pages(store.materialPages(materialId), 30000);
-        List<ResponseParser.DeadlineDraft> drafts = null;
-        for (int attempt = 0; attempt < 2; attempt++) {
+        List<String> pages = studySources.pages(file,message -> { });
+        String sourceText = String.join("\n",pages);
+        List<ResponseParser.DeadlineDraft> drafts = new java.util.ArrayList<>();
+        for(String batch:StudyPages.batches(pages,24000)) {
+          String context = "Semester " + semester.startDate() + " to " + semester.endDate()
+                + "; course " + course.name() + "; source " + file.originalName() + "\n" + batch;
+          for (int attempt = 0; attempt < 2; attempt++) {
             String response = llm.complete(prompts.system(PromptBuilder.Task.DEADLINE_EXTRACTION),
                     prompts.user(PromptBuilder.Task.DEADLINE_EXTRACTION, context,
                             "Extract assessment deadlines; cite exact source wording and include weights. "
                             + "If an item is released on a date and due in 24 hours, use the following calendar day "
                             + "as dueDate, not the release date."));
-            try { drafts = parser.deadlines(response); break; }
+            try {
+                for(var draft:parser.deadlines(response)) if(!drafts.contains(draft)) drafts.add(draft);
+                break;
+            }
             catch (RuntimeException ex) { if (attempt == 1) throw ex; }
+          }
         }
         List<CommandInvoker.Proposal> result = new java.util.ArrayList<>();
         DeadlineValidator validator = new DeadlineValidator();
@@ -227,18 +239,18 @@ public final class AgentController {
 
     public CommandInvoker.Proposal suggestLectureWeek(UUID materialId) throws IOException {
         MaterialFile file = store.material(materialId);
-        if (file.category() != Category.LECTURE_MATERIALS || !file.textAvailable())
+        if (file.category() != Category.LECTURE_MATERIALS || !canStudy(file))
             throw new IllegalArgumentException("Select lecture material with extractable text.");
         List<MaterialFile> syllabi = store.materials().stream()
                 .filter(m -> m.courseId().equals(file.courseId()) && m.category() == Category.SYLLABUS
-                        && m.textAvailable()).toList();
+                        && canStudy(m)).toList();
         if (syllabi.isEmpty()) throw new IllegalStateException(
                 "No readable syllabus is available. Assign the lecture week manually.");
         StringBuilder context = new StringBuilder("Course: " + store.course(file.courseId()).name());
         for (MaterialFile syllabus : syllabi) context.append("\nSyllabus " ).append(syllabus.originalName())
-                .append("\n").append(prompts.pages(store.materialPages(syllabus.id()), 14000));
+                .append("\n").append(prompts.pages(studySources.pages(syllabus,message -> { }), Integer.MAX_VALUE));
         context.append("\nLecture material " ).append(file.originalName()).append("\n")
-                .append(prompts.pages(store.materialPages(materialId), 14000));
+                .append(prompts.pages(studySources.pages(file,message -> { }), Integer.MAX_VALUE));
         Integer week = parser.week(llm.complete(prompts.system(PromptBuilder.Task.WEEK_MATCH),
                 prompts.user(PromptBuilder.Task.WEEK_MATCH,
                         context.toString(),
@@ -269,6 +281,19 @@ public final class AgentController {
     public MaterialFile uploadMaterial(UUID courseId, Category category, Path path, boolean replace)
             throws IOException {
         return store.uploadMaterial(courseId, category, path, replace);
+    }
+    /** Full source preparation is run after upload, outside the Swing event thread. */
+    public int prepareMaterials(List<UUID> ids, java.util.function.Consumer<String> progress) throws IOException {
+        int prepared=0;
+        for(int i=0;i<ids.size();i++) {
+            MaterialFile file=store.material(ids.get(i));
+            if(!canStudy(file)) continue;
+            progress.accept("Reading and indexing file " + (i+1) + "/" + ids.size() + ": " + file.originalName());
+            List<String> pages=studySources.pages(file,progress);
+            progress.accept("Indexed " + pages.size() + " complete pages: " + file.originalName());
+            prepared++;
+        }
+        return prepared;
     }
 
     public Deadline addDeadline(UUID courseId, String title, String type, LocalDate dueDate, String scope)
@@ -415,49 +440,116 @@ public final class AgentController {
     }
 
     public GroundedAnswer answerQuestion(UUID courseId, String question) throws IOException {
+        return answerQuestion(courseId, question, message -> { });
+    }
+    public GroundedAnswer answerQuestion(UUID courseId, String question, java.util.function.Consumer<String> progress) throws IOException {
         List<MaterialFile> candidates = store.materials().stream().filter(m -> m.courseId().equals(courseId)
-                && m.textAvailable()).toList();
-        return answerQuestion(courseId, question, candidates);
+                && canStudy(m)).toList();
+        return answerQuestion(courseId, question, candidates, progress);
     }
 
     public GroundedAnswer answerFromMaterial(UUID materialId, String question) throws IOException {
+        return answerFromMaterial(materialId, question, message -> { });
+    }
+    public GroundedAnswer answerFromMaterial(UUID materialId, String question, java.util.function.Consumer<String> progress) throws IOException {
         MaterialFile file = store.material(materialId);
-        if (!file.textAvailable()) throw new IllegalArgumentException("This file has no readable text for source questions.");
-        return answerQuestion(file.courseId(), question, List.of(file));
+        if (!canStudy(file)) throw new IllegalArgumentException("This file cannot be read for source questions.");
+        return answerQuestion(file.courseId(), question, List.of(file), progress);
     }
 
-    private GroundedAnswer answerQuestion(UUID courseId, String question, List<MaterialFile> candidates) throws IOException {
+    private GroundedAnswer answerQuestion(UUID courseId, String question, List<MaterialFile> candidates,
+                                         java.util.function.Consumer<String> progress) throws IOException {
         store.course(courseId);
         if (question == null || question.isBlank()) throw new IllegalArgumentException("Enter a question.");
         if (candidates.isEmpty()) throw new IllegalArgumentException("Upload a readable lecture or syllabus to this course first.");
-        List<MaterialFile> selected = candidates.size() == 1 ? candidates : new ReferenceSelector().select(llm, prompts, parser,
-                question + "\n" + candidateSnippets(candidates), candidates);
-        if (selected.isEmpty()) throw new IllegalArgumentException("No uploaded source supports this question.");
         StringBuilder context = new StringBuilder();
-        List<MaterialSearcher.Passage> passages = new MaterialSearcher().search(store, selected, question, 8);
+        List<MaterialSearcher.Passage> passages = new java.util.ArrayList<>(new MaterialSearcher().search(candidates, question, 12, studySources::index));
+        boolean assessment = MaterialSearcher.assessmentQuestion(question);
+        Set<String> studyLectures = java.util.Set.of();
+        boolean studyPlan = AssessmentStudySources.requested(question);
+        if (studyPlan) {
+            String savedSchedule = store.deadlines().stream().filter(d -> d.courseId().equals(courseId))
+                    .map(d -> d.title()+" | due "+d.dueDate()+" | scope "+d.scope()).collect(Collectors.joining("\n"));
+            var reading = AssessmentStudySources.read(candidates, studySources, llm, question, savedSchedule, progress);
+            studyLectures = reading.lectureNames();
+            passages = new java.util.ArrayList<>(reading.pages());
+            context.append("Assessment topic selection (check against syllabus; teaching subtopics are recommendations): ")
+                    .append(reading.scope()).append('\n');
+        }
+        // Assessment questions need the course syllabus and saved scope, even when a lecture tab is open.
+        if (assessment || candidates.size() == 1) {
+            for (MaterialFile file : candidates) if (file.category() == Category.SYLLABUS || (!studyPlan && candidates.size() == 1)) {
+                List<String> pages = studySources.pages(file, message -> { });
+                for (int index = 0; index < pages.size(); index++) {
+                    int physical = index + 1;
+                    if (!pages.get(index).isBlank()) {
+                        passages.removeIf(p -> p.fileName().equals(file.originalName()) && p.page() == physical);
+                        passages.add(new MaterialSearcher.Passage(file.originalName(), physical, pages.get(index), 1));
+                    }
+                }
+            }
+        }
         if (passages.isEmpty()) throw new IllegalArgumentException("Selected sources contain no readable passages.");
         for (var passage : passages) context.append("\n[File: ").append(passage.fileName())
                 .append("; Page: ").append(passage.page()).append("]\n").append(passage.text()).append('\n');
         context.append("\nExplanation style: ")
                 .append(ExplanationStrategy.forDifficulty(store.course(courseId).difficulty()).instruction());
-        context.append("\nRecent interaction context (not source evidence):\n");
-        for (var entry : history.recent(5)) context.append(entry.event()).append(": ").append(entry.detail()).append('\n');
-        Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.QA),
-                prompts.user(PromptBuilder.Task.QA, context.toString(), question)));
-        List<GroundedAnswer.Citation> citations = new java.util.ArrayList<>();
-        for (Object raw : Json.array(response.get("citations"))) {
+        if (assessment) {
+            context.append("\nStudent-approved schedule (not a new claim about exam coverage):\n");
+            for (Deadline deadline : store.deadlines()) if (deadline.courseId().equals(courseId))
+                context.append(deadline.title()).append(" | due ").append(deadline.dueDate()).append(" | scope ")
+                        .append(deadline.scope()).append('\n');
+            context.append("\nActual recorded topic statistics: ").append(topicStatistics(courseId)).append('\n');
+        }
+        context.append("\nPrevious student questions in this course (not source evidence):\n");
+        for (var entry : history.recent(5)) if (entry.event().equals("question answered")
+                && entry.detail().startsWith("Course: " + courseId + "\n")) {
+            var line = entry.detail().lines().filter(s -> s.startsWith("Question:")).findFirst();
+            line.ifPresent(s -> context.append(s).append('\n'));
+        }
+        String allowed = Json.write(passages.stream().map(p -> Map.of("fileName",p.fileName(),"page",p.page())).distinct().toList());
+        context.append("\nAllowed physical-PDF citations (use these exact names/numbers, not printed slide numbers):\n").append(allowed);
+        String request = question + "\nUse only supplied evidence. If the syllabus does not specify assessment coverage, "
+                + "say that explicitly; distinguish general practice suggestions from the actual assessed scope. "
+                + "Cite only entries in Allowed physical-PDF citations. Do not reuse citations from past conversations.";
+        if (studyPlan) request += "\nCreate an actionable study guide from the teaching slides, not a syllabus/date summary. "
+                + "Mention logistics in at most one short sentence. Give 4-6 ordered study steps: what to understand, "
+                + "what to implement or trace using the actual source examples, and how to check mastery. "
+                + "Include concrete code/practice exercises, common mistakes, and 3 self-check questions grounded in lectures. "
+                + "Cite the relevant lecture pages beside each step; use at least two teaching files when available. "
+                + "Label recommended practice separately from officially confirmed test coverage once, without repeating disclaimers.";
+        final Set<String> requiredStudyLectures = studyLectures;
+        final String originalRequest = request;
+        progress.accept(studyPlan ? "Writing study steps and practice tasks from the lecture slides" : "Writing source-grounded answer");
+        for (int attempt = 0; attempt < 3; attempt++) {
+          Map<String, Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.QA),
+                prompts.user(PromptBuilder.Task.QA, context.toString(), request)));
+          List<GroundedAnswer.Citation> citations = new java.util.ArrayList<>();
+          String invalid = null;
+          for (Object raw : Json.array(response.get("citations"))) {
             Map<String, Object> citation = Json.object(raw);
             String name = Json.string(citation, "fileName");
             int page = ((Number) citation.get("page")).intValue();
-            if (passages.stream().noneMatch(p -> p.fileName().equals(name) && p.page() == page))
-                throw new IllegalArgumentException("Answer cites a page not supplied as evidence: " + name + " p." + page);
+            if (passages.stream().noneMatch(p -> p.fileName().equals(name) && p.page() == page)) {
+                invalid = name + " p." + page; break;
+            }
             citations.add(new GroundedAnswer.Citation(name, page));
         }
-        if (citations.isEmpty()) throw new IllegalArgumentException("AI answer has no verifiable source citation.");
+          long lectureCitations = citations.stream().map(GroundedAnswer.Citation::fileName)
+                  .filter(requiredStudyLectures::contains).distinct().count();
+          if (invalid != null || citations.isEmpty() || lectureCitations < Math.min(2, requiredStudyLectures.size())) {
+            request = originalRequest + "\nThe previous response had an invalid/missing citation or only cited syllabus/logistics (" + invalid + "). "
+                    + "Include source-supported study steps from the supplied teaching files: " + requiredStudyLectures + ". "
+                    + "Generate a fresh answer from the supplied passages. Choose citations only from: " + allowed;
+            if (attempt < 2) continue;
+            throw new IllegalArgumentException("The AI could not verify its source pages after retrying. No answer was saved. Try a more specific source question.");
+          }
         GroundedAnswer result = new GroundedAnswer(Json.string(response, "answer"), citations);
-        history.add("question answered", "Question: " + question + "\nAnswer: " + result.answer()
+        history.add("question answered", "Course: " + courseId + "\nQuestion: " + question + "\nAnswer: " + result.answer()
                 + "\nSources: " + result.citations());
         return result;
+        }
+        throw new IllegalStateException("Source answer could not be verified.");
     }
 
     public StudyArtifacts.Summary generateSummary(UUID materialId) throws IOException {
@@ -466,8 +558,8 @@ public final class AgentController {
 
     public StudyArtifacts.Summary generateSummary(UUID materialId, java.util.function.Consumer<String> progress) throws IOException {
         MaterialFile file = store.material(materialId);
-        if (!file.textAvailable()) throw new IllegalArgumentException("This file has no extractable text.");
-        List<String> pages = store.materialPages(materialId);
+        if (!canStudy(file)) throw new IllegalArgumentException("This file cannot be read.");
+        List<String> pages = studySources.pages(file, progress);
         List<String> parts = new java.util.ArrayList<>();
         List<String> sources = new java.util.ArrayList<>();
         List<String> batches = StudyPages.batches(pages, 12000);
@@ -530,7 +622,17 @@ public final class AgentController {
 
     public StudyArtifacts.Quiz generateQuiz(List<UUID> materialIds, int count, Difficulty difficulty)
             throws IOException {
-        String context = quizContext(materialIds);
+        return generateQuiz(materialIds, count, difficulty, message -> { });
+    }
+    public StudyArtifacts.Quiz generateQuiz(List<UUID> materialIds, int count, Difficulty difficulty,
+                                          java.util.function.Consumer<String> progress) throws IOException {
+        if (materialIds == null || materialIds.isEmpty()) throw new IllegalArgumentException("Choose lecture slides for the quiz.");
+        UUID course = store.material(materialIds.get(0)).courseId();
+        if (materialIds.stream().map(store::material).anyMatch(m -> !m.courseId().equals(course)))
+            throw new IllegalArgumentException("Quiz scope must contain lecture files from one course.");
+        materialIds = materialIds.stream().filter(id -> store.material(id).category() == Category.LECTURE_MATERIALS).toList();
+        if (materialIds.isEmpty()) throw new IllegalArgumentException("Choose lecture slides for the quiz. The syllabus is used for assessment scope, not practice questions.");
+        String context = quizContext(materialIds, progress);
         MaterialFile file = store.material(materialIds.get(0));
         return generateQuizFromContext(file, context, count, difficulty);
     }
@@ -538,9 +640,11 @@ public final class AgentController {
     public StudyArtifacts.Quiz generateSlideQuiz(UUID materialId, List<Integer> pages, int count, Difficulty difficulty)
             throws IOException {
         MaterialFile file = store.material(materialId);
-        if (!file.textAvailable()) throw new IllegalArgumentException("This file has no extractable slide text.");
+        if (!canStudy(file)) throw new IllegalArgumentException("This file cannot be read.");
+        if (file.category() != Category.LECTURE_MATERIALS)
+            throw new IllegalArgumentException("Choose a lecture slide file for a page quiz, rather than the syllabus.");
         String context = "File: " + file.originalName() + "\nUse ONLY these selected slides:\n"
-                + StudyPages.selected(store.materialPages(materialId), pages);
+                + StudyPages.selected(studySources.pages(file, message -> { }), pages);
         return generateQuizFromContext(file, context, count, difficulty);
     }
 
@@ -747,19 +851,41 @@ public final class AgentController {
     }
 
     private String quizContext(List<UUID> materialIds) throws IOException {
+        return quizContext(materialIds, message -> { });
+    }
+    private String quizContext(List<UUID> materialIds, java.util.function.Consumer<String> progress) throws IOException {
         if (materialIds == null || materialIds.isEmpty())
             throw new IllegalArgumentException("Choose at least one material for the quiz.");
         UUID courseId = store.material(materialIds.get(0)).courseId();
         StringBuilder context = new StringBuilder();
         for (UUID id : materialIds) {
             MaterialFile file = store.material(id);
-            if (!file.courseId().equals(courseId) || !file.textAvailable())
+            if (!file.courseId().equals(courseId) || !canStudy(file))
                 throw new IllegalArgumentException("Quiz scope must contain readable files from one course.");
             context.append("File: ").append(file.originalName()).append('\n')
-                    .append(prompts.pages(store.materialPages(id), Math.max(1000, 25000 / materialIds.size())))
+                    .append(prompts.pages(studySources.pages(file, progress), Integer.MAX_VALUE))
                     .append('\n');
         }
-        return context.toString();
+        String source = context.toString();
+        // Every page enters a reading batch; never replace a whole-file quiz with its front matter.
+        for (int round = 0; source.length() > 120000 && round < 3; round++) {
+            List<String> chunks = StudyPages.batches(List.of(source), 24000);
+            StringBuilder facts = new StringBuilder();
+            for (int i = 0; i < chunks.size(); i++) {
+                progress.accept("Reading quiz sources · batch " + (i + 1) + "/" + chunks.size());
+                Map<String,Object> response = parser.parse(llm.complete(prompts.system(PromptBuilder.Task.SUMMARY),
+                        prompts.user(PromptBuilder.Task.SUMMARY, chunks.get(i),
+                                "Extract concise, source-grounded study facts for quiz generation. Include definitions, code behavior "
+                                + "and diagram relationships from this entire batch. Keep file/page references. "
+                                + "Do not turn a topic heading into invented knowledge. Return at most 12 useful bullet points in summary.")));
+                facts.append(Json.string(response,"summary")).append('\n');
+            }
+            if (facts.length() >= source.length()) throw new IOException("The study source is too large to combine. Choose fewer lecture files.");
+            source = facts.toString();
+        }
+        if (source.length() > 120000) throw new IOException("Choose fewer lecture files for this quiz.");
+        progress.accept("Generating questions from the selected study sources");
+        return source;
     }
     public List<StudyArtifacts.EssayPrompt> essayPrompts(UUID courseId) throws IOException {
         store.course(courseId);

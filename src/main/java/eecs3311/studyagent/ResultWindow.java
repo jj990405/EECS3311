@@ -13,11 +13,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 /** Screen-bounded, resizable result frame with the operating system's maximize control. */
 final class ResultWindow extends JFrame {
     ResultWindow(JFrame owner, String title, String content, Runnable openSource) {
+        this(owner, title, content, openSource, java.util.List.of(), null);
+    }
+    ResultWindow(JFrame owner, String title, GroundedAnswer answer,
+                 java.util.function.Consumer<GroundedAnswer.Citation> openCitation) {
+        this(owner, title, answer.answer(), null, answer.citations(), openCitation);
+    }
+    private ResultWindow(JFrame owner, String title, String content, Runnable openSource,
+                         java.util.List<GroundedAnswer.Citation> citations,
+                         java.util.function.Consumer<GroundedAnswer.Citation> openCitation) {
         super(title);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(true);
@@ -26,12 +34,10 @@ final class ResultWindow extends JFrame {
         JLabel heading = new JLabel(title);
         heading.setFont(AppTheme.SECTION);
         root.add(heading, BorderLayout.NORTH);
-        JTextArea text = new JTextArea(content);
-        text.setEditable(false);
-        text.setFont(AppTheme.BODY);
-        text.setLineWrap(true);
-        text.setWrapStyleWord(true);
-        text.setBorder(AppTheme.padding(12, 14, 12, 14));
+        ReadableText text = new ReadableText();
+        text.setMarkdown(content);
+        text.onCitation(openCitation);
+        text.appendCitations(citations);
         text.setCaretPosition(0);
         JScrollPane scroll = new JScrollPane(text);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

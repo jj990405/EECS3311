@@ -1,31 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1450" viewBox="0 0 1680 1450">
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1470" viewBox="0 0 1680 1470">
 <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
-<rect x="0" y="0" width="1680" height="1450" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="0" y="0" width="1680" height="1470" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD10a - Generate and locally grade a multiple-choice quiz</text>
 <text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">F13 / UC14 | Actual Java implementation | 14 November 2026</text>
 <line x1="32" y1="100" x2="1648" y2="100" stroke="#b8c7d7" stroke-width="2"/>
 <rect x="31.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="130.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Student</text>
-<line x1="130.0" y1="191" x2="130.0" y2="1314" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="130.0" y1="191" x2="130.0" y2="1334" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="267.66666666666663" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="366.66666666666663" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">MainWindow / CLI</text>
-<line x1="366.66666666666663" y1="191" x2="366.66666666666663" y2="1314" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="366.66666666666663" y1="191" x2="366.66666666666663" y2="1334" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="504.33333333333326" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="603.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">AgentController</text>
-<line x1="603.3333333333333" y1="191" x2="603.3333333333333" y2="1314" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="603.3333333333333" y1="191" x2="603.3333333333333" y2="1334" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="741.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="840.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">DataStore</text>
-<line x1="840.0" y1="191" x2="840.0" y2="1314" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="840.0" y1="191" x2="840.0" y2="1334" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="977.6666666666665" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="1076.6666666666665" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">LLM + JSON helpers</text>
-<line x1="1076.6666666666665" y1="191" x2="1076.6666666666665" y2="1314" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="1076.6666666666665" y1="191" x2="1076.6666666666665" y2="1334" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="1214.3333333333333" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="1313.3333333333333" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">StudyArtifacts</text>
-<line x1="1313.3333333333333" y1="191" x2="1313.3333333333333" y2="1314" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="1313.3333333333333" y1="191" x2="1313.3333333333333" y2="1334" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <rect x="1451.0" y="125" width="198" height="66" rx="5" fill="#ecf2f8" stroke="#718aa1" stroke-width="1.5"/>
 <text x="1550.0" y="153" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">QuizDialog /</text>
 <text x="1550.0" y="175" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">QuizSessionPanel</text>
-<line x1="1550.0" y1="191" x2="1550.0" y2="1314" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
+<line x1="1550.0" y1="191" x2="1550.0" y2="1334" stroke="#9db0c1" stroke-width="1" stroke-dasharray="7 5"/>
 <line x1="130.0" y1="263" x2="366.66666666666663" y2="263" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
 <rect x="73.13333333333333" y="215" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="248.33333333333331" y="230" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">1. Choose file / selected slides / lecture</text>
@@ -38,63 +38,65 @@
 <text x="484.99999999999994" y="328" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">generateSlideQuiz(fileId, pages, count,</text>
 <rect x="436.9" y="333" width="96.19999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="484.99999999999994" y="348" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">difficulty)</text>
-<line x1="603.3333333333333" y1="439" x2="840.0" y2="439" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="562.8666666666667" y="391" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="721.6666666666666" y="406" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. Validate one-course readable scope;</text>
-<rect x="657.1666666666666" y="411" width="129.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="721.6666666666666" y="426" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">materialPages()</text>
-<line x1="603.3333333333333" y1="481" x2="673.3333333333333" y2="481" stroke="#395b7b" stroke-width="2"/>
-<line x1="673.3333333333333" y1="481" x2="673.3333333333333" y2="503" stroke="#395b7b" stroke-width="2"/>
-<line x1="673.3333333333333" y1="503" x2="603.3333333333333" y2="503" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="680.3333333333333" y="469" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="683.3333333333333" y="484" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. StudyPages.selected: valid physical</text>
-<rect x="680.3333333333333" y="489" width="317.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="683.3333333333333" y="504" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">pages only; outside-page text excluded</text>
-<line x1="603.3333333333333" y1="575" x2="1076.6666666666665" y2="575" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="644.3" y="547" width="391.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="839.9999999999999" y="562" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. QUIZ prompt -&gt; complete() -&gt; parse questions</text>
-<line x1="603.3333333333333" y1="624" x2="673.3333333333333" y2="624" stroke="#395b7b" stroke-width="2"/>
-<line x1="673.3333333333333" y1="624" x2="673.3333333333333" y2="646" stroke="#395b7b" stroke-width="2"/>
-<line x1="673.3333333333333" y1="646" x2="603.3333333333333" y2="646" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="680.3333333333333" y="612" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="683.3333333333333" y="627" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Validate 1-10 count; four choices;</text>
-<rect x="680.3333333333333" y="632" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="683.3333333333333" y="647" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">answer index; retry malformed output once</text>
-<line x1="603.3333333333333" y1="718" x2="1313.3333333333333" y2="718" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="754.4333333333333" y="690" width="407.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="958.3333333333333" y="705" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. saveQuiz(courseId, firstMaterialId, questions)</text>
-<line x1="603.3333333333333" y1="803" x2="366.66666666666663" y2="803" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
-<rect x="330.29999999999995" y="755" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="484.99999999999994" y="770" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Quiz; InteractionHistory.add(&quot;quiz</text>
-<rect x="416.4" y="775" width="137.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="484.99999999999994" y="790" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">generated&quot;, ...)</text>
-<line x1="366.66666666666663" y1="861" x2="1550.0" y2="861" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="750.3333333333333" y="833" width="415.99999999999994" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="958.3333333333333" y="848" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. take(quiz) [GUI] / print question prompts [CLI]</text>
-<line x1="130.0" y1="926" x2="1550.0" y2="926" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="529.5" y="898" width="621.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="840.0" y="913" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. Navigate questions; answers retained; all answered enables Submit [GUI]</text>
-<line x1="1550.0" y1="991" x2="366.66666666666663" y2="991" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
-<rect x="852.8333333333333" y="963" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="958.3333333333333" y="978" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. List&lt;Integer&gt; answers</text>
-<line x1="366.66666666666663" y1="1056" x2="603.3333333333333" y2="1056" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="367.19999999999993" y="1028" width="235.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="484.99999999999994" y="1043" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. gradeQuiz(quiz, answers)</text>
-<line x1="603.3333333333333" y1="1121" x2="1313.3333333333333" y2="1121" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="791.3333333333333" y="1093" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="958.3333333333333" y="1108" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. grade(quiz, answers) -&gt; save Attempt</text>
-<line x1="603.3333333333333" y1="1206" x2="366.66666666666663" y2="1206" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
-<rect x="330.29999999999995" y="1158" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="484.99999999999994" y="1173" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. Correct count + per-topic result;</text>
-<rect x="428.69999999999993" y="1178" width="112.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="484.99999999999994" y="1193" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">history entry</text>
-<line x1="366.66666666666663" y1="1284" x2="130.0" y2="1284" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
-<rect x="93.63333333333333" y="1236" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="248.33333333333331" y="1251" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. Answer review with chosen/correct</text>
-<rect x="155.13333333333333" y="1256" width="186.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="248.33333333333331" y="1271" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">answer and explanation</text>
-<rect x="32" y="1336" width="1616" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
-<text x="48" y="1362" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
-<text x="48" y="1387" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">GUI uses a navigator, wrapping choices, progress and read-only review; cancel saves no attempt. Selected-slide MCQs are available from PDF/file menus and CLI pages scope. Cover/outline-only</text>
-<text x="48" y="1410" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">input may be rejected for insufficient concepts. Grading compares stored keys, not pedagogical truth. Multi-file metadata records the first material; essay scope remains file/week/all (SD10b).</text>
+<line x1="603.3333333333333" y1="459" x2="840.0" y2="459" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="546.4666666666667" y="391" width="350.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="406" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. Validate one-course lecture-only scope;</text>
+<rect x="550.5666666666666" y="411" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="426" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">exclude syllabus; StudySources reuses all</text>
+<rect x="661.2666666666667" y="431" width="120.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="446" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">prepared pages</text>
+<line x1="603.3333333333333" y1="501" x2="673.3333333333333" y2="501" stroke="#395b7b" stroke-width="2"/>
+<line x1="673.3333333333333" y1="501" x2="673.3333333333333" y2="523" stroke="#395b7b" stroke-width="2"/>
+<line x1="673.3333333333333" y1="523" x2="603.3333333333333" y2="523" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="680.3333333333333" y="489" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="683.3333333333333" y="504" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. Whole scope reads all source batches;</text>
+<rect x="680.3333333333333" y="509" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="683.3333333333333" y="524" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">selected-page scope excludes other pages</text>
+<line x1="603.3333333333333" y1="595" x2="1076.6666666666665" y2="595" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="644.3" y="567" width="391.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="839.9999999999999" y="582" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">5. QUIZ prompt -&gt; complete() -&gt; parse questions</text>
+<line x1="603.3333333333333" y1="644" x2="673.3333333333333" y2="644" stroke="#395b7b" stroke-width="2"/>
+<line x1="673.3333333333333" y1="644" x2="673.3333333333333" y2="666" stroke="#395b7b" stroke-width="2"/>
+<line x1="673.3333333333333" y1="666" x2="603.3333333333333" y2="666" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="680.3333333333333" y="632" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="683.3333333333333" y="647" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">6. Validate 1-10 count; four choices;</text>
+<rect x="680.3333333333333" y="652" width="342.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="683.3333333333333" y="667" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">answer index; retry malformed output once</text>
+<line x1="603.3333333333333" y1="738" x2="1313.3333333333333" y2="738" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="754.4333333333333" y="710" width="407.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="725" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. saveQuiz(courseId, firstMaterialId, questions)</text>
+<line x1="603.3333333333333" y1="823" x2="366.66666666666663" y2="823" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="330.29999999999995" y="775" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="790" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. Quiz; InteractionHistory.add(&quot;quiz</text>
+<rect x="416.4" y="795" width="137.2" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="810" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">generated&quot;, ...)</text>
+<line x1="366.66666666666663" y1="881" x2="1550.0" y2="881" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="750.3333333333333" y="853" width="415.99999999999994" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="868" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. take(quiz) [GUI] / print question prompts [CLI]</text>
+<line x1="130.0" y1="946" x2="1550.0" y2="946" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="529.5" y="918" width="621.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="840.0" y="933" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">10. Navigate questions; answers retained; all answered enables Submit [GUI]</text>
+<line x1="1550.0" y1="1011" x2="366.66666666666663" y2="1011" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="852.8333333333333" y="983" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="998" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. List&lt;Integer&gt; answers</text>
+<line x1="366.66666666666663" y1="1076" x2="603.3333333333333" y2="1076" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="367.19999999999993" y="1048" width="235.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1063" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. gradeQuiz(quiz, answers)</text>
+<line x1="603.3333333333333" y1="1141" x2="1313.3333333333333" y2="1141" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="791.3333333333333" y="1113" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="958.3333333333333" y="1128" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">13. grade(quiz, answers) -&gt; save Attempt</text>
+<line x1="603.3333333333333" y1="1226" x2="366.66666666666663" y2="1226" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="330.29999999999995" y="1178" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1193" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">14. Correct count + per-topic result;</text>
+<rect x="428.69999999999993" y="1198" width="112.6" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="484.99999999999994" y="1213" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">history entry</text>
+<line x1="366.66666666666663" y1="1304" x2="130.0" y2="1304" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="93.63333333333333" y="1256" width="309.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="1271" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">15. Answer review with chosen/correct</text>
+<rect x="155.13333333333333" y="1276" width="186.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="248.33333333333331" y="1291" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">answer and explanation</text>
+<rect x="32" y="1356" width="1616" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<text x="48" y="1382" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
+<text x="48" y="1407" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Unassigned lecture weeks offer file selection instead of blocking. Whole-file/week/all scopes read all prepared pages, including image readings; very long scopes use source-fact batches.</text>
+<text x="48" y="1430" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Selected-slide scope stays explicit. A true cover-only page can still be insufficient. Grading compares saved keys, not pedagogical truth. Multi-file metadata retains the first material.</text>
 </svg>

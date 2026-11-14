@@ -18,6 +18,17 @@ final class OfficeXmlReader {
     private OfficeXmlReader() { }
 
     static String paragraphs(InputStream source) throws IOException {
+        Document document = document(source);
+        NodeList paragraphs = document.getElementsByTagNameNS("*", "p");
+        List<String> lines = new ArrayList<>();
+        for (int i = 0; i < paragraphs.getLength(); i++) {
+            StringBuilder line = new StringBuilder();
+            collectText(paragraphs.item(i), line);
+            if (!line.toString().isBlank()) lines.add(line.toString());
+        }
+        return String.join("\n", lines);
+    }
+    static Document document(InputStream source) throws IOException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -27,15 +38,7 @@ final class OfficeXmlReader {
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             factory.setXIncludeAware(false);
             factory.setExpandEntityReferences(false);
-            Document document = factory.newDocumentBuilder().parse(source);
-            NodeList paragraphs = document.getElementsByTagNameNS("*", "p");
-            List<String> lines = new ArrayList<>();
-            for (int i = 0; i < paragraphs.getLength(); i++) {
-                StringBuilder line = new StringBuilder();
-                collectText(paragraphs.item(i), line);
-                if (!line.toString().isBlank()) lines.add(line.toString());
-            }
-            return String.join("\n", lines);
+            return factory.newDocumentBuilder().parse(source);
         } catch (ParserConfigurationException | SAXException ex) {
             throw new IOException("Cannot read Office XML text.", ex);
         }

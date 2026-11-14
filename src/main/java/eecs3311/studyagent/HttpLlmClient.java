@@ -41,32 +41,53 @@ public final class HttpLlmClient implements LlmClient {
     }
 
     @Override public String complete(String systemPrompt, String userPrompt) throws IOException {
+        return request(systemPrompt, userPrompt);
+    }
+
+    @Override public boolean supportsImages() { return true; }
+
+    @Override public String completeWithImages(String systemPrompt, String userPrompt, List<String> dataUrls) throws IOException {
+        List<Map<String, Object>> content = new java.util.ArrayList<>();
+        content.add(Map.of("type", "text", "text", userPrompt));
+        for (String url : dataUrls) content.add(Map.of("type", "image_url", "image_url", Map.of("url", url, "detail", "high")));
+        return request(systemPrompt, content);
+    }
+
+    private String request(String systemPrompt, Object userContent) throws IOException {
         if (key.isBlank()) throw new IllegalStateException("LLM_API_KEY is blank. Copy .env.example to .env and add your key.");
         String body = Json.write(Map.of("model", model,
                 "reasoning_effort", "none", "response_format", Map.of("type", "json_object"),
                 "messages", List.of(Map.of("role", "system", "content", systemPrompt),
-                        Map.of("role", "user", "content", userPrompt))));
+                        Map.of("role", "user", "content", userContent))));
         HttpRequest request = HttpRequest.newBuilder(endpoint).timeout(Duration.ofSeconds(90))
                 .header("Authorization", "Bearer " + key).header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(body)).build();
         try {
             HttpResponse<String> response = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(15))
                     .build().send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() / 100 != 2) throw new IOException(switch (response.statusCode()) {
-                case 401, 403 -> "OpenAI rejected the API credentials (HTTP " + response.statusCode() + "). Check the local .env key and model access.";
+            return responseContent(response.statusCode(), response.body());
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new IOException("LLM request interrupted", ex);
+        }
+    }
+
+    static String responseContent(int status, String body) throws IOException {
+            if (status / 100 != 2) throw new IOException(switch (status) {
+                case 401, 403 -> "OpenAI rejected the API credentials (HTTP " + status + "). Check the local .env key and model access.";
                 case 429 -> "OpenAI quota or rate limit reached (HTTP 429). Check API billing/credits, or wait and retry.";
-                default -> "AI service request failed (HTTP " + response.statusCode() + "). Retry when the service is available.";
+                default -> "AI service request failed (HTTP " + status + "). Retry when the service is available.";
             });
-            Map<String, Object> root = Json.object(Json.parse(response.body()));
+        try {
+            Map<String, Object> root = Json.object(Json.parse(body));
             Map<String, Object> choice = Json.object(Json.array(root.get("choices")).get(0));
             if ("length".equals(choice.get("finish_reason")))
                 throw new IOException("LLM response was truncated; retry with less source text.");
             String content = Json.string(Json.object(choice.get("message")), "content");
             if (content.isBlank()) throw new IOException("LLM returned an empty JSON response.");
             return content;
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new IOException("LLM request interrupted", ex);
+        } catch (RuntimeException ex) {
+            throw new IOException("The AI service returned an invalid response. Nothing was saved. Retry the action.", ex);
         }
     }
 }

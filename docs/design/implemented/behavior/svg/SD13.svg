@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1703" viewBox="0 0 1440 1703">
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1726" viewBox="0 0 1440 1726">
 <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#395b7b" stroke-width="1.5"/></marker></defs>
-<rect x="0" y="0" width="1440" height="1703" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="0" y="0" width="1440" height="1726" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="32" y="51" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="27" font-weight="700" fill="#1e3146">SD13 - Review document-purpose classification before saving or moving</text>
 <text x="32" y="83" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="400" fill="#536579">New / UC18 | Actual Java implementation | 14 November 2026</text>
 <line x1="32" y1="100" x2="1408" y2="100" stroke="#b8c7d7" stroke-width="2"/>
@@ -58,10 +58,10 @@
 <rect x="614.5" y="683" width="210.99999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="720.0" y="698" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">7. classify(sources, llm)</text>
 <line x1="838.0" y1="796" x2="1310.0" y2="796" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="857.8" y="748" width="432.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1074.0" y="763" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. &lt;=8-file batches; first two, middle and last page</text>
-<rect x="1042.3" y="768" width="63.39999999999999" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1074.0" y="783" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">samples</text>
+<rect x="853.7" y="748" width="440.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1074.0" y="763" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">8. &lt;=8-file batches of complete text; large documents</text>
+<rect x="931.6" y="768" width="284.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1074.0" y="783" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">use every 18,000-character segment</text>
 <line x1="1310.0" y1="874" x2="838.0" y2="874" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
 <rect x="870.1" y="826" width="407.79999999999995" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="1074.0" y="841" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">9. One decision per supplied UUID; confidence and</text>
@@ -75,10 +75,10 @@
 <rect x="915.0" y="924" width="243.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="918.0" y="939" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">missing/duplicate/unknown IDs</text>
 <line x1="838.0" y1="1030" x2="1310.0" y2="1030" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="894.7" y="982" width="358.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1074.0" y="997" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. If uncertain/conflicting: every page in</text>
-<rect x="960.3" y="1002" width="227.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="1074.0" y="1017" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">&lt;=18,000-character segments</text>
+<rect x="857.8" y="982" width="432.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1074.0" y="997" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">11. If large or uncertain/conflicting: inspect every</text>
+<rect x="972.6" y="1002" width="202.79999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1074.0" y="1017" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">full source-text segment</text>
 <line x1="1310.0" y1="1088" x2="838.0" y2="1088" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
 <rect x="841.4000000000001" y="1060" width="465.19999999999993" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="1074.0" y="1075" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">12. Purpose/evidence per segment; aggregate ALL findings</text>
@@ -108,8 +108,9 @@
 <line x1="366.0" y1="1530" x2="130.0" y2="1530" stroke="#395b7b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
 <rect x="101.5" y="1502" width="293.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="248.0" y="1517" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">18. Refresh workspace; show outcome</text>
-<rect x="32" y="1589" width="1376" height="81" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
+<rect x="32" y="1589" width="1376" height="104" rx="4" fill="#f4f7fa" stroke="#b8c7d7" stroke-width="1.5"/>
 <text x="48" y="1615" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="16" font-weight="700" fill="#1e3146">Conditions and implementation limits</text>
-<text x="48" y="1640" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Explicit AI action may send all extracted text for uncertain files. No storage or moves occur before review. Failure leaves choices unchanged; scanned text needs</text>
-<text x="48" y="1663" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">manual categorization. Classification is reviewed directly, rather than queued in CommandInvoker. Moving retains original bytes and extracted text.</text>
+<text x="48" y="1640" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">Classification reads all available source text, without short-prefix sampling. Existing prepared image readings can contribute after upload. No storage or moves</text>
+<text x="48" y="1663" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">occur before review; failures retain the choices. Classification uses reviewed direct moves rather than CommandInvoker. Original bytes and complete source caches</text>
+<text x="48" y="1686" text-anchor="start" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">remain local.</text>
 </svg>

@@ -1,6 +1,6 @@
 # Implemented architecture and class diagrams
 
-These diagrams describe the Java implementation inspected on November 13, 2026. They replace the architecture/class views for implementation documentation; the original Stage 1 diagrams remain unchanged in `docs/design/diagrams/`.
+These diagrams describe the Java implementation inspected on November 13-14, 2026. The latest 01/03 sheets include complete-source preparation, image input and persistent page/word indexes. They replace the architecture/class views for implementation documentation; the original Stage 1 diagrams remain unchanged in `docs/design/diagrams/`.
 
 Open `implemented-architecture-and-classes.drawio` in diagrams.net to edit all seven sheets. Each sheet is also available as a separate editable `.drawio`, scalable `.svg`, and rendered `.png`. Use SVG for the report to preserve readable text. Selected members are shown rather than every overload, UI control, or Java-library type.
 
@@ -83,3 +83,5 @@ Temporary generation code and contact sheets are kept under ignored `codex/`, no
 Nov14 follow-up: the classification helper reads all extracted pages for uncertain/conflicting files, with an explicit reviewed pre-upload UI. Thin course markers and the quiz navigator are presentation components; the shared facade, persistence and six GoF collaborations above remain unchanged. SD13 and SD10a were refreshed accordingly.
 
 The later GUI follow-up adds `MaterialList` (selectable file rows/context actions), `AiFeedback` (explicit chat tool routing and greeting/failure presentation), `ResultWindow` (screen-bounded resizable/maximizable text results) and `StudyPages` (page-range validation and complete source batching). `AgentController.generateSlideQuiz/answerFromMaterial` are additional facade operations. These helper/UI details are outside the selected class-member sheets; SD09a/SD09b/SD10a and the feature inventory identify their calls. No new persistence family or pattern role is implied.
+
+The latest feedback supersedes the ResultWindow presentation: ordinary source answers render only in Chat and other text results use closable side tabs. Quiz interaction still has its own window. `AssessmentStudySources` adds a source-selection/read step for assessment preparation, then requires actual teaching-file evidence before a study guide can be accepted. It uses the existing LlmClient boundary and StudySources cache, not a new pattern or persistence subsystem. SD09a includes these helper calls.

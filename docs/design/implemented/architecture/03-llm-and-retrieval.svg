@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1210" viewBox="0 0 1600 1210">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1570" viewBox="0 0 1600 1570">
 <rect width="100%" height="100%" fill="white"/>
 <defs><marker id="arrow" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#334155" stroke-width="1.5"/></marker><marker id="triangle" markerWidth="14" markerHeight="12" refX="13" refY="6" orient="auto"><path d="M0,0 L13,6 L0,12 Z" fill="white" stroke="#334155"/></marker></defs>
 <text x="45" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#0f172a">LLM adapter and grounded retrieval</text>
-<text x="45" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" fill="#475569">External model access is replaceable; source selection and citation checks remain deterministic.</text>
+<text x="45" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="400" fill="#475569">Complete sources are cached; source scope, page identities and citation checks remain explicit.</text>
 <path d="M600,215 L495,215" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
 <text x="552.5" y="209.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">uses</text>
-<path d="M270,500 L270,275" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
-<text x="275.0" y="381.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">implements</text>
+<path d="M270,500 L270,321" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<text x="275.0" y="404.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">implements</text>
 <path d="M1030,210 L1125,210" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
 <text x="1082.5" y="204.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">owns</text>
 <path d="M1030,270 L1080,270 L1080,555 L1125,555" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
@@ -19,6 +19,12 @@
 <text x="835" y="784" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">records / reads context</text>
 <path d="M1030,345 L1095,345 L1095,925 L1125,925" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
 <text x="1100" y="744" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">selects style</text>
+<path d="M600,357 L535,360 L535,1140 L385,1140 L385,1180" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="572.5" y="352.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">owns / prepares</text>
+<path d="M720,1310 L875,1310" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="802.5" y="1304.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">builds</text>
+<path d="M815,695 L815,1120 L1210,1120 L1210,1180" stroke="#334155" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="820.0" y="901.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569">reads postings</text>
 <rect x="600" y="150" width="430" height="207" fill="white" stroke="#64748b" stroke-width="1.5"/>
 <rect x="601" y="151" width="428" height="43" fill="#dbeafe"/>
 <path d="M600,194 H1030" stroke="#64748b"/>
@@ -29,11 +35,13 @@
 <text x="612" y="289" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ answerQuestion(...)</text>
 <text x="612" y="312" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ suggestReferences(...)</text>
 <text x="612" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ generateSummary(...) / generateQuiz(...)</text>
-<rect x="45" y="180" width="450" height="95" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="45" y="180" width="450" height="141" fill="white" stroke="#64748b" stroke-width="1.5"/>
 <rect x="46" y="181" width="448" height="43" fill="#f1edf8"/>
 <path d="M45,224 H495" stroke="#64748b"/>
 <text x="57" y="208" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">LlmClient  &lt;&lt;interface&gt;&gt;</text>
 <text x="57" y="253" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ complete(systemPrompt, userPrompt): String</text>
+<text x="57" y="276" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ supportsImages(): boolean</text>
+<text x="57" y="299" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ completeWithImages(system, user, dataUrls): String</text>
 <rect x="1125" y="160" width="430" height="118" fill="white" stroke="#64748b" stroke-width="1.5"/>
 <rect x="1126" y="161" width="428" height="43" fill="#f1edf8"/>
 <path d="M1125,204 H1555" stroke="#64748b"/>
@@ -47,12 +55,12 @@
 <text x="57" y="573" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- key: String; - endpoint: URI; - model: String</text>
 <path d="M45,585 H495" stroke="#cbd5e1"/>
 <text x="57" y="616" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ HttpLlmClient(projectRoot: Path)</text>
-<text x="57" y="639" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ complete(...): String</text>
+<text x="57" y="639" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ complete(...) / completeWithImages(...): String</text>
 <rect x="600" y="530" width="430" height="165" fill="white" stroke="#64748b" stroke-width="1.5"/>
 <rect x="601" y="531" width="428" height="43" fill="#f3f4f6"/>
 <path d="M600,574 H1030" stroke="#64748b"/>
 <text x="612" y="558" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">MaterialSearcher</text>
-<text x="612" y="603" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ search(store, files, query, limit)</text>
+<text x="612" y="603" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ search(files, query, limit, IndexReader)</text>
 <text x="612" y="626" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">  : List&lt;Passage&gt;</text>
 <text x="612" y="649" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Passage(fileName, page, text, score)</text>
 <rect x="1125" y="500" width="430" height="141" fill="white" stroke="#64748b" stroke-width="1.5"/>
@@ -83,7 +91,28 @@
 <text x="1137" y="923" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ instruction(): String</text>
 <text x="1137" y="946" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ forDifficulty(Difficulty): ExplanationStrategy</text>
 <text x="1137" y="969" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Returns HIGH / MEDIUM / LOW lambdas.</text>
-<text x="45" y="1116" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">HttpLlmClient adapts the application interface to an OpenAI-compatible HTTPS endpoint; .env remains local and ignored by Git.</text>
-<text x="45" y="1141" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">answerQuestion() checks cited file/page pairs against supplied passages. Notes track source pages in the controller.</text>
-<text x="45" y="1193" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#64748b">EECS3311 / Implementation diagrams / 2026-11-13 / Selected members; consult source for full signatures.</text>
+<rect x="45" y="1180" width="675" height="245" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="46" y="1181" width="673" height="43" fill="#f3f4f6"/>
+<path d="M45,1224 H720" stroke="#64748b"/>
+<text x="57" y="1208" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">StudySources</text>
+<text x="57" y="1253" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- store: DataStore; - llm: LlmClient</text>
+<text x="57" y="1276" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">- cache: Path; - indexes: Map&lt;UUID, SourceIndex&gt;</text>
+<path d="M45,1288 H720" stroke="#cbd5e1"/>
+<text x="57" y="1319" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ pages(file, progress): List&lt;String&gt;</text>
+<text x="57" y="1342" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ index(file): SourceIndex</text>
+<text x="57" y="1365" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">PDFBox page images / PPTX embedded pictures</text>
+<text x="57" y="1388" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Stores every source page and readable text export</text>
+<rect x="875" y="1180" width="675" height="245" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="876" y="1181" width="673" height="43" fill="#edf4ed"/>
+<path d="M875,1224 H1550" stroke="#64748b"/>
+<text x="887" y="1208" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#0f172a">SourceIndex  &lt;&lt;record&gt;&gt;</text>
+<text x="887" y="1253" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">pages: List&lt;String&gt;</text>
+<text x="887" y="1276" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">terms: Map&lt;String, List&lt;Integer&gt;&gt;</text>
+<path d="M875,1288 H1550" stroke="#cbd5e1"/>
+<text x="887" y="1319" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ build(pages): SourceIndex</text>
+<text x="887" y="1342" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">+ encode() / decode(record)</text>
+<text x="887" y="1365" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#0f172a">Physical page identities retained across restart</text>
+<text x="45" y="1506" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">Text and image readings use the same configured HTTPS adapter; API keys and derived source caches stay local.</text>
+<text x="45" y="1531" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#475569">Q&amp;A checks physical file/page pairs and regenerates invalid citations. Past AI answers do not become source evidence.</text>
+<text x="45" y="1553" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#64748b">EECS3311 / Implementation diagrams / 2026-11-13 / Selected members; consult source for full signatures.</text>
 </svg>

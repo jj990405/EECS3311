@@ -34,10 +34,10 @@
 <rect x="346.69999999999993" y="293" width="276.59999999999997" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="484.99999999999994" y="308" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">2. suggestLectureWeek(materialId)</text>
 <line x1="603.3333333333333" y1="406" x2="840.0" y2="406" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="607.9666666666667" y="358" width="227.39999999999998" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="721.6666666666666" y="373" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. material(); materials();</text>
+<rect x="554.6666666666666" y="358" width="334.0" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
+<text x="721.6666666666666" y="373" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">3. material(); materials(); StudySources</text>
 <rect x="587.4666666666667" y="378" width="268.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
-<text x="721.6666666666666" y="393" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">materialPages(lecture + syllabi)</text>
+<text x="721.6666666666666" y="393" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">complete lecture + syllabi pages</text>
 <line x1="603.3333333333333" y1="484" x2="1076.6666666666665" y2="484" stroke="#395b7b" stroke-width="2" marker-end="url(#arrow)"/>
 <rect x="623.8" y="436" width="432.4" height="20" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"/>
 <text x="839.9999999999999" y="451" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#1e3146">4. PromptBuilder WEEK_MATCH -&gt; LlmClient.complete -&gt;</text>

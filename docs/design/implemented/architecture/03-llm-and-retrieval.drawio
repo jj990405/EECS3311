@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <mxfile host="app.diagrams.net" type="device">
   <diagram id="03-llm-and-retrieval" name="LLM adapter and grounded retrieval">
-    <mxGraphModel dx="1600" dy="1210" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1210">
+    <mxGraphModel dx="1600" dy="1570" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1570">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="title" value="LLM adapter and grounded retrieval" style="text;html=1;align=left;fontSize=30;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="30" width="1500" height="45" />
         </mxCell>
-        <mxCell id="subtitle" value="External model access is replaceable; source selection and citation checks remain deterministic." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="Complete sources are cached; source scope, page identities and citation checks remain explicit." style="text;html=1;align=left;fontSize=17;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="82" width="1500" height="35" />
         </mxCell>
         <mxCell id="controller" value="AgentController" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#dbeafe;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
@@ -18,10 +18,10 @@
           <mxGeometry as="geometry" x="0" y="44" width="430" height="163" />
         </mxCell>
         <mxCell id="llm" value="LlmClient  &amp;lt;&amp;lt;interface&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
-          <mxGeometry as="geometry" x="45" y="180" width="450" height="95" />
+          <mxGeometry as="geometry" x="45" y="180" width="450" height="141" />
         </mxCell>
-        <mxCell id="llm-body" value="+ complete(systemPrompt, userPrompt): String" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="llm">
-          <mxGeometry as="geometry" x="0" y="44" width="450" height="51" />
+        <mxCell id="llm-body" value="+ complete(systemPrompt, userPrompt): String&lt;br&gt;+ supportsImages(): boolean&lt;br&gt;+ completeWithImages(system, user, dataUrls): String" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="llm">
+          <mxGeometry as="geometry" x="0" y="44" width="450" height="97" />
         </mxCell>
         <mxCell id="prompts" value="PromptBuilder" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="1125" y="160" width="430" height="118" />
@@ -32,13 +32,13 @@
         <mxCell id="http" value="HttpLlmClient  &amp;lt;&amp;lt;Adapter&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="45" y="500" width="450" height="161" />
         </mxCell>
-        <mxCell id="http-body" value="- key: String; - endpoint: URI; - model: String&lt;hr&gt;+ HttpLlmClient(projectRoot: Path)&lt;br&gt;+ complete(...): String" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="http">
+        <mxCell id="http-body" value="- key: String; - endpoint: URI; - model: String&lt;hr&gt;+ HttpLlmClient(projectRoot: Path)&lt;br&gt;+ complete(...) / completeWithImages(...): String" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="http">
           <mxGeometry as="geometry" x="0" y="44" width="450" height="117" />
         </mxCell>
         <mxCell id="search" value="MaterialSearcher" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="600" y="530" width="430" height="165" />
         </mxCell>
-        <mxCell id="search-body" value="+ search(store, files, query, limit)&lt;br&gt;  : List&amp;lt;Passage&amp;gt;&lt;br&gt;Passage(fileName, page, text, score)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="search">
+        <mxCell id="search-body" value="+ search(files, query, limit, IndexReader)&lt;br&gt;  : List&amp;lt;Passage&amp;gt;&lt;br&gt;Passage(fileName, page, text, score)" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="search">
           <mxGeometry as="geometry" x="0" y="44" width="430" height="121" />
         </mxCell>
         <mxCell id="parser" value="ResponseParser" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f1edf8;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
@@ -65,7 +65,19 @@
         <mxCell id="explain-body" value="+ instruction(): String&lt;br&gt;+ forDifficulty(Difficulty): ExplanationStrategy&lt;br&gt;Returns HIGH / MEDIUM / LOW lambdas." style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="explain">
           <mxGeometry as="geometry" x="0" y="44" width="430" height="121" />
         </mxCell>
-        <mxCell id="edge0" value="uses" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.0;exitY=0.3140096618357488;entryX=1.0;entryY=0.3684210526315789;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="llm">
+        <mxCell id="sources" value="StudySources" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#f3f4f6;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1180" width="675" height="245" />
+        </mxCell>
+        <mxCell id="sources-body" value="- store: DataStore; - llm: LlmClient&lt;br&gt;- cache: Path; - indexes: Map&amp;lt;UUID, SourceIndex&amp;gt;&lt;hr&gt;+ pages(file, progress): List&amp;lt;String&amp;gt;&lt;br&gt;+ index(file): SourceIndex&lt;br&gt;PDFBox page images / PPTX embedded pictures&lt;br&gt;Stores every source page and readable text export" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="sources">
+          <mxGeometry as="geometry" x="0" y="44" width="675" height="201" />
+        </mxCell>
+        <mxCell id="index" value="SourceIndex  &amp;lt;&amp;lt;record&amp;gt;&amp;gt;" style="swimlane;html=1;startSize=44;rounded=0;fillColor=#edf4ed;swimlaneFillColor=#ffffff;strokeColor=#64748b;fontSize=17;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="875" y="1180" width="675" height="245" />
+        </mxCell>
+        <mxCell id="index-body" value="pages: List&amp;lt;String&amp;gt;&lt;br&gt;terms: Map&amp;lt;String, List&amp;lt;Integer&amp;gt;&amp;gt;&lt;hr&gt;+ build(pages): SourceIndex&lt;br&gt;+ encode() / decode(record)&lt;br&gt;Physical page identities retained across restart" style="text;html=1;align=left;verticalAlign=top;fontSize=16;spacing=10;" vertex="1" parent="index">
+          <mxGeometry as="geometry" x="0" y="44" width="675" height="201" />
+        </mxCell>
+        <mxCell id="edge0" value="uses" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.0;exitY=0.3140096618357488;entryX=1.0;entryY=0.24822695035460993;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="llm">
           <mxGeometry as="geometry" relative="1">
             <Array as="points" />
           </mxGeometry>
@@ -119,11 +131,33 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="note0" value="HttpLlmClient adapts the application interface to an OpenAI-compatible HTTPS endpoint; .env remains local and ignored by Git." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
-          <mxGeometry as="geometry" x="45" y="1100" width="1515" height="25" />
+        <mxCell id="edge8" value="owns / prepares" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=0.0;exitY=1.0;entryX=0.5037037037037037;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="controller" target="sources">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="535" y="360" />
+              <mxPoint x="535" y="1140" />
+              <mxPoint x="385" y="1140" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="note1" value="answerQuestion() checks cited file/page pairs against supplied passages. Notes track source pages in the controller." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
-          <mxGeometry as="geometry" x="45" y="1125" width="1515" height="25" />
+        <mxCell id="edge9" value="builds" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;endArrow=open;endFill=0;exitX=1.0;exitY=0.5306122448979592;entryX=0.0;entryY=0.5306122448979592;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="sources" target="index">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge10" value="reads postings" style="edgeStyle=none;html=1;rounded=0;strokeColor=#334155;fontSize=14;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1.0;entryX=0.4962962962962963;entryY=0.0;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="search" target="index">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="815" y="1120" />
+              <mxPoint x="1210" y="1120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note0" value="Text and image readings use the same configured HTTPS adapter; API keys and derived source caches stay local." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1490" width="1515" height="25" />
+        </mxCell>
+        <mxCell id="note1" value="Q&amp;amp;A checks physical file/page pairs and regenerates invalid citations. Past AI answers do not become source evidence." style="text;html=1;align=left;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="45" y="1515" width="1515" height="25" />
         </mxCell>
       </root>
     </mxGraphModel>

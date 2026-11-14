@@ -10,7 +10,8 @@
       "DataStore",
       "DocumentReaderFactory",
       "DocumentReader",
-      "Local files"
+      "Local files",
+      "StudySources / LlmClient"
     ],
     "steps": [
       [
@@ -77,6 +78,32 @@
         true
       ],
       [
+        1,
+        2,
+        "prepareMaterials(uploaded IDs, progress) [upload worker]"
+      ],
+      [
+        2,
+        7,
+        "pages(file): read every original physical page"
+      ],
+      [
+        7,
+        7,
+        "Render sparse/image-heavy PDF pages or PPTX pictures; completeWithImages()"
+      ],
+      [
+        7,
+        6,
+        "Save complete page text and SourceIndex JSON under artifacts/source-pages/"
+      ],
+      [
+        7,
+        2,
+        "Complete page count; cached text and word-to-page postings",
+        true
+      ],
+      [
         0,
         1,
         "Select original PDF / Open original"
@@ -93,7 +120,7 @@
         true
       ]
     ],
-    "note": "Storage is deterministic. Optional pre-upload AI folder review is shown in SD13; no file is saved until confirmation. Unsupported/scanned content remains stored but AI needs readable text. Duplicate replacement is confirmed. Lecture-week matching is separate (SD01b)."
+    "note": "Raw extraction keeps every page. After upload, image-assisted reading may send page images to the configured API; labelled results and a complete index stay local. Cached preparation is reused. No 1,500-character prefix limit. Local originals stay unchanged; calendar/grade mutations still need approval. Lecture-week matching is separate (SD01b)."
   },
   {
     "id": "SD01b",
@@ -122,7 +149,7 @@
       [
         2,
         3,
-        "material(); materials(); materialPages(lecture + syllabi)"
+        "material(); materials(); StudySources complete lecture + syllabi pages"
       ],
       [
         2,
@@ -814,7 +841,7 @@
       "Student",
       "ChatPanel / CLI",
       "AgentController",
-      "ReferenceSelector",
+      "StudySources / SourceIndex",
       "MaterialSearcher",
       "DataStore",
       "LLM + JSON helpers",
@@ -834,43 +861,48 @@
       [
         2,
         5,
-        "Readable materials and candidateSnippets()"
+        "Readable course materials; explicit selected-file scope remains available"
       ],
       [
         2,
+        4,
+        "search(files, question, 12, StudySources::index)"
+      ],
+      [
+        4,
         3,
-        "select(...) for course scope; selected-file scope uses only that file"
-      ],
-      [
-        3,
-        6,
-        "REFERENCE_SELECTION -> complete() -> validated fileNames"
-      ],
-      [
-        2,
-        4,
-        "search(store, selected, question, 8)"
-      ],
-      [
-        4,
-        5,
-        "materialPages(fileId) [each selected file]"
+        "Read persisted word-to-page postings and complete page text"
       ],
       [
         4,
         2,
-        "Up to 8 ranked passages, each <= 4,500 characters",
+        "Diverse ranked passages with physical page IDs",
         true
       ],
       [
         2,
-        7,
-        "recent(5) [memory context, explicitly not evidence]"
+        5,
+        "For assessment questions: syllabus pages, saved dates/scope and topic statistics"
       ],
       [
         2,
         6,
-        "QA prompt + passages + ExplanationStrategy instruction"
+        "For study preparation: AssessmentStudySources selects teaching files using syllabus + all-file index"
+      ],
+      [
+        2,
+        3,
+        "Read every selected lecture page; long scopes use validated source-note batches"
+      ],
+      [
+        2,
+        7,
+        "recent(5): previous same-course student questions only; no old AI answers/citations"
+      ],
+      [
+        2,
+        6,
+        "QA prompt + passages + exact allowed physical-page citation list"
       ],
       [
         6,
@@ -881,7 +913,7 @@
       [
         2,
         2,
-        "Require citations; reject any not in supplied passages"
+        "Validate physical citations and require teaching evidence for study plans; retry up to 3 total attempts"
       ],
       [
         2,
@@ -897,11 +929,21 @@
       [
         1,
         0,
-        "Display answer and cited original pages",
+        "Render answer once in Chat with clickable exact file/page links; no duplicate popup",
         true
+      ],
+      [
+        0,
+        1,
+        "Click a source link"
+      ],
+      [
+        1,
+        1,
+        "Resolve stored course/file; show PDF tab; PdfPreviewPanel.showPage(cited page)"
       ]
     ],
-    "note": "No selected readable source or invalid citation -> show error. The lexical passage search may include score-zero pages; citations validate provenance, not factual correctness. The LLM never reads local files directly."
+    "note": "GUI chat defaults to course materials even with a PDF tab open. Selected-file scope is explicit. Unknown exam coverage remains unknown. Repeated citation failures save no answer. Index retrieval may include score-zero pages; provenance validation and AI image reading do not prove factual correctness."
   },
   {
     "id": "SD09b",
@@ -911,7 +953,7 @@
       "Student",
       "MainWindow / CLI",
       "AgentController",
-      "DataStore",
+      "DataStore / StudySources",
       "LLM + JSON helpers",
       "StudyArtifacts",
       "InteractionHistory"
@@ -930,7 +972,7 @@
       [
         2,
         3,
-        "material(); materialPages()"
+        "material(); prepared complete source pages (cached image readings included)"
       ],
       [
         2,
@@ -1032,12 +1074,12 @@
       [
         2,
         3,
-        "Validate one-course readable scope; materialPages()"
+        "Validate one-course lecture-only scope; exclude syllabus; StudySources reuses all prepared pages"
       ],
       [
         2,
         2,
-        "StudyPages.selected: valid physical pages only; outside-page text excluded"
+        "Whole scope reads all source batches; selected-page scope excludes other pages"
       ],
       [
         2,
@@ -1099,7 +1141,7 @@
         true
       ]
     ],
-    "note": "GUI uses a navigator, wrapping choices, progress and read-only review; cancel saves no attempt. Selected-slide MCQs are available from PDF/file menus and CLI pages scope. Cover/outline-only input may be rejected for insufficient concepts. Grading compares stored keys, not pedagogical truth. Multi-file metadata records the first material; essay scope remains file/week/all (SD10b)."
+    "note": "Unassigned lecture weeks offer file selection instead of blocking. Whole-file/week/all scopes read all prepared pages, including image readings; very long scopes use source-fact batches. Selected-slide scope stays explicit. A true cover-only page can still be insufficient. Grading compares saved keys, not pedagogical truth. Multi-file metadata retains the first material."
   },
   {
     "id": "SD10b",
@@ -1418,7 +1460,7 @@
       [
         3,
         5,
-        "<=8-file batches; first two, middle and last page samples"
+        "<=8-file batches of complete text; large documents use every 18,000-character segment"
       ],
       [
         5,
@@ -1434,7 +1476,7 @@
       [
         3,
         5,
-        "If uncertain/conflicting: every page in <=18,000-character segments"
+        "If large or uncertain/conflicting: inspect every full source-text segment"
       ],
       [
         5,
@@ -1476,7 +1518,7 @@
         true
       ]
     ],
-    "note": "Explicit AI action may send all extracted text for uncertain files. No storage or moves occur before review. Failure leaves choices unchanged; scanned text needs manual categorization. Classification is reviewed directly, rather than queued in CommandInvoker. Moving retains original bytes and extracted text."
+    "note": "Classification reads all available source text, without short-prefix sampling. Existing prepared image readings can contribute after upload. No storage or moves occur before review; failures retain the choices. Classification uses reviewed direct moves rather than CommandInvoker. Original bytes and complete source caches remain local."
   },
   {
     "id": "SD14",

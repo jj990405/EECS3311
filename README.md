@@ -71,6 +71,6 @@ Implemented distinct GoF patterns: Facade (`AgentController`), Composite (`Works
 
 The [current diagram index](docs/design/implemented/README.md) contains editable architecture, class, use-case and sequence diagrams. The [development audit](docs/development/README.md) maps every original and added feature to code, checks and known limits. The [recording guide](docs/demo/recording-guide.ko.md) provides a GUI/CLI demonstration plan for the later report.
 
-The [Stage 2 report](stage2-report.pdf) includes 21 feature mappings, six GoF patterns, updated UML, 75-test verification and direct timestamped demonstration links. Watch the [GUI demonstration](https://youtu.be/VxEf256ZtDc) or [CLI demonstration](https://youtu.be/qe8We5Za7Jc).
+The [Stage 2 report](stage2-report.pdf) includes 21 feature mappings, six GoF patterns, updated UML, 75-test verification and direct timestamped demonstration links. Watch the [GUI demonstration](https://youtu.be/VxEf256ZtDc), [CLI demonstration](https://youtu.be/qe8We5Za7Jc) and [reset demonstration](https://youtu.be/tHhoOUVAz1k).
 
 The [submission requirement check](docs/development/stage2-requirements-check.md) records what is verified and what still needs recording, finalization or historical evidence.

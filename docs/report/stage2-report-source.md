@@ -346,15 +346,15 @@ All Java class/file names in this section refer to src/main/java/eecs3311/studya
 
 **Affected design trace:** New UC20 in UC-A; MainWindow.clearAllData -> AgentController.clearAllData -> DataStore.clearAllData. Diagram sources and code anchors are in docs/design/implemented/.
 
-**Entry and behavior:** Isolated automated reset checks; confirmation cancellation checked separately in native GUI.
+**Entry and behavior:** Delete all local data -> review the warning -> explicitly confirm Delete all data -> return to an empty workspace.
 
 **Classes and collaboration:** Red button → `MainWindow.clearAllData` → `AgentController.clearAllData` clears store/artifacts/history/proposals
 
 **Mode and design patterns:** Deterministic; Facade, Observer
 
-**Verification and scope:** Student requested a clean workspace on Nov14: original 82 files moved to ignored backup, with every SHA-256 verified; fresh data used for the native bulk run. Local `.env` and external originals preserved. GUI reset confirmation/persistence checks remain covered separately.
+**Verification and scope:** The supplementary recording starts with one semester, one course and five uploaded files. Explicit confirmation removes them and clears the workspace. A subsequent new-course attempt requires a semester first. Isolated reset tests also verify preservation of external original files and local configuration.
 
-**Demonstration:** [GUI 29:32](https://youtu.be/VxEf256ZtDc?t=1772).
+**Demonstration:** [Reset execution 00:00](https://youtu.be/tHhoOUVAz1k?t=0); [GUI reset safeguards 29:32](https://youtu.be/VxEf256ZtDc?t=1772).
 
 ### N06 Timeline selection and context actions
 
@@ -642,6 +642,8 @@ The recorded CLI uses the real application entry point and command handlers. It 
 
 AiTaskStatusPanel, RuntimeDiagnostics and the recording display are presentation/deployment helpers rather than new domain entities or additional design-pattern categories. The 28-sheet design set continues to describe the shared controller, persistence, AI, approval, study and workspace collaborations.
 
+The supplementary [N05 reset demonstration](https://youtu.be/tHhoOUVAz1k?t=0) records confirmation, clearing of one semester/one course/five uploaded files, and the empty workspace. This is a deterministic action; no AI request is needed.
+
 ### Weekly source commit summary
 
 The development record below groups source and test changes by the three reporting periods. The displayed dates are Git author/committer dates, and each entry links directly to its implementation change.
@@ -694,13 +696,13 @@ The five-page Stage 2 brief was checked against the source and all seven report 
 
 ## 7 Demonstration index
 
-The GUI demonstration is [GUI video](https://youtu.be/VxEf256ZtDc) (29:54). The command-line demonstration is [CLI video](https://youtu.be/qe8We5Za7Jc) (06:49). Both were opened without signing in on 14 November 2026. The links below jump to actual start times in the edited recordings. English on-screen captions identify the feature, invocation, input, result and AI role; relevant validation and alternative paths are included.
+The GUI demonstration is [GUI video](https://youtu.be/VxEf256ZtDc) (29:54). The command-line demonstration is [CLI video](https://youtu.be/qe8We5Za7Jc) (06:49). Both were opened without signing in. A [supplementary reset video](https://youtu.be/tHhoOUVAz1k?t=0) provides the complete N05 execution and result. The links below jump to actual start times in the edited recordings. English on-screen captions identify the feature, invocation, input, result and AI role; relevant validation and alternative paths are included.
 
 Some popup windows were not captured by Windows Game Bar. Screenshots from the running application are inserted for those sections.
 
 The CLI recording display is a Java stdin/stdout host invoking the actual application CLI entry point and shared command handlers. It does not implement substitute commands or fabricated responses. GUI-only additions such as PDF side tabs and reset confirmation are indexed to the GUI recording.
 
-Reset safeguards are demonstrated through confirmation and cancellation; isolated tests verify complete clearing while preserving external originals and configuration. Date-based tests also verify the daily unknown-date reminder.
+The [supplementary N05 video 00:00](https://youtu.be/tHhoOUVAz1k?t=0) shows the deletion warning, explicit confirmation, actual clearing and the empty workspace. It also demonstrates the requirement to create a semester before adding a new course.
 
 | Feature | GUI timestamp link | CLI timestamp link |
 | --- | --- | --- |
@@ -723,7 +725,7 @@ Reset safeguards are demonstrated through confirmation and cancellation; isolate
 | N02 On-demand source workspace | [GUI 03:12](https://youtu.be/VxEf256ZtDc?t=192) | GUI-specific workflow |
 | N03 Bulk calendar import and undated reminders | [GUI 06:49](https://youtu.be/VxEf256ZtDc?t=409) | GUI-specific workflow |
 | N04 Easier setup and date/color selection | [GUI 00:00](https://youtu.be/VxEf256ZtDc?t=0) | [CLI 00:24](https://youtu.be/qe8We5Za7Jc?t=24) |
-| N05 Confirmed full reset | [GUI 29:32](https://youtu.be/VxEf256ZtDc?t=1772) | GUI-specific workflow |
+| N05 Confirmed full reset | [Reset 00:00](https://youtu.be/tHhoOUVAz1k?t=0) | GUI-specific workflow |
 | N06 Timeline selection and context actions | [GUI 12:28](https://youtu.be/VxEf256ZtDc?t=748) | GUI-specific workflow |
 
 Additional result links: [Full 15-minute timer completion 27:53](https://youtu.be/VxEf256ZtDc?t=1673); [Local MCQ grading and explanation 04:13](https://youtu.be/qe8We5Za7Jc?t=253); [Essay feedback and approval 05:57](https://youtu.be/qe8We5Za7Jc?t=357).
@@ -831,7 +833,7 @@ Hosted GUI demonstration: [GUI video](https://youtu.be/VxEf256ZtDc), 29:54. Host
 - 29:32: N05 Full reset confirmation (72-reset-native.png)
 - 29:42: F01 F05 F12 Saved data after restart (79-persistence-native.png)
 
-All source screenshots are lossless native-resolution PNG captures. The appendix embeds representative review, input, result and guard windows; the complete repaired sequence is in the edited GUI video. Reset and deletion were demonstrated with confirmation and cancellation. Next-day repetition of a TBD reminder is not shown.
+All source screenshots are lossless native-resolution PNG captures. The appendix embeds representative review, input, result and guard windows; the complete repaired sequence is in the edited GUI video. The main GUI recording demonstrates confirmation and cancellation. The supplementary N05 video demonstrates actual reset execution and its empty-workspace result. Next-day repetition of a TBD reminder is not shown.
 
 
 ## Appendix C Application API usage evidence
@@ -839,3 +841,10 @@ All source screenshots are lossless native-resolution PNG captures. The appendix
 The Analytics screenshot supplied on 14 November 2026 shows the selected Nov 8-Nov 14 period: 2,823,475 tokens, 777 requests and USD 0.38 total spend. The Spend limit panel separately displays USD 0.40 spent for Personal and Default project. Development through ChatGPT Pro is the separate USD 200/month subscription recorded in Section 5.
 
 Source image: docs/report/evidence/api-usage-2026-11-14.png.
+
+
+## Appendix D Confirmed local reset demonstration
+
+The supplementary N05 recording demonstrates the deletion warning, explicit confirmation, and the resulting empty workspace. At 00:00-00:05 the student reviews and confirms the warning; from 00:05 the saved semester, course and uploaded files are absent. The final check requires a semester before adding another course.
+
+[Watch the reset demonstration from 00:00](https://youtu.be/tHhoOUVAz1k?t=0).

@@ -455,11 +455,19 @@
     {
       "feature": "N05",
       "name": "Confirmed full reset",
-      "video_url": "https://youtu.be/VxEf256ZtDc",
-      "start_time": "29:32",
-      "status": "Recorded; hosted link checked without sign-in on 14 November 2026",
-      "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1772",
+      "video_url": "https://youtu.be/tHhoOUVAz1k",
+      "start_time": "00:00",
+      "status": "Recorded; supplementary reset video verified without sign-in on 15 November 2026",
+      "timestamp_url": "https://youtu.be/tHhoOUVAz1k?t=0",
       "recordings": [
+        {
+          "interface": "GUI reset supplement",
+          "video_url": "https://youtu.be/tHhoOUVAz1k",
+          "start_time": "00:00",
+          "seconds": 0,
+          "timestamp_url": "https://youtu.be/tHhoOUVAz1k?t=0",
+          "scope": "Confirmed reset execution and empty-workspace result"
+        },
         {
           "interface": "GUI",
           "video_url": "https://youtu.be/VxEf256ZtDc",
@@ -468,7 +476,7 @@
           "timestamp_url": "https://youtu.be/VxEf256ZtDc?t=1772"
         }
       ],
-      "coverage_note": "The recording shows reset confirmation and cancellation. Actual clearing was verified separately in an isolated automated test."
+      "coverage_note": "The supplementary recording shows explicit confirmation, actual clearing and the empty workspace; the original GUI segment also shows cancellation."
     },
     {
       "feature": "N06",
@@ -499,8 +507,14 @@
       "interface": "CLI",
       "url": "https://youtu.be/qe8We5Za7Jc",
       "duration": "06:49"
+    },
+    {
+      "interface": "GUI reset supplement",
+      "url": "https://youtu.be/tHhoOUVAz1k",
+      "duration_seconds": 13.633333
     }
   ],
-  "access_check": "Both unlisted videos opened without signing in; GUI playback reached 0:02 and CLI playback control entered its running state. No access request was required.",
-  "recording_note": "Some popup windows were not captured by Windows Game Bar. Screenshots from the running application are inserted for those sections."
+  "access_check": "Both unlisted videos opened without signing in; GUI playback reached 0:02 and CLI playback control entered its running state. No access request was required. The supplementary reset video also played without sign-in, reaching 0:05.",
+  "recording_note": "Some popup windows were not captured by Windows Game Bar. Screenshots from the running application are inserted for those sections.",
+  "last_updated": "2026-11-15"
 }

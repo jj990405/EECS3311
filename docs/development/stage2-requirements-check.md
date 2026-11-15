@@ -18,3 +18,5 @@ GUI: https://youtu.be/VxEf256ZtDc (29:54). CLI: https://youtu.be/qe8We5Za7Jc (06
 The report documents implementation scope, including GUI timer records, in-application notifications and reviewed single-action schedule proposals. The later full deterministic and KUMA validation requirements are Stage 3 work.
 
 Actual keys, user data, generated launchers/runtime, MP4 exports and local test artifacts are excluded from the source commit. PDF/PNG/DOCX files use binary attributes to preserve their bytes.
+
+Supplementary N05 reset demonstration: https://youtu.be/tHhoOUVAz1k. The recording shows explicit confirmation, actual clearing and the empty workspace. Playback was checked without signing in.
